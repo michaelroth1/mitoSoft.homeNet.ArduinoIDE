@@ -4,20 +4,27 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
 public class ProgramTextBuilder
 {
-    private string _controllerName;
-    private string _ip;
-    private string _mac;
-    private string _brokerIp;
-    private string _gpioMode;
+    private readonly string _controllerName;
+    private readonly string _ip;
+    private readonly string _mac;
+    private readonly string _brokerIp;
+    private readonly string _gpioMode;
+    private readonly string _subscribedTopic;
     private string _program;
 
-    public ProgramTextBuilder(string controllerName, string ip, string mac, string brokerIp, string gpioMode)
+    public ProgramTextBuilder(string controllerName,
+                              string ip,
+                              string mac,
+                              string brokerIp,
+                              string gpioMode,
+                              string subscribedTopic)
     {
         _controllerName = controllerName;
         _ip = ip;
         _mac = mac;
         _brokerIp = brokerIp;
         _gpioMode = gpioMode;
+        _subscribedTopic = subscribedTopic;
         _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
     }
 
@@ -51,6 +58,7 @@ public class ProgramTextBuilder
         _program = _program.Replace("##brokerIp##", _brokerIp);
         _program = _program.Replace("##date##", DateTime.Now.ToString());
         _program = _program.Replace("##author##", "build with mitoSoft.ArduinoIDE");
+        _program = _program.Replace("##subscribedTopic##", _subscribedTopic);
     }
 
     private void SetCoverInfo(IList<Cover> covers)
@@ -81,16 +89,19 @@ public class ProgramTextBuilder
         {
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Light.txt");
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
+            var lightInit = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightInit.txt");
 
             var properties = ReflectionHelper.GetAllProperties(light);
             foreach (var prop in properties)
             {
-                lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
                 lightTemplate = lightTemplate.Replace($"##{prop.Key}##", prop.Value);
+                lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
+                lightInit = lightInit.Replace($"##{prop.Key}##", prop.Value);
             }
 
-            _program = _program.Replace("##lightSetup##", lightSetup);
             _program = _program.Replace("##light##", lightTemplate);
+            _program = _program.Replace("##lightSetup##", lightSetup);
+            _program = _program.Replace("##lightInit##", lightInit);
         }
     }
 
@@ -101,6 +112,7 @@ public class ProgramTextBuilder
         _program = _program.Replace("##coverSetup##", "");
         _program = _program.Replace("##lightSetup##", "");
         _program = _program.Replace("##coverReferenceRun##", "");
+        _program = _program.Replace("##lightInit##", "");
     }
 
     private void Check()

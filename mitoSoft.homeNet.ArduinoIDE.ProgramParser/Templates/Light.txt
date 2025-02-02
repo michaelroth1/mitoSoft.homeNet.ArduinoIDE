@@ -15,5 +15,4 @@
     gpio_##Name##.setOff();
     mqttHelper.publish("##StateTopic##", "##StateOff##", true);
   }
-
 ##light##

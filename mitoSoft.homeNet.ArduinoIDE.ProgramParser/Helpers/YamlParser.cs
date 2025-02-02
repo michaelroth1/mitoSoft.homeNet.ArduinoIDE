@@ -1,6 +1,7 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
@@ -77,10 +78,10 @@ public class YamlParser
 
         foreach (var light in mqttConfig.Lights)
         {
-            var homeNetCover = homeNetConfig.Lights.Single(h => h.UniqueId == light.UniqueId);
-            light.GpioPin = homeNetCover.GpioPin;
-            light.GpioButton = homeNetCover.GpioButton;
-            light.ControllerId = homeNetCover.ControllerId;
+            var homeNetLight = homeNetConfig.Lights.Single(h => h.UniqueId == light.UniqueId);
+            light.GpioPin = homeNetLight.GpioPin;
+            light.GpioButton = homeNetLight.GpioButton;
+            light.ControllerId = homeNetLight.ControllerId;
         }
 
         return new MqttConfig()
@@ -89,6 +90,85 @@ public class YamlParser
             Lights = mqttConfig.Lights.Where(l => l.ControllerId == controllerId).ToList(),
         };
     }
+
+    public void CheckYaml()
+    {
+        this.DeleteIgnorableItems();
+
+        this.Truncate("!include");
+
+        var deserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties() // Ignoriert Alexa
+            .Build();
+
+        _ = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
+    }
+
+    public string AddHomeNetElements()
+    {
+        this.DeleteIgnorableItems();
+
+        this.Truncate("!include");
+
+        var deserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties() // Ignoriert Alexa
+            .Build();
+
+        var mqttData = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
+        var mqttConfig = mqttData["mqtt"];// Extrahiere nur den "mqtt"-Teil
+
+        var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
+        var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
+
+        var newHomeNetConfig = new HomeNetConfig();
+
+        // für jede mqttConfig muss auch eine arduinoConfig vorhanden sein
+        foreach (var cover in mqttConfig.Covers)
+        {
+            var homeNetCover = homeNetConfig.Covers.SingleOrDefault(h => h.UniqueId == cover.UniqueId);
+            if (homeNetCover == null)
+            {
+                newHomeNetConfig.Covers.Add(new HomeNetCover()
+                {
+                    ControllerId = 1,
+                    GpioClose = 1,
+                    GpioOpen = 2,
+                    GpioCloseButton = 3,
+                    GpioOpenButton = 4,
+                    RunningTime = 15000,
+                    UniqueId = cover.UniqueId,
+                });
+            }
+        }
+
+        foreach (var light in mqttConfig.Lights)
+        {
+            var homeNetLight = homeNetConfig.Lights.SingleOrDefault(h => h.UniqueId == light.UniqueId);
+            if (homeNetLight == null)
+            {
+                newHomeNetConfig.Lights.Add(new HomeNetLight()
+                {
+                    ControllerId = 1,
+                    GpioButton = 1,
+                    GpioPin = 2,
+                    UniqueId = light.UniqueId,
+                });
+            }
+        }
+
+        var serializer = new SerializerBuilder()
+            .WithNamingConvention(NullNamingConvention.Instance)  // ERZWINGT die Verwendung der Alias-Namen!
+            .Build();
+
+        var yamlOutput = serializer.Serialize(new Dictionary<string, HomeNetConfig> { { "homeNet", newHomeNetConfig } });
+
+        yamlOutput = yamlOutput.Replace("controller: []", "");
+        yamlOutput = yamlOutput.Replace("cover: []", "");
+        yamlOutput = yamlOutput.Replace("light: []", "");
+
+        return yamlOutput;
+    }
+
 
     private void Truncate(string keyword)
     {

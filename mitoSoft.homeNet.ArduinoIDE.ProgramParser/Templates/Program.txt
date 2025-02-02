@@ -23,9 +23,7 @@ PubSubClient client(broker, 1883, ethClient);
 PubSubHelper mqttHelper(client, 15000, false);
 
 ##coverSetup##
-
 ##lightSetup##
-
 void setup() {
   //Serial.begin(9600);
   //Serial.println("start ##controllerName##");
@@ -35,8 +33,7 @@ void setup() {
   mqttHelper.init("##controllerName##");
 
 ##coverReferenceRun##
-
-  //mqttHelper.publish("Licht/state/mode", "0", true);
+##lightInit##
 }
 
 void loop() {
@@ -49,12 +46,10 @@ void loop() {
   }
   
 ##cover##
-
 ##light##
-
   //Subscribe
   if (mqttHelper.onConnected()){
-    mqttHelper.subscribe("TestController/+/+/command/#");
+    mqttHelper.subscribe("##subscribedTopic##");
   }
 
   //looping

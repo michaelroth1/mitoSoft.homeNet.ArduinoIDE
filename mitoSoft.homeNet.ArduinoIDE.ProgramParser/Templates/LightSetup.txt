@@ -1,4 +1,4 @@
-﻿DebouncingInput gpio_##Name##_button(##GpioButton##);
+﻿//Light ##Name##**************************************************
+DebouncingInput gpio_##Name##_button(##GpioButton##);
 DigitalOutput gpio_##Name##(##GpioPin##, ##GpioMode##); //INVERTED or STANDARD;
-
 ##lightSetup##

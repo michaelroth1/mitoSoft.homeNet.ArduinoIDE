@@ -11,7 +11,7 @@ public class HomeNetConfig
     public List<HomeNetLight> Lights { get; set; } = [];
 
     [YamlMember(Alias = "controller")]
-    public required List<HomeNetController> Controllers { get; set; } = [];
+    public List<HomeNetController> Controllers { get; set; } = [];
 }
 
 /*
@@ -24,6 +24,9 @@ public class HomeNetController
 {
     [YamlMember(Alias = "name")]
     public required string Name { get; set; } = null!;
+
+    [YamlMember(Alias = "subscribed_topic")]
+    public required string SubscribedTopic { get; set; } = null!;
 
     [YamlMember(Alias = "unique_id")]
     public required int UniqueId { get; set; }

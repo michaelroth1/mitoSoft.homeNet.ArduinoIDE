@@ -17,8 +17,7 @@ public partial class Form1 : Form
 
     private void Inspect_Clicked(object sender, EventArgs e)
     {
-        Properties.Settings.Default.YamlContent = this.richTextBox1.Text;
-        Properties.Settings.Default.Save();
+        this.SaveYaml();
 
         var controllers = new YamlParser(richTextBox1.Text)
             .ParseHomeNetControllers();
@@ -31,14 +30,23 @@ public partial class Form1 : Form
         this.comboBox1.SelectedIndex = 0;
     }
 
+    private void SaveYaml()
+    {
+        Properties.Settings.Default.YamlContent = this.richTextBox1.Text;
+        Properties.Settings.Default.Save();
+    }
+
     private void Convert_Clicked(object sender, EventArgs e)
     {
+        this.SaveYaml();
+
         this.Check();
 
         var controllerName = ((HomeNetController)this.comboBox1.SelectedItem!).Name;
         var id = ((HomeNetController)this.comboBox1.SelectedItem!).UniqueId;
         var ip = ((HomeNetController)this.comboBox1.SelectedItem!).IPAddress;
         var mac = ((HomeNetController)this.comboBox1.SelectedItem!).MacAddress;
+        var subscribedTopic = ((HomeNetController)this.comboBox1.SelectedItem!).SubscribedTopic;
 
         var mqtt = new YamlParser(richTextBox1.Text)
             .Parse(id);
@@ -48,11 +56,33 @@ public partial class Form1 : Form
            ip,
            mac,
            Properties.Settings.Default.BrokerAddress,
-           Properties.Settings.Default.GpioMode)
+           Properties.Settings.Default.GpioMode,
+           subscribedTopic)
            .Build(mqtt);
 
         var f = new Form2();
         f.ShowDialog(program);
+    }
+
+    private void CheckYAML_Clicked(object sender, EventArgs e)
+    {
+        this.SaveYaml();
+
+        new YamlParser(richTextBox1.Text)
+            .CheckYaml();
+
+        MessageBox.Show("No errors in YAML file.");
+    }
+
+    private void createHomeNetElementsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        this.SaveYaml();
+
+        var newConfig = new YamlParser(richTextBox1.Text)
+            .AddHomeNetElements();
+
+        var f = new Form2();
+        f.ShowDialog(newConfig);
     }
 
     private void Check()
