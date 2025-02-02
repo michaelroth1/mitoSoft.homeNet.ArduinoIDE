@@ -11,7 +11,7 @@
 #include <StringHelper.h>
 #include <ArduinoMqttClient.h>
 
-// network configuration
+//network configuration*******************************************
 byte mac[] = {##mac##}; //Format: { 0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D };
 IPAddress ip(##ip##); 
 IPAddress broker(##brokerIp##);
