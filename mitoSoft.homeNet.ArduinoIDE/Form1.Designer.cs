@@ -36,12 +36,12 @@
             openToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             createHomeNetElementsToolStripMenuItem = new ToolStripMenuItem();
+            checkYAMLToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             button1 = new Button();
             comboBox1 = new ComboBox();
             label2 = new Label();
-            checkYAMLToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -111,6 +111,13 @@
             createHomeNetElementsToolStripMenuItem.Text = "Create homeNetElements";
             createHomeNetElementsToolStripMenuItem.Click += createHomeNetElementsToolStripMenuItem_Click;
             // 
+            // checkYAMLToolStripMenuItem
+            // 
+            checkYAMLToolStripMenuItem.Name = "checkYAMLToolStripMenuItem";
+            checkYAMLToolStripMenuItem.Size = new Size(421, 44);
+            checkYAMLToolStripMenuItem.Text = "Check YAML";
+            checkYAMLToolStripMenuItem.Click += CheckYAML_Clicked;
+            // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
@@ -154,13 +161,6 @@
             label2.Size = new Size(125, 32);
             label2.TabIndex = 7;
             label2.Text = "Controller:";
-            // 
-            // checkYAMLToolStripMenuItem
-            // 
-            checkYAMLToolStripMenuItem.Name = "checkYAMLToolStripMenuItem";
-            checkYAMLToolStripMenuItem.Size = new Size(421, 44);
-            checkYAMLToolStripMenuItem.Text = "Check YAML";
-            checkYAMLToolStripMenuItem.Click += CheckYAML_Clicked;
             // 
             // Form1
             // 

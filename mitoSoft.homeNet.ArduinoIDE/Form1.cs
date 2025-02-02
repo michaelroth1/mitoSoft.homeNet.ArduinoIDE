@@ -68,10 +68,11 @@ public partial class Form1 : Form
     {
         this.SaveYaml();
 
-        new YamlParser(richTextBox1.Text)
+        var warnings = new YamlParser(richTextBox1.Text)
             .CheckYaml();
 
-        MessageBox.Show("No errors in YAML file.");
+        var f = new Form2();
+        f.ShowDialog(warnings);
     }
 
     private void createHomeNetElementsToolStripMenuItem_Click(object sender, EventArgs e)

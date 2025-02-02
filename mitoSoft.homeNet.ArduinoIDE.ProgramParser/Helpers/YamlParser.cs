@@ -1,4 +1,5 @@
-﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -31,13 +32,7 @@ public class YamlParser
 
     public IList<HomeNetController> ParseHomeNetControllers()
     {
-        this.DeleteIgnorableItems();
-
-        this.Truncate("!include");
-
-        var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties() // Ignoriert Alexa
-            .Build();
+        IDeserializer deserializer = GetDeserializer();
 
         var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
         var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
@@ -47,42 +42,9 @@ public class YamlParser
 
     public MqttConfig Parse(int controllerId)
     {
-        this.DeleteIgnorableItems();
+        IDeserializer deserializer = GetDeserializer();
 
-        this.Truncate("!include");
-
-        var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties() // Ignoriert Alexa
-            .Build();
-
-        var mqttData = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
-        var mqttConfig = mqttData["mqtt"];// Extrahiere nur den "mqtt"-Teil
-
-        var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
-        var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
-
-        // für jede mqttConfig muss auch eine arduinoConfig vorhanden sein
-        CheckCovers(mqttConfig, homeNetConfig);
-        CheckLights(mqttConfig, homeNetConfig);
-
-        foreach (var cover in mqttConfig.Covers)
-        {
-            var homeNetCover = homeNetConfig.Covers.Single(h => h.UniqueId == cover.UniqueId);
-            cover.GpioOpen = homeNetCover.GpioOpen;
-            cover.GpioOpenButton = homeNetCover.GpioOpenButton;
-            cover.GpioCloseButton = homeNetCover.GpioCloseButton;
-            cover.GpioClose = homeNetCover.GpioClose;
-            cover.RunningTime = homeNetCover.RunningTime;
-            cover.ControllerId = homeNetCover.ControllerId;
-        }
-
-        foreach (var light in mqttConfig.Lights)
-        {
-            var homeNetLight = homeNetConfig.Lights.Single(h => h.UniqueId == light.UniqueId);
-            light.GpioPin = homeNetLight.GpioPin;
-            light.GpioButton = homeNetLight.GpioButton;
-            light.ControllerId = homeNetLight.ControllerId;
-        }
+        MqttConfig mqttConfig = GetMergedMqttConfig(deserializer);
 
         return new MqttConfig()
         {
@@ -91,28 +53,53 @@ public class YamlParser
         };
     }
 
-    public void CheckYaml()
+    public string CheckYaml()
     {
-        this.DeleteIgnorableItems();
+        var warnings = new List<string>();
 
-        this.Truncate("!include");
+        IDeserializer deserializer = GetDeserializer();
 
-        var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties() // Ignoriert Alexa
-            .Build();
+        MqttConfig mqttConfig = GetMergedMqttConfig(deserializer);
 
-        _ = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
+        var gpios = mqttConfig.Covers
+            .SelectMany(c => new[] { c.GpioOpen, c.GpioClose, c.GpioOpenButton, c.GpioCloseButton }) // Alle GPIO-Werte sammeln
+            .Concat(mqttConfig.Lights.SelectMany(l => new[] { l.GpioPin, l.GpioButton })) // Light GPIOs hinzufügen
+            .Where(gpio => gpio > 0) // Falls es ungültige Werte gibt, ignorieren
+            .OrderBy(gpio => gpio) // Sortieren
+            .ToList();
+
+        var duplicates = gpios.FindDuplicates();
+
+        foreach (var duplicate in duplicates)
+        {
+            foreach (var cover in mqttConfig.Covers)
+            {
+                if (cover.GpioClose == duplicate
+                 || cover.GpioOpen == duplicate
+                 || cover.GpioCloseButton == duplicate
+                 || cover.GpioOpenButton == duplicate)
+                {
+                    warnings.Add($"In cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
+                }
+            }
+            foreach (var light in mqttConfig.Lights )
+            {
+                if (light.GpioPin  == duplicate
+                 || light.GpioButton == duplicate)
+                {
+                    warnings.Add($"In light '{light.Name}' a duplicate gpio is used: {duplicate}");
+                }
+            }
+        }
+
+        warnings.Insert(0, $"{warnings.Count} warnings found:");
+
+        return string.Join('\n', warnings.ToArray());
     }
 
     public string AddHomeNetElements()
     {
-        this.DeleteIgnorableItems();
-
-        this.Truncate("!include");
-
-        var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties() // Ignoriert Alexa
-            .Build();
+        IDeserializer deserializer = GetDeserializer();
 
         var mqttData = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
         var mqttConfig = mqttData["mqtt"];// Extrahiere nur den "mqtt"-Teil
@@ -169,6 +156,39 @@ public class YamlParser
         return yamlOutput;
     }
 
+    private MqttConfig GetMergedMqttConfig(IDeserializer deserializer)
+    {
+        var mqttData = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
+        var mqttConfig = mqttData["mqtt"];// Extrahiere nur den "mqtt"-Teil
+
+        var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
+        var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
+
+        // für jede mqttConfig muss auch eine homeNetConfig vorhanden sein
+        CheckCovers(mqttConfig, homeNetConfig);
+        CheckLights(mqttConfig, homeNetConfig);
+
+        foreach (var cover in mqttConfig.Covers)
+        {
+            var homeNetCover = homeNetConfig.Covers.Single(h => h.UniqueId == cover.UniqueId);
+            cover.GpioOpen = homeNetCover.GpioOpen;
+            cover.GpioOpenButton = homeNetCover.GpioOpenButton;
+            cover.GpioCloseButton = homeNetCover.GpioCloseButton;
+            cover.GpioClose = homeNetCover.GpioClose;
+            cover.RunningTime = homeNetCover.RunningTime;
+            cover.ControllerId = homeNetCover.ControllerId;
+        }
+
+        foreach (var light in mqttConfig.Lights)
+        {
+            var homeNetLight = homeNetConfig.Lights.Single(h => h.UniqueId == light.UniqueId);
+            light.GpioPin = homeNetLight.GpioPin;
+            light.GpioButton = homeNetLight.GpioButton;
+            light.ControllerId = homeNetLight.ControllerId;
+        }
+
+        return mqttConfig;
+    }
 
     private void Truncate(string keyword)
     {
@@ -181,6 +201,18 @@ public class YamlParser
         }
 
         _yamlText = string.Join("\n", result);
+    }
+
+    private IDeserializer GetDeserializer()
+    {
+        this.DeleteIgnorableItems();
+
+        this.Truncate("!include");
+
+        var deserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties() // Ignoriert Alexa
+            .Build();
+        return deserializer;
     }
 
     private static void CheckCovers(MqttConfig mqttConfig, HomeNetConfig homeNetConfig)
