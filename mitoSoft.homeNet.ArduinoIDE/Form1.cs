@@ -74,7 +74,7 @@ public partial class Form1 : Form
            subscribedTopic)
            .Build(mqtt);
 
-        var f = new Form2();
+        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem);
         f.ShowDialog(program);
     }
 
@@ -88,7 +88,7 @@ public partial class Form1 : Form
         var newConfig = new YamlParser(YamlTextBox.Text)
             .AddHomeNetElements();
 
-        var f = new Form2();
+        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem);
         f.ShowDialog(newConfig);
     }
 

@@ -31,10 +31,12 @@
             components = new System.ComponentModel.Container();
             button1 = new Button();
             label1 = new Label();
-            richTextBox1 = new RichTextBox();
+            TextBox = new RichTextBox();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             timer1 = new System.Windows.Forms.Timer(components);
+            button2 = new Button();
+            SaveFileDialog = new SaveFileDialog();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,14 +60,14 @@
             label1.TabIndex = 4;
             label1.Text = "Arduino Code:";
             // 
-            // richTextBox1
+            // TextBox
             // 
-            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox1.Location = new Point(12, 72);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(1491, 680);
-            richTextBox1.TabIndex = 3;
-            richTextBox1.Text = "";
+            TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            TextBox.Location = new Point(12, 72);
+            TextBox.Name = "TextBox";
+            TextBox.Size = new Size(1491, 680);
+            TextBox.TabIndex = 3;
+            TextBox.Text = "";
             // 
             // statusStrip1
             // 
@@ -88,15 +90,31 @@
             timer1.Interval = 2500;
             timer1.Tick += Timer_Tick;
             // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.Location = new Point(1197, 20);
+            button2.Name = "button2";
+            button2.Size = new Size(150, 46);
+            button2.TabIndex = 7;
+            button2.Text = "Save";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += SaveButton_Clicked;
+            // 
+            // SaveFileDialog
+            // 
+            SaveFileDialog.Filter = "Arduino |*.ino";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1515, 807);
+            Controls.Add(button2);
             Controls.Add(statusStrip1);
             Controls.Add(button1);
             Controls.Add(label1);
-            Controls.Add(richTextBox1);
+            Controls.Add(TextBox);
             Name = "Form2";
             Text = "Arduino IDE";
             statusStrip1.ResumeLayout(false);
@@ -109,9 +127,11 @@
 
         private Button button1;
         private Label label1;
-        private RichTextBox richTextBox1;
+        private RichTextBox TextBox;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timer1;
+        private Button button2;
+        private SaveFileDialog SaveFileDialog;
     }
 }
