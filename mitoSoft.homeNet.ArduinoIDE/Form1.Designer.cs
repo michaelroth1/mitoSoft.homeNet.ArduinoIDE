@@ -28,101 +28,124 @@
         /// </summary>
         private void InitializeComponent()
         {
-            richTextBox1 = new RichTextBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            YamlTextBox = new RichTextBox();
             label1 = new Label();
-            button2 = new Button();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
-            createHomeNetElementsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripComboBox1 = new ToolStripComboBox();
+            toolStripButton1 = new ToolStripButton();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            createToolStripMenuItem = new ToolStripMenuItem();
             checkYAMLToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
-            button1 = new Button();
-            comboBox1 = new ComboBox();
-            label2 = new Label();
+            splitContainer1 = new SplitContainer();
+            WarningTextBox = new RichTextBox();
+            openFileDialog1 = new OpenFileDialog();
+            saveFileDialog1 = new SaveFileDialog();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
             SuspendLayout();
             // 
-            // richTextBox1
+            // YamlTextBox
             // 
-            richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            richTextBox1.Location = new Point(12, 118);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(1419, 678);
-            richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "";
+            YamlTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            YamlTextBox.Location = new Point(0, 45);
+            YamlTextBox.Name = "YamlTextBox";
+            YamlTextBox.Size = new Size(1440, 517);
+            YamlTextBox.TabIndex = 0;
+            YamlTextBox.Text = "";
+            YamlTextBox.TextChanged += RichTextBox1_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 73);
+            label1.Location = new Point(12, 10);
             label1.Name = "label1";
             label1.Size = new Size(137, 32);
             label1.TabIndex = 1;
             label1.Text = "YAML code:";
             // 
-            // button2
-            // 
-            button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            button2.ImageAlign = ContentAlignment.TopRight;
-            button2.Location = new Point(12, 802);
-            button2.Name = "button2";
-            button2.Size = new Size(200, 46);
-            button2.TabIndex = 3;
-            button2.Text = "Inspect";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += Inspect_Clicked;
-            // 
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(32, 32);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolStripMenuItem1 });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolStripComboBox1, toolStripButton1, toolsToolStripMenuItem, toolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1443, 42);
+            menuStrip1.Size = new Size(1443, 46);
             menuStrip1.TabIndex = 4;
             menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem, createHomeNetElementsToolStripMenuItem, checkYAMLToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 38);
+            fileToolStripMenuItem.Size = new Size(71, 42);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
+            openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(421, 44);
+            openToolStripMenuItem.Size = new Size(206, 44);
             openToolStripMenuItem.Text = "Open";
+            openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
+            saveToolStripMenuItem.Image = (Image)resources.GetObject("saveToolStripMenuItem.Image");
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(421, 44);
+            saveToolStripMenuItem.Size = new Size(206, 44);
             saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
             // 
-            // createHomeNetElementsToolStripMenuItem
+            // toolStripComboBox1
             // 
-            createHomeNetElementsToolStripMenuItem.Name = "createHomeNetElementsToolStripMenuItem";
-            createHomeNetElementsToolStripMenuItem.Size = new Size(421, 44);
-            createHomeNetElementsToolStripMenuItem.Text = "Create homeNetElements";
-            createHomeNetElementsToolStripMenuItem.Click += createHomeNetElementsToolStripMenuItem_Click;
+            toolStripComboBox1.Name = "toolStripComboBox1";
+            toolStripComboBox1.Size = new Size(350, 42);
+            // 
+            // toolStripButton1
+            // 
+            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+            toolStripButton1.ImageAlign = ContentAlignment.MiddleLeft;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(104, 36);
+            toolStripButton1.Text = "&Build";
+            toolStripButton1.TextAlign = ContentAlignment.BottomLeft;
+            toolStripButton1.Click += ToolStripButton1_Clicked;
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(89, 42);
+            toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // createToolStripMenuItem
+            // 
+            createToolStripMenuItem.Name = "createToolStripMenuItem";
+            createToolStripMenuItem.Size = new Size(428, 44);
+            createToolStripMenuItem.Text = "Create homeNet Elements";
+            createToolStripMenuItem.Click += CreateHomeNetElementsToolStripMenuItem_Clicked;
             // 
             // checkYAMLToolStripMenuItem
             // 
             checkYAMLToolStripMenuItem.Name = "checkYAMLToolStripMenuItem";
-            checkYAMLToolStripMenuItem.Size = new Size(421, 44);
+            checkYAMLToolStripMenuItem.Size = new Size(428, 44);
             checkYAMLToolStripMenuItem.Text = "Check YAML";
-            checkYAMLToolStripMenuItem.Click += CheckYAML_Clicked;
+            checkYAMLToolStripMenuItem.Click += CheckYAMLToolStripMenuItem_Clicked;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 38);
+            toolStripMenuItem1.Size = new Size(45, 42);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -130,49 +153,51 @@
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             settingsToolStripMenuItem.Size = new Size(233, 44);
             settingsToolStripMenuItem.Text = "Settings";
-            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
+            settingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Clicked;
             // 
-            // button1
+            // splitContainer1
             // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Location = new Point(1231, 802);
-            button1.Name = "button1";
-            button1.Size = new Size(200, 46);
-            button1.TabIndex = 5;
-            button1.Text = "Convert";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += Convert_Clicked;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 46);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
             // 
-            // comboBox1
+            // splitContainer1.Panel1
             // 
-            comboBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(349, 808);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(402, 40);
-            comboBox1.TabIndex = 6;
+            splitContainer1.Panel1.Controls.Add(label1);
+            splitContainer1.Panel1.Controls.Add(YamlTextBox);
             // 
-            // label2
+            // splitContainer1.Panel2
             // 
-            label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            label2.AutoSize = true;
-            label2.Location = new Point(218, 811);
-            label2.Name = "label2";
-            label2.Size = new Size(125, 32);
-            label2.TabIndex = 7;
-            label2.Text = "Controller:";
+            splitContainer1.Panel2.Controls.Add(WarningTextBox);
+            splitContainer1.Size = new Size(1443, 814);
+            splitContainer1.SplitterDistance = 565;
+            splitContainer1.TabIndex = 5;
+            // 
+            // WarningTextBox
+            // 
+            WarningTextBox.Dock = DockStyle.Fill;
+            WarningTextBox.Location = new Point(0, 0);
+            WarningTextBox.Name = "WarningTextBox";
+            WarningTextBox.Size = new Size(1443, 245);
+            WarningTextBox.TabIndex = 0;
+            WarningTextBox.Text = "";
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "YAML|*.yaml";
+            // 
+            // saveFileDialog1
+            // 
+            saveFileDialog1.Filter = "YAML|*.yaml";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1443, 860);
-            Controls.Add(label2);
-            Controls.Add(comboBox1);
-            Controls.Add(button1);
-            Controls.Add(button2);
-            Controls.Add(label1);
-            Controls.Add(richTextBox1);
+            Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "Form1";
@@ -180,25 +205,33 @@
             Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private RichTextBox richTextBox1;
+        private RichTextBox YamlTextBox;
         private Label label1;
-        private Button button2;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem settingsToolStripMenuItem;
-        private Button button1;
-        private ComboBox comboBox1;
-        private Label label2;
-        private ToolStripMenuItem createHomeNetElementsToolStripMenuItem;
+        private ToolStripComboBox toolStripComboBox1;
+        private ToolStripButton toolStripButton1;
+        private SplitContainer splitContainer1;
+        private RichTextBox WarningTextBox;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem createToolStripMenuItem;
         private ToolStripMenuItem checkYAMLToolStripMenuItem;
+        private OpenFileDialog openFileDialog1;
+        private SaveFileDialog saveFileDialog1;
     }
 }

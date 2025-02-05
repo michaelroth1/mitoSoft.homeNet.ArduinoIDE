@@ -1,5 +1,6 @@
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+using System.Windows.Forms;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
@@ -12,47 +13,60 @@ public partial class Form1 : Form
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        this.richTextBox1.Text = Properties.Settings.Default.YamlContent;
+        this.YamlTextBox.Text = Properties.Settings.Default.YamlContent;
     }
 
-    private void Inspect_Clicked(object sender, EventArgs e)
+    private void RichTextBox1_TextChanged(object sender, EventArgs e)
     {
-        this.SaveYaml();
+        this.SaveYamlInProps();
 
-        var controllers = new YamlParser(richTextBox1.Text)
+        var controllers = new YamlParser(YamlTextBox.Text)
             .ParseHomeNetControllers();
 
-        this.comboBox1.Items.Clear();
+        var selected = this.toolStripComboBox1.SelectedItem as HomeNetController;
+
+        this.toolStripComboBox1.Items.Clear();
         foreach (var controller in controllers)
         {
-            this.comboBox1.Items.Add(controller);
+            this.toolStripComboBox1.Items.Add(controller);
         }
-        this.comboBox1.SelectedIndex = 0;
+
+        foreach (HomeNetController item in this.toolStripComboBox1.Items)
+        {
+            if (item.Name == selected?.Name)
+            {
+                toolStripComboBox1.SelectedItem = item;
+                break;
+            }
+        }
     }
 
-    private void SaveYaml()
+    private void SaveYamlInProps()
     {
-        Properties.Settings.Default.YamlContent = this.richTextBox1.Text;
+        Properties.Settings.Default.YamlContent = this.YamlTextBox.Text;
         Properties.Settings.Default.Save();
     }
 
-    private void Convert_Clicked(object sender, EventArgs e)
+    private void ToolStripButton1_Clicked(object sender, EventArgs e)
     {
-        this.SaveYaml();
+        this.SaveYamlInProps();
+        this.CheckEntries();
 
-        this.Check();
+        this.CheckYaml();
 
-        var controllerName = ((HomeNetController)this.comboBox1.SelectedItem!).Name;
-        var id = ((HomeNetController)this.comboBox1.SelectedItem!).UniqueId;
-        var ip = ((HomeNetController)this.comboBox1.SelectedItem!).IPAddress;
-        var mac = ((HomeNetController)this.comboBox1.SelectedItem!).MacAddress;
-        var subscribedTopic = ((HomeNetController)this.comboBox1.SelectedItem!).SubscribedTopic;
+        var controller = (HomeNetController)toolStripComboBox1.SelectedItem!;
 
-        var mqtt = new YamlParser(richTextBox1.Text)
+        var controllerName = controller?.Name;
+        var id = controller!.UniqueId;
+        var ip = controller!.IPAddress;
+        var mac = controller!.MacAddress;
+        var subscribedTopic = controller!.SubscribedTopic;
+
+        var mqtt = new YamlParser(YamlTextBox.Text)
             .Parse(id);
 
         var program = new ProgramTextBuilder(
-           controllerName,
+           controllerName!,
            ip,
            mac,
            Properties.Settings.Default.BrokerAddress,
@@ -64,29 +78,21 @@ public partial class Form1 : Form
         f.ShowDialog(program);
     }
 
-    private void CheckYAML_Clicked(object sender, EventArgs e)
+    private void CheckYAMLToolStripMenuItem_Clicked(object sender, EventArgs e)
     {
-        this.SaveYaml();
-
-        var warnings = new YamlParser(richTextBox1.Text)
-            .CheckYaml();
-
-        var f = new Form2();
-        f.ShowDialog(warnings);
+        this.CheckYaml();
     }
 
-    private void createHomeNetElementsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CreateHomeNetElementsToolStripMenuItem_Clicked(object sender, EventArgs e)
     {
-        this.SaveYaml();
-
-        var newConfig = new YamlParser(richTextBox1.Text)
+        var newConfig = new YamlParser(YamlTextBox.Text)
             .AddHomeNetElements();
 
         var f = new Form2();
         f.ShowDialog(newConfig);
     }
 
-    private void Check()
+    private void CheckEntries()
     {
         if (string.IsNullOrEmpty(Properties.Settings.Default.BrokerAddress)
          || string.IsNullOrEmpty(Properties.Settings.Default.GpioMode))
@@ -94,20 +100,45 @@ public partial class Form1 : Form
             throw new InvalidOperationException("Complete Settings.");
         }
 
-        if (string.IsNullOrEmpty(this.richTextBox1.Text))
+        if (string.IsNullOrEmpty(this.YamlTextBox.Text))
         {
             throw new InvalidOperationException("Add a YAML file.");
         }
 
-        if (this.comboBox1.SelectedItem == null)
+        if (this.toolStripComboBox1.SelectedItem == null)
         {
             throw new InvalidOperationException("Inspect and choose a controller.");
         }
     }
 
-    private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void CheckYaml()
+    {
+        var warnings = new YamlParser(YamlTextBox.Text)
+            .CheckYaml();
+
+        this.WarningTextBox.Text = warnings.ToString();
+    }
+
+    private void SettingsToolStripMenuItem_Clicked(object sender, EventArgs e)
     {
         var settings = new Settings();
         settings.ShowDialog();
+    }
+
+    private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            var yaml = File.ReadAllText(openFileDialog1.FileName);
+            this.YamlTextBox.Text = yaml;
+        }
+    }
+
+    private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            File.WriteAllText(saveFileDialog1.FileName, this.YamlTextBox.Text);
+        }
     }
 }

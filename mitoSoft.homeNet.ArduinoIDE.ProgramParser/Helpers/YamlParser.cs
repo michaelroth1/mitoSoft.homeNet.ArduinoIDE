@@ -32,12 +32,19 @@ public class YamlParser
 
     public IList<HomeNetController> ParseHomeNetControllers()
     {
-        IDeserializer deserializer = GetDeserializer();
+        try
+        {
+            IDeserializer deserializer = GetDeserializer();
 
-        var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
-        var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
+            var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
+            var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
 
-        return homeNetConfig.Controllers;
+            return homeNetConfig.Controllers;
+        }
+        catch
+        {
+            return new List<HomeNetController>();
+        }
     }
 
     public MqttConfig Parse(int controllerId)
@@ -55,7 +62,7 @@ public class YamlParser
 
     public string CheckYaml()
     {
-        var warnings = new List<string>();
+        var errors = new List<string>();
 
         IDeserializer deserializer = GetDeserializer();
 
@@ -79,22 +86,20 @@ public class YamlParser
                  || cover.GpioCloseButton == duplicate
                  || cover.GpioOpenButton == duplicate)
                 {
-                    warnings.Add($"In cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
+                    errors.Add($"WARNING: In cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
                 }
             }
-            foreach (var light in mqttConfig.Lights )
+            foreach (var light in mqttConfig.Lights)
             {
-                if (light.GpioPin  == duplicate
+                if (light.GpioPin == duplicate
                  || light.GpioButton == duplicate)
                 {
-                    warnings.Add($"In light '{light.Name}' a duplicate gpio is used: {duplicate}");
+                    errors.Add($"\"WARNING: In light '{light.Name}' a duplicate gpio is used: {duplicate}");
                 }
             }
         }
 
-        warnings.Insert(0, $"{warnings.Count} warnings found:");
-
-        return string.Join('\n', warnings.ToArray());
+        return string.Join('\n', errors.ToArray());
     }
 
     public string AddHomeNetElements()
