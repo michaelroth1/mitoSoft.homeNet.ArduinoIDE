@@ -44,8 +44,8 @@
             settingsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             WarningTextBox = new RichTextBox();
-            openFileDialog1 = new OpenFileDialog();
-            saveFileDialog1 = new SaveFileDialog();
+            OpenFileDialog = new OpenFileDialog();
+            SaveFileDialog = new SaveFileDialog();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -183,14 +183,14 @@
             WarningTextBox.TabIndex = 0;
             WarningTextBox.Text = "";
             // 
-            // openFileDialog1
+            // OpenFileDialog
             // 
-            openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.Filter = "YAML|*.yaml";
+            OpenFileDialog.Filter = "YAML|*.yaml";
             // 
-            // saveFileDialog1
+            // SaveFileDialog
             // 
-            saveFileDialog1.Filter = "YAML|*.yaml";
+            SaveFileDialog.FileName = "export";
+            SaveFileDialog.Filter = "YAML|*.yaml";
             // 
             // Form1
             // 
@@ -231,7 +231,7 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem createToolStripMenuItem;
         private ToolStripMenuItem checkYAMLToolStripMenuItem;
-        private OpenFileDialog openFileDialog1;
-        private SaveFileDialog saveFileDialog1;
+        private OpenFileDialog OpenFileDialog;
+        private SaveFileDialog SaveFileDialog;
     }
 }

@@ -127,18 +127,18 @@ public partial class Form1 : Form
 
     private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+        if (OpenFileDialog.ShowDialog() == DialogResult.OK)
         {
-            var yaml = File.ReadAllText(openFileDialog1.FileName);
+            var yaml = File.ReadAllText(OpenFileDialog.FileName);
             this.YamlTextBox.Text = yaml;
         }
     }
 
     private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+        if (SaveFileDialog.ShowDialog() == DialogResult.OK)
         {
-            File.WriteAllText(saveFileDialog1.FileName, this.YamlTextBox.Text);
+            File.WriteAllText(SaveFileDialog.FileName, this.YamlTextBox.Text);
         }
     }
 }
