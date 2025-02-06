@@ -1,5 +1,4 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using System.IO;
 
 namespace mitoSoft.homeNet.ArduinoIDE
 {
