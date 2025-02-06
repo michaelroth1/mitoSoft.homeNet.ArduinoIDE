@@ -1,8 +1,6 @@
 using mitoSoft.homeNet.ArduinoIDE.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
