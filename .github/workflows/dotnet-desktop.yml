@@ -6,10 +6,10 @@ name: Build Release Zip
 on:
   workflow_dispatch
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
+  #push:
     #branches: [ main ]
-    tags:
-     - "v*"
+   # tags:
+    # - "v*"
 
 env:
   PROJECT_FILE: mitoSoft.homeNet.ArduinoIDE.csproj
