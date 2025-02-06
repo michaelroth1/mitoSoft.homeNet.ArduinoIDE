@@ -38,18 +38,20 @@
             toolsToolStripMenuItem = new ToolStripMenuItem();
             createToolStripMenuItem = new ToolStripMenuItem();
             checkYAMLToolStripMenuItem = new ToolStripMenuItem();
+            selectHomeNetNodeToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             WarningTextBox = new RichTextBox();
             toolStrip1 = new ToolStrip();
-            BuildToolStripButton = new ToolStripButton();
             toolStripComboBox1 = new ToolStripComboBox();
+            BuildToolStripButton = new ToolStripButton();
+            toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton1 = new ToolStripButton();
             toolStripButton2 = new ToolStripButton();
             OpenFileDialog = new OpenFileDialog();
             SaveFileDialog = new SaveFileDialog();
-            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripSeparator2 = new ToolStripSeparator();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -91,14 +93,14 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 36);
+            fileToolStripMenuItem.Size = new Size(71, 38);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(359, 44);
+            openToolStripMenuItem.Size = new Size(206, 44);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
             // 
@@ -112,9 +114,9 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 36);
+            toolsToolStripMenuItem.Size = new Size(89, 38);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // createToolStripMenuItem
@@ -131,11 +133,18 @@
             checkYAMLToolStripMenuItem.Text = "Check YAML";
             checkYAMLToolStripMenuItem.Click += CheckYAMLToolStripMenuItem_Clicked;
             // 
+            // selectHomeNetNodeToolStripMenuItem
+            // 
+            selectHomeNetNodeToolStripMenuItem.Name = "selectHomeNetNodeToolStripMenuItem";
+            selectHomeNetNodeToolStripMenuItem.Size = new Size(428, 44);
+            selectHomeNetNodeToolStripMenuItem.Text = "Select HomeNet node";
+            selectHomeNetNodeToolStripMenuItem.Click += SelectHomeNetNodeToolStripMenuItem_Clicked;
+            // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 36);
+            toolStripMenuItem1.Size = new Size(45, 38);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -182,6 +191,11 @@
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripComboBox1
+            // 
+            toolStripComboBox1.Name = "toolStripComboBox1";
+            toolStripComboBox1.Size = new Size(350, 42);
+            // 
             // BuildToolStripButton
             // 
             BuildToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -192,10 +206,10 @@
             BuildToolStripButton.Text = "Build";
             BuildToolStripButton.Click += BuildToolStripButton_Click;
             // 
-            // toolStripComboBox1
+            // toolStripSeparator1
             // 
-            toolStripComboBox1.Name = "toolStripComboBox1";
-            toolStripComboBox1.Size = new Size(350, 42);
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 42);
             // 
             // toolStripButton1
             // 
@@ -226,10 +240,10 @@
             SaveFileDialog.FileName = "export";
             SaveFileDialog.Filter = "YAML|*.yaml";
             // 
-            // toolStripSeparator1
+            // toolStripSeparator2
             // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 42);
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(425, 6);
             // 
             // Form1
             // 
@@ -279,5 +293,7 @@
         private ToolStripButton toolStripButton1;
         private ToolStripButton toolStripButton2;
         private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem selectHomeNetNodeToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
     }
 }

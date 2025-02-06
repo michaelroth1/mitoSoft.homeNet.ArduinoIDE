@@ -1,5 +1,7 @@
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
@@ -214,5 +216,12 @@ public partial class Form1 : Form
         this.YamlTextBox.SelectionLength = uncommentedText.Length;
     }
 
+    private void SelectHomeNetNodeToolStripMenuItem_Clicked(object sender, EventArgs e)
+    {
+        var key = "homeNet";
 
+        var edit = new YamlEditor(this.YamlTextBox);
+
+        edit.SelectYamlNode(key);
+    }
 }
