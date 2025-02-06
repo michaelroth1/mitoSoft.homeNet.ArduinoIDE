@@ -1,6 +1,5 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 
-
 namespace mitoSoft.homeNet.ArduinoIDE
 {
     public partial class Form2 : Form
