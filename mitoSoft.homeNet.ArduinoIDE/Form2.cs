@@ -48,7 +48,9 @@ namespace mitoSoft.homeNet.ArduinoIDE
             {
                 var fileInfo = new FileInfo(SaveFileDialog.FileName);
 
-                var file = Path.Combine(fileInfo.DirectoryName!, controllerName, fileInfo.Name);
+                var file = Path.Combine(fileInfo.DirectoryName!,
+                                        fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length),
+                                        fileInfo.Name);
 
                 var path = new FileInfo(file).DirectoryName!;
 
