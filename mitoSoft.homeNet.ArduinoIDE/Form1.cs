@@ -47,7 +47,7 @@ public partial class Form1 : Form
         Properties.Settings.Default.Save();
     }
 
-    private void ToolStripButton1_Clicked(object sender, EventArgs e)
+    private void BuildToolStripButton_Click(object sender, EventArgs e)
     {
         this.SaveYamlInProps();
         this.CheckEntries();
@@ -140,5 +140,38 @@ public partial class Form1 : Form
         {
             File.WriteAllText(SaveFileDialog.FileName, this.YamlTextBox.Text);
         }
+    }
+
+    private void CommentToolStripButton_Clicked(object sender, EventArgs e)
+    {
+        var selectedText = this.YamlTextBox.SelectedText;
+
+        string commentedText = string.Join("\n", selectedText
+            .Split(["\r\n", "\n"], StringSplitOptions.None)
+            .Select(line => "#" + line));
+
+        // Markierten Text durch auskommentierte Version ersetzen
+        int selectionStart = this.YamlTextBox.SelectionStart;
+        this.YamlTextBox.SelectedText = commentedText;
+
+        // Cursor zurücksetzen, um die Auswahl beizubehalten
+        this.YamlTextBox.SelectionStart = selectionStart;
+        this.YamlTextBox.SelectionLength = commentedText.Length;
+    }
+
+    private void UncommentToolStripButton_Clicked(object sender, EventArgs e)
+    {
+        var selectedText = this.YamlTextBox.SelectedText;
+
+        string uncommentedText = string.Join("\n", selectedText
+            .Split(["\r\n", "\n"], StringSplitOptions.None)
+            .Where(line => line.StartsWith("#"))
+            .Select(line => line.Substring(1)));
+
+        int selectionStart = this.YamlTextBox.SelectionStart;
+        this.YamlTextBox.SelectedText = uncommentedText;
+
+        this.YamlTextBox.SelectionStart = selectionStart;
+        this.YamlTextBox.SelectionLength = uncommentedText.Length;
     }
 }

@@ -37,11 +37,11 @@ namespace mitoSoft.homeNet.ArduinoIDE
         private void SaveButton_Clicked(object sender, EventArgs e)
         {
             var controllerName = _controller?.Name ?? "TestController";
-            
+
             SaveFileDialog.InitialDirectory = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "Arduino");
-            
+
             SaveFileDialog.FileName = $"{controllerName}.ino";
 
             if (SaveFileDialog.ShowDialog() == DialogResult.OK)
@@ -50,9 +50,9 @@ namespace mitoSoft.homeNet.ArduinoIDE
 
                 var file = Path.Combine(fileInfo.DirectoryName!, controllerName, fileInfo.Name);
 
-                var path = new FileInfo(file).DirectoryName;
+                var path = new FileInfo(file).DirectoryName!;
 
-                Directory.CreateDirectory(Path.Combine(fileInfo.DirectoryName!, controllerName));
+                Directory.CreateDirectory(path);
 
                 File.WriteAllText(file, this.TextBox.Text);
 

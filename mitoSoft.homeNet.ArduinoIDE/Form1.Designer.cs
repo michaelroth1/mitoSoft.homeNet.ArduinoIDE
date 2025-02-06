@@ -35,8 +35,6 @@
             fileToolStripMenuItem = new ToolStripMenuItem();
             openToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
-            toolStripComboBox1 = new ToolStripComboBox();
-            toolStripButton1 = new ToolStripButton();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             createToolStripMenuItem = new ToolStripMenuItem();
             checkYAMLToolStripMenuItem = new ToolStripMenuItem();
@@ -44,21 +42,28 @@
             settingsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             WarningTextBox = new RichTextBox();
+            toolStrip1 = new ToolStrip();
+            BuildToolStripButton = new ToolStripButton();
+            toolStripComboBox1 = new ToolStripComboBox();
+            toolStripButton1 = new ToolStripButton();
+            toolStripButton2 = new ToolStripButton();
             OpenFileDialog = new OpenFileDialog();
             SaveFileDialog = new SaveFileDialog();
+            toolStripSeparator1 = new ToolStripSeparator();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // YamlTextBox
             // 
-            YamlTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            YamlTextBox.Location = new Point(0, 45);
+            YamlTextBox.Dock = DockStyle.Fill;
+            YamlTextBox.Location = new Point(0, 0);
             YamlTextBox.Name = "YamlTextBox";
-            YamlTextBox.Size = new Size(1440, 517);
+            YamlTextBox.Size = new Size(1443, 507);
             YamlTextBox.TabIndex = 0;
             YamlTextBox.Text = "";
             YamlTextBox.TextChanged += RichTextBox1_TextChanged;
@@ -66,7 +71,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 10);
+            label1.Location = new Point(12, 82);
             label1.Name = "label1";
             label1.Size = new Size(407, 32);
             label1.TabIndex = 1;
@@ -75,10 +80,10 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(32, 32);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolStripComboBox1, toolStripButton1, toolsToolStripMenuItem, toolStripMenuItem1 });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, toolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1443, 46);
+            menuStrip1.Size = new Size(1443, 42);
             menuStrip1.TabIndex = 4;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -86,14 +91,14 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 42);
+            fileToolStripMenuItem.Size = new Size(71, 36);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(206, 44);
+            openToolStripMenuItem.Size = new Size(359, 44);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
             // 
@@ -105,26 +110,11 @@
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
             // 
-            // toolStripComboBox1
-            // 
-            toolStripComboBox1.Name = "toolStripComboBox1";
-            toolStripComboBox1.Size = new Size(350, 42);
-            // 
-            // toolStripButton1
-            // 
-            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
-            toolStripButton1.ImageAlign = ContentAlignment.MiddleLeft;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(104, 36);
-            toolStripButton1.Text = "&Build";
-            toolStripButton1.TextAlign = ContentAlignment.BottomLeft;
-            toolStripButton1.Click += ToolStripButton1_Clicked;
-            // 
             // toolsToolStripMenuItem
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 42);
+            toolsToolStripMenuItem.Size = new Size(89, 36);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // createToolStripMenuItem
@@ -145,7 +135,7 @@
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 42);
+            toolStripMenuItem1.Size = new Size(45, 36);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -157,21 +147,20 @@
             // 
             // splitContainer1
             // 
-            splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 46);
+            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            splitContainer1.Location = new Point(0, 127);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(label1);
             splitContainer1.Panel1.Controls.Add(YamlTextBox);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(WarningTextBox);
-            splitContainer1.Size = new Size(1443, 814);
-            splitContainer1.SplitterDistance = 565;
+            splitContainer1.Size = new Size(1443, 733);
+            splitContainer1.SplitterDistance = 507;
             splitContainer1.TabIndex = 5;
             // 
             // WarningTextBox
@@ -179,9 +168,54 @@
             WarningTextBox.Dock = DockStyle.Fill;
             WarningTextBox.Location = new Point(0, 0);
             WarningTextBox.Name = "WarningTextBox";
-            WarningTextBox.Size = new Size(1443, 245);
+            WarningTextBox.Size = new Size(1443, 222);
             WarningTextBox.TabIndex = 0;
             WarningTextBox.Text = "";
+            // 
+            // toolStrip1
+            // 
+            toolStrip1.ImageScalingSize = new Size(32, 32);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox1, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
+            toolStrip1.Location = new Point(0, 42);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(1443, 42);
+            toolStrip1.TabIndex = 2;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // BuildToolStripButton
+            // 
+            BuildToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            BuildToolStripButton.Image = (Image)resources.GetObject("BuildToolStripButton.Image");
+            BuildToolStripButton.ImageTransparentColor = Color.Magenta;
+            BuildToolStripButton.Name = "BuildToolStripButton";
+            BuildToolStripButton.Size = new Size(46, 36);
+            BuildToolStripButton.Text = "Build";
+            BuildToolStripButton.Click += BuildToolStripButton_Click;
+            // 
+            // toolStripComboBox1
+            // 
+            toolStripComboBox1.Name = "toolStripComboBox1";
+            toolStripComboBox1.Size = new Size(350, 42);
+            // 
+            // toolStripButton1
+            // 
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+            toolStripButton1.ImageTransparentColor = Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(46, 36);
+            toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Click += CommentToolStripButton_Clicked;
+            // 
+            // toolStripButton2
+            // 
+            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
+            toolStripButton2.ImageTransparentColor = Color.Magenta;
+            toolStripButton2.Name = "toolStripButton2";
+            toolStripButton2.Size = new Size(46, 36);
+            toolStripButton2.Text = "toolStripButton2";
+            toolStripButton2.Click += UncommentToolStripButton_Clicked;
             // 
             // OpenFileDialog
             // 
@@ -192,12 +226,19 @@
             SaveFileDialog.FileName = "export";
             SaveFileDialog.Filter = "YAML|*.yaml";
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 42);
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1443, 860);
+            Controls.Add(label1);
             Controls.Add(splitContainer1);
+            Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "Form1";
@@ -206,10 +247,11 @@
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -224,8 +266,6 @@
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem settingsToolStripMenuItem;
-        private ToolStripComboBox toolStripComboBox1;
-        private ToolStripButton toolStripButton1;
         private SplitContainer splitContainer1;
         private RichTextBox WarningTextBox;
         private ToolStripMenuItem toolsToolStripMenuItem;
@@ -233,5 +273,11 @@
         private ToolStripMenuItem checkYAMLToolStripMenuItem;
         private OpenFileDialog OpenFileDialog;
         private SaveFileDialog SaveFileDialog;
+        private ToolStrip toolStrip1;
+        private ToolStripButton BuildToolStripButton;
+        private ToolStripComboBox toolStripComboBox1;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton2;
+        private ToolStripSeparator toolStripSeparator1;
     }
 }
