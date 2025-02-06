@@ -12,6 +12,11 @@ namespace mitoSoft.homeNet.ArduinoIDE
             InitializeComponent();
 
             _controller = controller;
+
+            if (Properties.Settings.Default.TextZoom > 0)
+            {
+                this.TextBox.ZoomFactor = Properties.Settings.Default.TextZoom;
+            }
         }
 
         public void ShowDialog(string text)

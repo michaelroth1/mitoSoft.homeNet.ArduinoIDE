@@ -1,3 +1,4 @@
+using mitoSoft.homeNet.ArduinoIDE.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 using System.Text.RegularExpressions;
@@ -10,6 +11,17 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+
+        if (Properties.Settings.Default.FormSize.Width > 0
+            && Properties.Settings.Default.FormSize.Height > 0)
+        {
+            this.Size = Properties.Settings.Default.FormSize;
+        }
+
+        if (Properties.Settings.Default.TextZoom > 0)
+        {
+            this.YamlTextBox.ZoomFactor = Properties.Settings.Default.TextZoom;
+        }
     }
 
     private void Form1_Load(object sender, EventArgs e)
@@ -68,14 +80,14 @@ public partial class Form1 : Form
 
         var program = new ProgramTextBuilder(
            controllerName!,
-           ip,
+           ip.GetArduinoIP(),
            mac,
-           Properties.Settings.Default.BrokerAddress,
+           Properties.Settings.Default.BrokerAddress.GetArduinoIP(),
            Properties.Settings.Default.GpioMode,
            subscribedTopic)
            .Build(mqtt);
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem);
+        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);
         f.ShowDialog(program);
     }
 
@@ -89,7 +101,7 @@ public partial class Form1 : Form
         var newConfig = new YamlParser(YamlTextBox.Text)
             .AddHomeNetElements();
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem);
+        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);
         f.ShowDialog(newConfig);
     }
 
@@ -222,6 +234,15 @@ public partial class Form1 : Form
 
         var edit = new YamlEditor(this.YamlTextBox);
 
+        this.YamlTextBox.Focus();
+
         edit.SelectYamlNode(key);
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        Properties.Settings.Default.FormSize = this.Size;
+        Properties.Settings.Default.TextZoom = this.YamlTextBox.ZoomFactor;
+        Properties.Settings.Default.Save();
     }
 }

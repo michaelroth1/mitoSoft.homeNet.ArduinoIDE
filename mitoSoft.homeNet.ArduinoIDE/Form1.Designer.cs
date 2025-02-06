@@ -38,6 +38,7 @@
             toolsToolStripMenuItem = new ToolStripMenuItem();
             createToolStripMenuItem = new ToolStripMenuItem();
             checkYAMLToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             selectHomeNetNodeToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
@@ -51,7 +52,6 @@
             toolStripButton2 = new ToolStripButton();
             OpenFileDialog = new OpenFileDialog();
             SaveFileDialog = new SaveFileDialog();
-            toolStripSeparator2 = new ToolStripSeparator();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -85,7 +85,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, toolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1443, 42);
+            menuStrip1.Size = new Size(1443, 40);
             menuStrip1.TabIndex = 4;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -93,7 +93,7 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 38);
+            fileToolStripMenuItem.Size = new Size(71, 36);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
@@ -116,7 +116,7 @@
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 38);
+            toolsToolStripMenuItem.Size = new Size(89, 36);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // createToolStripMenuItem
@@ -133,6 +133,11 @@
             checkYAMLToolStripMenuItem.Text = "Check YAML";
             checkYAMLToolStripMenuItem.Click += CheckYAMLToolStripMenuItem_Clicked;
             // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(425, 6);
+            // 
             // selectHomeNetNodeToolStripMenuItem
             // 
             selectHomeNetNodeToolStripMenuItem.Name = "selectHomeNetNodeToolStripMenuItem";
@@ -144,7 +149,7 @@
             // 
             toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 38);
+            toolStripMenuItem1.Size = new Size(45, 36);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -185,7 +190,7 @@
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox1, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
-            toolStrip1.Location = new Point(0, 42);
+            toolStrip1.Location = new Point(0, 40);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1443, 42);
             toolStrip1.TabIndex = 2;
@@ -240,11 +245,6 @@
             SaveFileDialog.FileName = "export";
             SaveFileDialog.Filter = "YAML|*.yaml";
             // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(425, 6);
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -257,6 +257,7 @@
             MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Arduino IDE";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
