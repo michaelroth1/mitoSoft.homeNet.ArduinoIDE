@@ -1,6 +1,5 @@
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using System.Windows.Forms;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
@@ -144,34 +143,76 @@ public partial class Form1 : Form
 
     private void CommentToolStripButton_Clicked(object sender, EventArgs e)
     {
-        var selectedText = this.YamlTextBox.SelectedText;
-
-        string commentedText = string.Join("\n", selectedText
-            .Split(["\r\n", "\n"], StringSplitOptions.None)
-            .Select(line => "#" + line));
-
-        // Markierten Text durch auskommentierte Version ersetzen
-        int selectionStart = this.YamlTextBox.SelectionStart;
-        this.YamlTextBox.SelectedText = commentedText;
-
-        // Cursor zurücksetzen, um die Auswahl beizubehalten
-        this.YamlTextBox.SelectionStart = selectionStart;
-        this.YamlTextBox.SelectionLength = commentedText.Length;
+        this.CommentSelectedLines();
     }
 
     private void UncommentToolStripButton_Clicked(object sender, EventArgs e)
     {
-        var selectedText = this.YamlTextBox.SelectedText;
+        this.UncommentSelectedLines();
+    }
 
-        string uncommentedText = string.Join("\n", selectedText
-            .Split(["\r\n", "\n"], StringSplitOptions.None)
-            .Where(line => line.StartsWith("#"))
-            .Select(line => line.Substring(1)));
-
+    private void CommentSelectedLines()
+    {
+        // Speichert die aktuelle Cursorposition
         int selectionStart = this.YamlTextBox.SelectionStart;
+        int selectionEnd = selectionStart + this.YamlTextBox.SelectionLength;
+
+        // Bestimme den Start der ersten Zeile und das Ende der letzten Zeile in der Auswahl
+        int lineStart = this.YamlTextBox.GetFirstCharIndexOfCurrentLine();
+        int lineEnd = selectionEnd;
+
+        while (lineEnd < this.YamlTextBox.Text.Length && this.YamlTextBox.Text[lineEnd] != '\n')
+        {
+            lineEnd++; // Gehe zum Ende der letzten Zeile
+        }
+
+        // Extrahiere die betroffenen Zeilen
+        string selectedText = this.YamlTextBox.Text.Substring(lineStart, lineEnd - lineStart);
+
+        // Jede Zeile mit "#" auskommentieren
+        string commentedText = string.Join("\n", selectedText
+            .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+            .Select(line => "#" + line));
+
+        // Ersetze den ursprünglichen Text
+        this.YamlTextBox.Select(lineStart, lineEnd - lineStart);
+        this.YamlTextBox.SelectedText = commentedText;
+
+        // Setzt den Cursor zurück
+        this.YamlTextBox.SelectionStart = lineStart;
+        this.YamlTextBox.SelectionLength = commentedText.Length;
+    }
+
+    private void UncommentSelectedLines()
+    {
+        int selectionStart = this.YamlTextBox.SelectionStart;
+        int selectionEnd = selectionStart + this.YamlTextBox.SelectionLength;
+
+        // Bestimme den Start der ersten Zeile und das Ende der letzten Zeile
+        int lineStart = this.YamlTextBox.GetFirstCharIndexOfCurrentLine();
+        int lineEnd = selectionEnd;
+
+        while (lineEnd < this.YamlTextBox.Text.Length && this.YamlTextBox.Text[lineEnd] != '\n')
+        {
+            lineEnd++; // Gehe zum Ende der letzten Zeile
+        }
+
+        // Extrahiere die betroffenen Zeilen
+        string selectedText = this.YamlTextBox.Text.Substring(lineStart, lineEnd - lineStart);
+
+        // Entfernt das "#" am Zeilenanfang, falls vorhanden
+        string uncommentedText = string.Join("\n", selectedText
+            .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+            .Select(line => line.StartsWith("#") ? line.Substring(1) : line));
+
+        // Ersetze den ursprünglichen Text
+        this.YamlTextBox.Select(lineStart, lineEnd - lineStart);
         this.YamlTextBox.SelectedText = uncommentedText;
 
-        this.YamlTextBox.SelectionStart = selectionStart;
+        // Setzt den Cursor zurück
+        this.YamlTextBox.SelectionStart = lineStart;
         this.YamlTextBox.SelectionLength = uncommentedText.Length;
     }
+
+
 }
