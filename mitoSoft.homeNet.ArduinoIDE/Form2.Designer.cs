@@ -69,6 +69,7 @@
             TextBox.Size = new Size(1491, 680);
             TextBox.TabIndex = 3;
             TextBox.Text = "";
+            TextBox.WordWrap = false;
             // 
             // statusStrip1
             // 

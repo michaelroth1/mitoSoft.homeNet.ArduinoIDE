@@ -68,6 +68,7 @@
             YamlTextBox.Size = new Size(1443, 507);
             YamlTextBox.TabIndex = 0;
             YamlTextBox.Text = "";
+            YamlTextBox.WordWrap = false;
             YamlTextBox.TextChanged += RichTextBox1_TextChanged;
             // 
             // label1
@@ -100,7 +101,7 @@
             // 
             openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(206, 44);
+            openToolStripMenuItem.Size = new Size(359, 44);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
             // 
@@ -108,7 +109,7 @@
             // 
             saveToolStripMenuItem.Image = (Image)resources.GetObject("saveToolStripMenuItem.Image");
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(206, 44);
+            saveToolStripMenuItem.Size = new Size(359, 44);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
             // 
@@ -147,10 +148,14 @@
             // 
             // toolStripMenuItem1
             // 
-            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(45, 36);
             toolStripMenuItem1.Text = "?";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(32, 19);
             // 
             // splitContainer1
             // 

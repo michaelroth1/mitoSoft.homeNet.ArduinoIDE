@@ -73,7 +73,7 @@ public partial class Form1 : Form
         var program = new ProgramTextBuilder(
            controller!.Name,
            controller!.IPAddress.GetArduinoIPFormat(),
-           controller!.MacAddress,
+           controller!.MacAddress.GetArduinoSignaturFormat(),
            controller!.BrokerIPAddress.GetArduinoIPFormat(),
            controller!.GpioMode,
            controller!.SubscribedTopic)
