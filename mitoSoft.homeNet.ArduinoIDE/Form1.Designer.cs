@@ -254,6 +254,7 @@
             Controls.Add(splitContainer1);
             Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Arduino IDE";

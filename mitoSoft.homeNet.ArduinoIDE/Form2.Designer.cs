@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             button1 = new Button();
             label1 = new Label();
             TextBox = new RichTextBox();
@@ -115,6 +116,7 @@
             Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(TextBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form2";
             Text = "Arduino IDE";
             statusStrip1.ResumeLayout(false);

@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Resources\mitoSoft.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\mitoSoft.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\mitoSoft.homeNet.ArduinoIDE.ProgramParser\mitoSoft.homeNet.ArduinoIDE.ProgramParser.csproj" />
