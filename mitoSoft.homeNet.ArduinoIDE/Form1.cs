@@ -67,22 +67,16 @@ public partial class Form1 : Form
 
         var controller = (HomeNetController)toolStripComboBox1.SelectedItem!;
 
-        var controllerName = controller?.Name;
-        var id = controller!.UniqueId;
-        var ip = controller!.IPAddress;
-        var mac = controller!.MacAddress;
-        var subscribedTopic = controller!.SubscribedTopic;
-
         var mqtt = new YamlParser(YamlTextBox.Text)
-            .Parse(id);
+            .Parse(controller!.UniqueId);
 
         var program = new ProgramTextBuilder(
-           controllerName!,
-           ip.GetArduinoIP(),
-           mac,
-           Properties.Settings.Default.BrokerAddress.GetArduinoIP(),
-           Properties.Settings.Default.GpioMode,
-           subscribedTopic)
+           controller!.Name,
+           controller!.IPAddress.GetArduinoIPFormat(),
+           controller!.MacAddress,
+           controller!.BrokerIPAddress.GetArduinoIPFormat(),
+           controller!.GpioMode,
+           controller!.SubscribedTopic)
            .Build(mqtt);
 
         var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);
@@ -105,12 +99,6 @@ public partial class Form1 : Form
 
     private void CheckEntries()
     {
-        if (string.IsNullOrEmpty(Properties.Settings.Default.BrokerAddress)
-         || string.IsNullOrEmpty(Properties.Settings.Default.GpioMode))
-        {
-            throw new InvalidOperationException("Complete Settings.");
-        }
-
         if (string.IsNullOrEmpty(this.YamlTextBox.Text))
         {
             throw new InvalidOperationException("Add a YAML file.");
@@ -128,12 +116,6 @@ public partial class Form1 : Form
             .CheckYaml();
 
         this.WarningTextBox.Text = warnings.ToString();
-    }
-
-    private void SettingsToolStripMenuItem_Clicked(object sender, EventArgs e)
-    {
-        var settings = new Settings();
-        settings.ShowDialog();
     }
 
     private void OpenToolStripMenuItem_Click(object sender, EventArgs e)

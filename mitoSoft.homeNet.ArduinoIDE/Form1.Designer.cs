@@ -147,17 +147,10 @@
             // 
             // toolStripMenuItem1
             // 
-            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { });
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(45, 36);
             toolStripMenuItem1.Text = "?";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(233, 44);
-            settingsToolStripMenuItem.Text = "Settings";
-            settingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Clicked;
             // 
             // splitContainer1
             // 

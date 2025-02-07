@@ -26,36 +26,12 @@ namespace mitoSoft.homeNet.ArduinoIDE.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string BrokerAddress {
-            get {
-                return ((string)(this["BrokerAddress"]));
-            }
-            set {
-                this["BrokerAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string YamlContent {
             get {
                 return ((string)(this["YamlContent"]));
             }
             set {
                 this["YamlContent"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GpioMode {
-            get {
-                return ((string)(this["GpioMode"]));
-            }
-            set {
-                this["GpioMode"] = value;
             }
         }
         

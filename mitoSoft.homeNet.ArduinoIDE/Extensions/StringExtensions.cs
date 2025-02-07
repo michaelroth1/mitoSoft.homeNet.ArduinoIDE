@@ -2,7 +2,7 @@
 {
     internal static class StringExtensions
     {
-        public static string GetArduinoIP(this string value)
+        public static string GetArduinoIPFormat(this string value)
         {
             return value.Replace(" ", "")
                         .Replace(".", ",")

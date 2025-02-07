@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using System.Diagnostics;
+using YamlDotNet.Serialization;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 
@@ -20,6 +21,7 @@ public class HomeNetConfig
   ip: "192,168,2,200"
   mac: "0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D"
  */
+[DebuggerDisplay("{Name}-{IPAddress}")]
 public class HomeNetController
 {
     [YamlMember(Alias = "name")]
@@ -37,12 +39,19 @@ public class HomeNetController
     [YamlMember(Alias = "mac")]
     public required string MacAddress { get; set; } = null!;
 
+    [YamlMember(Alias = "broker")]
+    public required string BrokerIPAddress { get; set; } = null!;
+
+    [YamlMember(Alias = "gpio_mode")]
+    public required string GpioMode { get; set; } = null!;
+
     public override string ToString()
     {
         return this.Name;
     }
 }
 
+[DebuggerDisplay("{UniqueId}")]
 public class HomeNetCover
 {
     [YamlMember(Alias = "unique_id")]
@@ -67,6 +76,7 @@ public class HomeNetCover
     public required int RunningTime { get; set; }
 }
 
+[DebuggerDisplay("{UniqueId}")]
 public class HomeNetLight
 {
     [YamlMember(Alias = "unique_id")]

@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using System.Diagnostics;
+using YamlDotNet.Serialization;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 
@@ -20,6 +21,7 @@ public interface IItem
     string UniqueId { get; set; }
 }
 
+[DebuggerDisplay("{Name}")]
 public class Cover : IItem
 {
     [YamlMember(Alias = "name")]
@@ -86,6 +88,7 @@ public class Cover : IItem
     public int RunningTime { get; set; }
 }
 
+[DebuggerDisplay("{Name}")]
 public class Light : IItem
 {
     [YamlMember(Alias = "name")]
