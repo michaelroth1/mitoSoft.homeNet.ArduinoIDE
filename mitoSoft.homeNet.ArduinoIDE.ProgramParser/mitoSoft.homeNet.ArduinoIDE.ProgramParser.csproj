@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates\Cover.txt" />
+    <EmbeddedResource Include="Templates\CoverTemplate.txt" />
     <EmbeddedResource Include="Templates\CoverSetup.txt" />
     <EmbeddedResource Include="Templates\CoverDeclaration.txt" />
-    <EmbeddedResource Include="Templates\Light.txt" />
+    <EmbeddedResource Include="Templates\LightTemplate.txt" />
     <EmbeddedResource Include="Templates\LightDeclaration.txt" />
     <EmbeddedResource Include="Templates\Program.txt" />
   </ItemGroup>
