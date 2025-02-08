@@ -22,8 +22,12 @@ EthernetClient ethClient;
 PubSubClient client(broker, 1883, ethClient);
 PubSubHelper mqttHelper(client, 15000, false);
 
-##coverSetup##
-##lightSetup##
+##coverDeclaration##
+
+##lightDeclaration##
+
+##additionalDeclaration##
+
 void setup() {
   //Serial.begin(9600);
   //Serial.println("start ##controllerName##");
@@ -32,8 +36,11 @@ void setup() {
 
   mqttHelper.init("##controllerName##");
 
-##coverReferenceRun##
-##lightInit##
+##coverSetup##
+
+##lightSetup##
+
+##additionalSetup##
 }
 
 void loop() {
@@ -46,7 +53,12 @@ void loop() {
   }
   
 ##cover##
+
 ##light##
+
+  // Additional code ***********************************************
+##additionalCode##
+
   // Subscribe******************************************************
   if (mqttHelper.onConnected()){
     mqttHelper.subscribe("##subscribedTopic##");

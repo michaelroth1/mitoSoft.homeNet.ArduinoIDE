@@ -3,20 +3,15 @@
   //
   if (gpio_##Name##_buttonDown.risingEdge()) {
     ##Name##.runDown();
-  }
-  else if (topic == "##CommandTopic##" && message == "##PayloadClose##") {
+  } else if (topic == "##CommandTopic##" && message == "##PayloadClose##") {
     ##Name##.runDown();
-  }
-  else if (gpio_##Name##_buttonUp.risingEdge()) {
+  } else if (gpio_##Name##_buttonUp.risingEdge()) {
     ##Name##.runUp();
-  }
-  else if (topic == "##CommandTopic##" && message == "##PayloadOpen##") {
+  } else if (topic == "##CommandTopic##" && message == "##PayloadOpen##") {
     ##Name##.runUp();
-  }
-  else if (topic == "##CommandTopic##" && message == "##PayloadStop##") {
+  } else if (topic == "##CommandTopic##" && message == "##PayloadStop##") {
     ##Name##.runStop();
-  }
-  else if (topic == "##SetPositionTopic##") {
+  } else if (topic == "##SetPositionTopic##") {
     ##Name##.setShutterPosition(message.toDouble());
   }
   
@@ -25,8 +20,7 @@
       gpio_##Name##_up.setOff();
       gpio_##Name##_down.setOn();
       mqttHelper.publish("##StateTopic##", "##StateClosing##", false); //state_closing:
-    }
-    else if (2 == ##Name##.getDirection()) { //UP
+    } else if (2 == ##Name##.getDirection()) { //UP
       gpio_##Name##_up.setOn();
       gpio_##Name##_down.setOff();
       mqttHelper.publish("##StateTopic##", "##StateOpening##", false); //state_opening:
@@ -44,8 +38,7 @@
     mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
     if (0.0 >= ##Name##.getPosition()) { 
       mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
-    }
-    else if (100.0 <= ##Name##.getPosition()) {
+    } else if (100.0 <= ##Name##.getPosition()) {
       mqttHelper.publish("##StateTopic##", "##StateClosed##", false);
     }
   }

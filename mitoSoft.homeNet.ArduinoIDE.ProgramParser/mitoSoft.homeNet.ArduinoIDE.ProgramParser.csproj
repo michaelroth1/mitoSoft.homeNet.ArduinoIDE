@@ -7,19 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\LightInit.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\LightInit.txt" />
+    <EmbeddedResource Include="Templates\LightSetup.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\Cover.txt" />
-    <EmbeddedResource Include="Templates\CoverReferenceRun.txt" />
     <EmbeddedResource Include="Templates\CoverSetup.txt" />
+    <EmbeddedResource Include="Templates\CoverDeclaration.txt" />
     <EmbeddedResource Include="Templates\Light.txt" />
-    <EmbeddedResource Include="Templates\LightSetup.txt" />
+    <EmbeddedResource Include="Templates\LightDeclaration.txt" />
     <EmbeddedResource Include="Templates\Program.txt" />
   </ItemGroup>
 

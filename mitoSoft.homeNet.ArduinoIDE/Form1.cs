@@ -76,7 +76,10 @@ public partial class Form1 : Form
            controller!.MacAddress.GetArduinoSignaturFormat(),
            controller!.BrokerIPAddress.GetArduinoIPFormat(),
            controller!.GpioMode,
-           controller!.SubscribedTopic)
+           controller!.SubscribedTopic,
+           controller!.AdditionalDeclaration, 
+           controller!.AdditionalSetup,
+           controller!.AdditionalCode)
            .Build(mqtt);
 
         var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);

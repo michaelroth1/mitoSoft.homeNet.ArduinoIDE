@@ -45,6 +45,15 @@ public class HomeNetController
     [YamlMember(Alias = "gpio_mode")]
     public required string GpioMode { get; set; } = null!;
 
+    [YamlMember(Alias = "additional_declaration")]
+    public  string AdditionalDeclaration { get; set; } = "";
+
+    [YamlMember(Alias = "additional_setup")]
+    public  string AdditionalSetup { get; set; } = "";
+
+    [YamlMember(Alias = "additional_code")]
+    public string AdditionalCode { get; set; } = "";
+
     public override string ToString()
     {
         return this.Name;

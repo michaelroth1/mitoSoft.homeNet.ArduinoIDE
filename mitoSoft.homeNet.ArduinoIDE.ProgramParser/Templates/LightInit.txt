@@ -1,2 +1,0 @@
-﻿  mqttHelper.publish("##StateTopic##", "##StateOn##", true);
-##lightInit##
