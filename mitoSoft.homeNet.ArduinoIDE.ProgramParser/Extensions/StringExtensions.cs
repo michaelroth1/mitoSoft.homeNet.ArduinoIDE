@@ -34,7 +34,7 @@ internal static class StringExtensions
 
     public static string CleanEmptyRows(this string value)
     {
-        var lines = value.Split('\n').ToList();
+        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
         var cleaned = new List<string>();
 
         foreach (string line in lines)
@@ -55,7 +55,7 @@ internal static class StringExtensions
 
     public static string RemoveDoubleEmptyRows(this string value)
     {
-        var lines = value.Split('\n').ToList();
+        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
         var cleaned = new List<string>();
         bool lastWasEmpty = false;
 
