@@ -36,14 +36,20 @@ public class YamlParser
         {
             IDeserializer deserializer = GetDeserializer();
 
-            var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
-            var homeNetConfig = homeNetData["homeNet"]; // Extrahiere nur den "homeNet"-Teil
-
-            return homeNetConfig.Controllers;
+            var yaml = deserializer.Deserialize<Dictionary<string, HomeNetConfig>>(_yamlText);
+            if (yaml != null)
+            {
+                var homeNetConfig = yaml!["homeNet"]; // Extrahiere nur den "homeNet"-Teil
+                return homeNetConfig.Controllers;
+            }
+            else
+            {
+                return [];
+            }
         }
         catch
         {
-            return new List<HomeNetController>();
+            return [];
         }
     }
 
