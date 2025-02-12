@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
+﻿namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
 
 internal static class StringExtensions
 {

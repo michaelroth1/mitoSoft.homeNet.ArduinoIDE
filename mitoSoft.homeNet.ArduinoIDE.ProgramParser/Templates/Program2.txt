@@ -6,17 +6,21 @@
 
 #include <SPI.h>
 #include <Ethernet.h>
+#include <PubSubClient.h>
 #include <MitoSoft.h>
+#include <StringHelper.h>
+#include <ArduinoMqttClient.h>
 
 // network configuration*******************************************
 byte mac[] = {##mac##}; //Format: { 0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D };
 IPAddress ip(##ip##); 
 IPAddress broker(##brokerIp##);
 
+EthernetHelper ethHelper(mac);
+
 EthernetClient ethClient;
-EthernetHelper ethHelper(mac, ip, false);
-MqttClient mqttClient(ethClient);
-MqttHelper mqttHelper(mqttClient, 15000, false);
+PubSubClient client(broker, 1883, ethClient);
+PubSubHelper mqttHelper(client, 15000, false);
 
 ##coverDeclaration##
 
@@ -27,10 +31,10 @@ MqttHelper mqttHelper(mqttClient, 15000, false);
 void setup() {
   //Serial.begin(9600);
   //Serial.println("start ##controllerName##");
+   
+  ethHelper.fixIpSetup(ip);
 
-  ethHelper.fixIpSetup();
-
-  mqttHelper.init(broker, "##controllerName##");
+  mqttHelper.init("##controllerName##");
 
 ##coverSetup##
 
