@@ -34,19 +34,21 @@ public partial class Form1 : Form
         var controllers = new YamlParser(YamlTextBox.Text)
             .ParseHomeNetControllers();
 
-        var selected = this.toolStripComboBox1.SelectedItem as HomeNetController;
+        var selected = this.toolStripComboBox.SelectedItem as HomeNetController;
 
-        this.toolStripComboBox1.Items.Clear();
+        this.toolStripComboBox.Items.Clear();
+        this.toolStripComboBox.SelectedIndex = -1;
+        this.toolStripComboBox.Text = "";
         foreach (var controller in controllers)
         {
-            this.toolStripComboBox1.Items.Add(controller);
+            this.toolStripComboBox.Items.Add(controller);
         }
 
-        foreach (HomeNetController item in this.toolStripComboBox1.Items)
+        foreach (HomeNetController item in this.toolStripComboBox.Items)
         {
             if (item.Name == selected?.Name)
             {
-                toolStripComboBox1.SelectedItem = item;
+                toolStripComboBox.SelectedItem = item;
                 break;
             }
         }
@@ -65,7 +67,7 @@ public partial class Form1 : Form
 
         this.CheckYaml();
 
-        var controller = (HomeNetController)toolStripComboBox1.SelectedItem!;
+        var controller = (HomeNetController)toolStripComboBox.SelectedItem!;
 
         var mqtt = new YamlParser(YamlTextBox.Text)
             .Parse(controller!.UniqueId);
@@ -82,7 +84,7 @@ public partial class Form1 : Form
            controller!.AdditionalCode)
            .Build(mqtt);
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);
+        var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
         f.ShowDialog(program);
     }
 
@@ -96,7 +98,7 @@ public partial class Form1 : Form
         var newConfig = new YamlParser(YamlTextBox.Text)
             .AddHomeNetElements();
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox1.SelectedItem!);
+        var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
         f.ShowDialog(newConfig);
     }
 
@@ -107,7 +109,7 @@ public partial class Form1 : Form
             throw new InvalidOperationException("Add a YAML file.");
         }
 
-        if (this.toolStripComboBox1.SelectedItem == null)
+        if (this.toolStripComboBox.SelectedItem == null)
         {
             throw new InvalidOperationException("Inspect and choose a controller.");
         }

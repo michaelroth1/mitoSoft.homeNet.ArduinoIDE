@@ -33,13 +33,13 @@ public class Cover : IItem
     public required string CommandTopic { get; set; } = null!;
 
     [YamlMember(Alias = "state_topic")]
-    public string StateTopic { get; set; } = "MyState";
+    public string StateTopic { get; set; } = "no_topic/state";
 
     [YamlMember(Alias = "set_position_topic")]
-    public string SetPositionTopic { get; set; } = null!;
+    public string SetPositionTopic { get; set; } = "no_topic/command/pos";
 
     [YamlMember(Alias = "position_topic")]
-    public string PositionTopic { get; set; } = "MyPosition";
+    public string PositionTopic { get; set; } = "no_topic/state/pos";
 
     [YamlMember(Alias = "payload_open")]
     public required string PayloadOpen { get; set; } = null!;
@@ -51,10 +51,10 @@ public class Cover : IItem
     public required string PayloadStop { get; set; } = null!;
 
     [YamlMember(Alias = "position_open")]
-    public string PositionOpen { get; set; } = null!;
+    public string PositionOpen { get; set; } = "100";
 
     [YamlMember(Alias = "position_closed")]
-    public string PositionClosed { get; set; } = null!;
+    public string PositionClosed { get; set; } = "0";
 
     [YamlMember(Alias = "state_open")]
     public string StateOpen { get; set; } = "opened";
@@ -102,7 +102,7 @@ public class Light : IItem
     public required string CommandTopic { get; set; } = null!;
 
     [YamlMember(Alias = "state_topic")]
-    public string StateTopic { get; set; } = null!;
+    public string StateTopic { get; set; } = "no_topic/state";
 
     [YamlMember(Alias = "payload_on")]
     public required string PayloadOn { get; set; } = null!;
@@ -121,7 +121,7 @@ public class Light : IItem
 
     public int ControllerId { get; set; }
 
-    public string Description { get; set; } = "";
+    public string Description { get; set; } = null!;
 
     public int GpioPin { get; set; }
 
@@ -130,4 +130,6 @@ public class Light : IItem
     public string StateOn { get; set; } = null!;
 
     public string StateOff { get; set; } = null!;
+
+    public required string SwitchMode { get; set; } = null!;
 }

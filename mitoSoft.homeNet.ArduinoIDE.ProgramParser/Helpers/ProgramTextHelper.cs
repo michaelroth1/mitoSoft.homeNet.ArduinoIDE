@@ -70,14 +70,14 @@ public class ProgramTextBuilder
         _program = _program.Replace("##author##", "build with mitoSoft.ArduinoIDE");
         _program = _program.Replace("##subscribedTopic##", _subscribedTopic);
         _program = _program.ReplaceWithWhiteSpaces(0, "##additionalDeclaration##", _additionalDeclaration);
-        _program = _program.ReplaceWithWhiteSpaces(2,"##additionalSetup##", _additionalSetup);
+        _program = _program.ReplaceWithWhiteSpaces(2, "##additionalSetup##", _additionalSetup);
         _program = _program.ReplaceWithWhiteSpaces(2, "##additionalCode##", _additionalCode);
     }
 
     private void SetCoverInfo(IList<Cover> covers)
     {
         foreach (var cover in covers)
-        {             
+        {
             var coverDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt");
             var coverSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt");
             var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
@@ -106,11 +106,22 @@ public class ProgramTextBuilder
     {
         foreach (var light in lights)
         {
+            this.TrySetLightInfos(light);
+        }
+    }
+
+    private void TrySetLightInfos(Light light)
+    {
+        try
+        {
             var lightDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightDeclaration.txt");
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
-            
+
             var properties = ReflectionHelper.GetAllProperties(light);
+
+            //button oder switch replacement
+            lightTemplate = lightTemplate.Replace($"///{light.SwitchMode.ToLower().Trim()}: ", "");
 
             foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
@@ -128,10 +139,14 @@ public class ProgramTextBuilder
             _program = _program.Replace("##lightSetup##", lightSetup);
             _program = _program.Replace("##light##", lightTemplate);
         }
+        catch (Exception ex)
+        {
+            throw new Exception($"{light.Name}: {ex.Message}");
+        }
     }
 
     private void CleanUp()
-    {   
+    {
         _program = _program.Replace("##coverDeclaration##", "");
         _program = _program.Replace("##coverSetup##", "");
         _program = _program.Replace("##cover##", "");
@@ -143,6 +158,7 @@ public class ProgramTextBuilder
         _program = _program.Replace("##additionalSetup##", "");
         _program = _program.Replace("##additionalCode##", "");
 
+        _program = _program.CommentOutInvalidMqttMessages();
         _program = _program.RemoveDoubleEmptyRows();
         _program = _program.CleanEmptyRows();
         _program = _program.Replace("\n\n  }", "\n  }");

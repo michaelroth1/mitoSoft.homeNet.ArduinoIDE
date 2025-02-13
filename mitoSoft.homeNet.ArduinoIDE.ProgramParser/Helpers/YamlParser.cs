@@ -188,7 +188,7 @@ public class YamlParser
             cover.GpioClose = homeNetCover.GpioClose;
             cover.RunningTime = homeNetCover.RunningTime;
             cover.ControllerId = homeNetCover.ControllerId;
-            cover.Description = homeNetCover.Description ?? "";
+            cover.Description = homeNetCover.Description;
         }
 
         foreach (var light in mqttConfig.Lights)
@@ -197,9 +197,10 @@ public class YamlParser
             light.GpioPin = homeNetLight.GpioPin;
             light.GpioButton = homeNetLight.GpioButton;
             light.ControllerId = homeNetLight.ControllerId;
-            light.Description = homeNetLight.Description ?? "";
+            light.Description = homeNetLight.Description;
             light.StateOn = homeNetLight.StateOn;
             light.StateOff = homeNetLight.StateOff;
+            light.SwitchMode = homeNetLight.SwitchMode;
         }
 
         return mqttConfig;

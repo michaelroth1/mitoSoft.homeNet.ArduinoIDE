@@ -45,7 +45,7 @@
             splitContainer1 = new SplitContainer();
             WarningTextBox = new RichTextBox();
             toolStrip1 = new ToolStrip();
-            toolStripComboBox1 = new ToolStripComboBox();
+            toolStripComboBox = new ToolStripComboBox();
             BuildToolStripButton = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton1 = new ToolStripButton();
@@ -101,7 +101,7 @@
             // 
             openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(359, 44);
+            openToolStripMenuItem.Size = new Size(206, 44);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += OpenToolStripMenuItem_Click;
             // 
@@ -109,7 +109,7 @@
             // 
             saveToolStripMenuItem.Image = (Image)resources.GetObject("saveToolStripMenuItem.Image");
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(359, 44);
+            saveToolStripMenuItem.Size = new Size(206, 44);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
             // 
@@ -187,17 +187,18 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox1, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
             toolStrip1.Location = new Point(0, 40);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1443, 42);
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripComboBox1
+            // toolStripComboBox
             // 
-            toolStripComboBox1.Name = "toolStripComboBox1";
-            toolStripComboBox1.Size = new Size(350, 42);
+            toolStripComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            toolStripComboBox.Name = "toolStripComboBox";
+            toolStripComboBox.Size = new Size(350, 42);
             // 
             // BuildToolStripButton
             // 
@@ -289,7 +290,7 @@
         private SaveFileDialog SaveFileDialog;
         private ToolStrip toolStrip1;
         private ToolStripButton BuildToolStripButton;
-        private ToolStripComboBox toolStripComboBox1;
+        private ToolStripComboBox toolStripComboBox;
         private ToolStripButton toolStripButton1;
         private ToolStripButton toolStripButton2;
         private ToolStripSeparator toolStripSeparator1;

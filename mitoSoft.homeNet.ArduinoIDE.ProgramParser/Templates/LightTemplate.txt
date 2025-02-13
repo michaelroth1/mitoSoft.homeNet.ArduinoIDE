@@ -1,7 +1,9 @@
 ﻿  //***********************************************************************************************************
   // ##Description##
   //
-  if (gpio_##Name##_button.risingEdge()) {
+  if ((topic == "##CommandTopic##" && message == "toggle") ||
+      ///button: gpio_##Name##_button.risingEdge()) { //switch_mode: button
+      ///switch: gpio_##Name##_button.risingEdge() || gpio_##Name##_button.risingEdge()) {  //switch_mode: switch
     int state = gpio_##Name##.toggle();
     if (state == 1) { //on
       mqttHelper.publish("##StateTopic##", "##StateOn##", true);

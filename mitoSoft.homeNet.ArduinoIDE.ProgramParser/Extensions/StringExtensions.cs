@@ -73,4 +73,12 @@ internal static class StringExtensions
 
         return string.Join('\n', cleaned.ToArray());
     }
+
+    /// <summary>
+    /// All lines with publish messages that starts with "no_topic/..." will set as a comment
+    /// </summary>
+    public static string CommentOutInvalidMqttMessages(this string value)
+    {
+        return value.Replace("mqttHelper.publish(\"no_topic/", "//mqttHelper.publish(\"no_topic/");
+    }
 }
