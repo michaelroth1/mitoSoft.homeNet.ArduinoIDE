@@ -110,11 +110,11 @@ public class HomeNetCover
     [Required]
     public string PositionTopic { get; set; } = "no_topic/state/pos";
 
-    public string PayloadOpen { get; set; } = null!;
+    public string PayloadOpen { get; set; } = "up";
 
-    public string PayloadClose { get; set; } = null!;
+    public string PayloadClose { get; set; } = "close";
 
-    public string PayloadStop { get; set; } = null!;
+    public string PayloadStop { get; set; } = "stop"!;
 
     [Required]
     public string PositionOpen { get; set; } = "open"!;

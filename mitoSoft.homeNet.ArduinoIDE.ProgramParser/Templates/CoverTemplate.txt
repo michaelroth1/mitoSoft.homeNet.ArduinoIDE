@@ -1,13 +1,11 @@
 ﻿  //***********************************************************************************************************
   // ##Description##
   //
-  if (gpio_##Name##_buttonDown.risingEdge()) {
+  if (gpio_##Name##_buttonDown.risingEdge() ||
+      (topic == "##CommandTopic##" && message == "##PayloadClose##")) {
     ##Name##.runDown();
-  } else if (topic == "##CommandTopic##" && message == "##PayloadClose##") {
-    ##Name##.runDown();
-  } else if (gpio_##Name##_buttonUp.risingEdge()) {
-    ##Name##.runUp();
-  } else if (topic == "##CommandTopic##" && message == "##PayloadOpen##") {
+  } else if (gpio_##Name##_buttonUp.risingEdge() ||
+             (topic == "##CommandTopic##" && message == "##PayloadOpen##")) {
     ##Name##.runUp();
   } else if (topic == "##CommandTopic##" && message == "##PayloadStop##") {
     ##Name##.runStop();
