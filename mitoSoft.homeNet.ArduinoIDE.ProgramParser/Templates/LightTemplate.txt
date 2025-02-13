@@ -1,5 +1,5 @@
 ﻿  //***********************************************************************************************************
-  //Light ##Name##
+  // ##Description##
   //
   if (gpio_##Name##_button.risingEdge()) {
     int state = gpio_##Name##.toggle();
@@ -10,7 +10,7 @@
     }    
   } else if (topic == "##CommandTopic##" && message == "##PayloadOn##") {
     gpio_##Name##.setOn();
-    mqttHelper.publish("##StateTopic##","##StateOn##", true);
+    mqttHelper.publish("##StateTopic##", "##StateOn##", true);
   } else if (topic == "##CommandTopic##" && message == "##PayloadOff##") {
     gpio_##Name##.setOff();
     mqttHelper.publish("##StateTopic##", "##StateOff##", true);

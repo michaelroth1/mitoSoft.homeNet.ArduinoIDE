@@ -83,11 +83,17 @@ public class ProgramTextBuilder
             var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
 
             var properties = ReflectionHelper.GetAllProperties(cover);
-            foreach (var prop in properties)
+
+            foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
                 coverDeclaration = coverDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 coverSetup = coverSetup.Replace($"##{prop.Key}##", prop.Value);
                 coverTemplate = coverTemplate.Replace($"##{prop.Key}##", prop.Value);
+            }
+
+            if (coverTemplate.Contains("##Description##"))
+            {
+                coverTemplate = coverTemplate.Replace($"##Description##", $"Cover {cover.Name}");
             }
 
             _program = _program.Replace("##coverDeclaration##", coverDeclaration);
@@ -105,11 +111,17 @@ public class ProgramTextBuilder
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
             
             var properties = ReflectionHelper.GetAllProperties(light);
-            foreach (var prop in properties)
+
+            foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
                 lightDeclaration = lightDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
                 lightTemplate = lightTemplate.Replace($"##{prop.Key}##", prop.Value);
+            }
+
+            if (lightTemplate.Contains("##Description##"))
+            {
+                lightTemplate = lightTemplate.Replace($"##Description##", $"Light {light.Name}");
             }
 
             _program = _program.Replace("##lightDeclaration##", lightDeclaration);

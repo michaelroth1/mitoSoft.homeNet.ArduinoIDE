@@ -66,6 +66,9 @@ public class HomeNetCover
     [YamlMember(Alias = "unique_id")]
     public required string UniqueId { get; set; } = null!;
 
+    [YamlMember(Alias = "description")]
+    public string? Description { get; set; }
+
     [YamlMember(Alias = "controller_id")]
     public required int ControllerId { get; set; }
 
@@ -91,6 +94,9 @@ public class HomeNetLight
     [YamlMember(Alias = "unique_id")]
     public required string UniqueId { get; set; } = null!;
 
+    [YamlMember(Alias = "description")]
+    public string? Description { get; set; }
+
     [YamlMember(Alias = "controller_id")]
     public required int ControllerId { get; set; }
 
@@ -99,4 +105,10 @@ public class HomeNetLight
 
     [YamlMember(Alias = "gpio_button")]
     public required int GpioButton { get; set; }
+
+    [YamlMember(Alias = "state_on")]
+    public string StateOn { get; set; } = "on";
+
+    [YamlMember(Alias = "state_off")]
+    public string StateOff { get; set; } = "off";
 }

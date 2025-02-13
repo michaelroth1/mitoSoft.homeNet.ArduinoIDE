@@ -16,6 +16,8 @@ public interface IItem
 {
     string Name { get; set; }
 
+    string Description { get; set; }
+
     int ControllerId { get; set; }
 
     string UniqueId { get; set; }
@@ -31,13 +33,13 @@ public class Cover : IItem
     public required string CommandTopic { get; set; } = null!;
 
     [YamlMember(Alias = "state_topic")]
-    public string StateTopic { get; set; } = null!;
+    public string StateTopic { get; set; } = "MyState";
 
     [YamlMember(Alias = "set_position_topic")]
     public string SetPositionTopic { get; set; } = null!;
 
     [YamlMember(Alias = "position_topic")]
-    public string PositionTopic { get; set; } = null!;
+    public string PositionTopic { get; set; } = "MyPosition";
 
     [YamlMember(Alias = "payload_open")]
     public required string PayloadOpen { get; set; } = null!;
@@ -55,25 +57,27 @@ public class Cover : IItem
     public string PositionClosed { get; set; } = null!;
 
     [YamlMember(Alias = "state_open")]
-    public string StateOpen { get; set; } = null!;
+    public string StateOpen { get; set; } = "opened";
 
     [YamlMember(Alias = "state_opening")]
-    public string StateOpening { get; set; } = null!;
+    public string StateOpening { get; set; } = "opening";
 
     [YamlMember(Alias = "state_closed")]
-    public string StateClosed { get; set; } = null!;
+    public string StateClosed { get; set; } = "closed";
 
     [YamlMember(Alias = "state_closing")]
-    public string StateClosing { get; set; } = null!;
+    public string StateClosing { get; set; } = "closing";
 
     [YamlMember(Alias = "state_stopped")]
-    public string StateStopped { get; set; } = null!;
+    public string StateStopped { get; set; } = "stopped";
 
     [YamlMember(Alias = "unique_id")]
     public required string UniqueId { get; set; } = null!;
 
     [YamlMember(Alias = "optimistic")]
     public bool Optimistic { get; set; } = false;
+
+    public string Description { get; set; } = "";
 
     public int ControllerId { get; set; }
 
@@ -109,12 +113,6 @@ public class Light : IItem
     [YamlMember(Alias = "optimistic")]
     public bool Optimistic { get; set; } = false;
 
-    [YamlMember(Alias = "state_on")]
-    public string StateOn { get; set; } = null!;
-
-    [YamlMember(Alias = "state_off")]
-    public string StateOff { get; set; } = null!;
-
     [YamlMember(Alias = "state_toggle")]
     public string StateToggle { get; set; } = null!;
 
@@ -123,7 +121,13 @@ public class Light : IItem
 
     public int ControllerId { get; set; }
 
+    public string Description { get; set; } = "";
+
     public int GpioPin { get; set; }
 
     public int GpioButton { get; set; }
+
+    public string StateOn { get; set; } = null!;
+
+    public string StateOff { get; set; } = null!;
 }

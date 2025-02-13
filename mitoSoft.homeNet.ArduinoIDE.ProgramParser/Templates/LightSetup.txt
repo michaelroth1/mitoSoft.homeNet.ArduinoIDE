@@ -1,2 +1,2 @@
-﻿  mqttHelper.publish("##StateTopic##", "##StateOn##", true);
+﻿  mqttHelper.publish("##StateTopic##", "##StateOff##", true);
 ##lightSetup##
