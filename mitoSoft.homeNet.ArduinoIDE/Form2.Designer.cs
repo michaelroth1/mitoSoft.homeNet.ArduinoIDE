@@ -33,12 +33,10 @@
             button1 = new Button();
             label1 = new Label();
             TextBox = new RichTextBox();
-            statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
             timer1 = new System.Windows.Forms.Timer(components);
             button2 = new Button();
             SaveFileDialog = new SaveFileDialog();
-            statusStrip1.SuspendLayout();
+            StatusLabel = new Label();
             SuspendLayout();
             // 
             // button1
@@ -66,26 +64,10 @@
             TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             TextBox.Location = new Point(12, 72);
             TextBox.Name = "TextBox";
-            TextBox.Size = new Size(1491, 680);
+            TextBox.Size = new Size(1491, 672);
             TextBox.TabIndex = 3;
             TextBox.Text = "";
             TextBox.WordWrap = false;
-            // 
-            // statusStrip1
-            // 
-            statusStrip1.ImageScalingSize = new Size(32, 32);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
-            statusStrip1.Location = new Point(0, 765);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1515, 42);
-            statusStrip1.TabIndex = 6;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(237, 32);
-            toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // timer1
             // 
@@ -107,21 +89,28 @@
             // 
             SaveFileDialog.Filter = "Arduino |*.ino";
             // 
+            // StatusLabel
+            // 
+            StatusLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            StatusLabel.AutoSize = true;
+            StatusLabel.Location = new Point(12, 766);
+            StatusLabel.Name = "StatusLabel";
+            StatusLabel.Size = new Size(0, 32);
+            StatusLabel.TabIndex = 8;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1515, 807);
+            Controls.Add(StatusLabel);
             Controls.Add(button2);
-            Controls.Add(statusStrip1);
             Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(TextBox);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form2";
             Text = "Arduino IDE";
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -131,10 +120,9 @@
         private Button button1;
         private Label label1;
         private RichTextBox TextBox;
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timer1;
         private Button button2;
         private SaveFileDialog SaveFileDialog;
+        private Label StatusLabel;
     }
 }

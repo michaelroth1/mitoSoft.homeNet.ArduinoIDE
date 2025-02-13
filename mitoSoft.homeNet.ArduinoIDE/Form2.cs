@@ -18,16 +18,18 @@ namespace mitoSoft.homeNet.ArduinoIDE
             }
         }
 
-        public void ShowDialog(string text)
+        public void ShowDialog(string text, string title)
         {
+            this.Text = $"Arduino IDE: {title}";
             this.TextBox.Text = text;
             this.CleanStatusStrip();
             this.CopyToClipboard();
             base.ShowDialog();
         }
 
-        public void Show(string text)
+        public void Show(string text, string title)
         {
+            this.Text = $"Arduino IDE: {title}";
             this.TextBox.Text = text;
             this.CleanStatusStrip();
             this.CopyToClipboard();
@@ -76,7 +78,7 @@ namespace mitoSoft.homeNet.ArduinoIDE
 
         private void ShowInStatusBar(string status)
         {
-            this.toolStripStatusLabel1.Text = status;
+            this.StatusLabel.Text = status;
 
             this.timer1.Start();
         }
@@ -90,7 +92,7 @@ namespace mitoSoft.homeNet.ArduinoIDE
 
         private void CleanStatusStrip()
         {
-            this.toolStripStatusLabel1.Text = "";
+            this.StatusLabel.Text = "";
         }
     }
 }

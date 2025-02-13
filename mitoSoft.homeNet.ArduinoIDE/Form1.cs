@@ -86,7 +86,7 @@ public partial class Form1 : Form
         var program = programBuilder.Build(mqtt);
 
         var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
-        f.Show(program);
+        f.Show(program, controller!.Name);
 
         programBuilder.Check();
     }
@@ -102,7 +102,7 @@ public partial class Form1 : Form
             .AddHomeNetElements();
 
         var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
-        f.ShowDialog(newConfig);
+        f.ShowDialog(newConfig, "Missing HomeNet elements");
     }
 
     private void CheckEntries()
