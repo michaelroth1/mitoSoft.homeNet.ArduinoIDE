@@ -1,5 +1,5 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 

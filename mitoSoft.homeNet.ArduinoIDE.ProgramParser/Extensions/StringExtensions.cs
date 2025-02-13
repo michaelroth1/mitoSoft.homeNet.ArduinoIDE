@@ -1,4 +1,4 @@
-﻿namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
+﻿namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 
 internal static class StringExtensions
 {

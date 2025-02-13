@@ -1,7 +1,5 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
-using YamlDotNet.Core.Tokens;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -76,10 +74,21 @@ public class YamlParser
 
         var homeNetConfig = GetMergedMqttConfig(deserializer);
 
-        var gpios = homeNetConfig.Covers
-            .SelectMany(c => new[] { c.GpioOpen, c.GpioClose, c.GpioOpenButton, c.GpioCloseButton }) // Alle GPIO-Werte sammeln
-            .Concat(homeNetConfig.Lights.SelectMany(l => new[] { l.GpioPin, l.GpioButton })) // Light GPIOs hinzufügen
-            .Where(gpio => gpio > 0) // Falls es ungültige Werte gibt, ignorieren
+        var gpios1 = homeNetConfig.Covers
+            .SelectMany(c => new[] {
+                $"{c.ControllerId}-{c.GpioOpen}",
+                $"{c.ControllerId}-{c.GpioClose}",
+                $"{c.ControllerId}-{c.GpioOpenButton}",
+                $"{c.ControllerId}-{c.GpioCloseButton}" });// Alle GPIO-Werte sammeln
+
+        var gpios2 = homeNetConfig.Lights
+            .SelectMany(l => new[] {
+                $"{l.ControllerId}-{l.GpioPin}",
+                $"{l.ControllerId}-{l.GpioButton}" });
+
+        var merged = gpios1.Concat(gpios2); // GPIOs merging
+
+        var gpios = merged.Where(gpio => Convert.ToInt16(gpio.Split('-')[1]) > 0) // Falls es ungültige Werte gibt, ignorieren
             .OrderBy(gpio => gpio) // Sortieren
             .ToList();
 
@@ -89,20 +98,20 @@ public class YamlParser
         {
             foreach (var cover in homeNetConfig.Covers)
             {
-                if (cover.GpioClose == duplicate
-                 || cover.GpioOpen == duplicate
-                 || cover.GpioCloseButton == duplicate
-                 || cover.GpioOpenButton == duplicate)
+                if ($"{cover.ControllerId}-{cover.GpioClose}" == duplicate
+                 || $"{cover.ControllerId}-{cover.GpioOpen}" == duplicate
+                 || $"{cover.ControllerId}-{cover.GpioCloseButton}" == duplicate
+                 || $"{cover.ControllerId}-{cover.GpioOpenButton}" == duplicate)
                 {
-                    errors.Add($"WARNING: In cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
+                    errors.Add($"WARNING: In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
                 }
             }
             foreach (var light in homeNetConfig.Lights)
             {
-                if (light.GpioPin == duplicate
-                 || light.GpioButton == duplicate)
+                if ($"{light.ControllerId}-{light.GpioPin}" == duplicate
+                 || $"{light.ControllerId}-{light.GpioButton}" == duplicate)
                 {
-                    errors.Add($"\"WARNING: In light '{light.Name}' a duplicate gpio is used: {duplicate}");
+                    errors.Add($"\"WARNING: In controller '{light.ControllerId}', light '{light.Name}' a duplicate gpio is used: {duplicate}");
                 }
             }
         }
