@@ -78,6 +78,14 @@ public class ProgramTextBuilder
     {
         foreach (var cover in covers)
         {
+            this.TrySetcoverInfos(cover);
+        }
+    }
+
+    private void TrySetcoverInfos(Cover cover)
+    {
+        try
+        {
             var coverDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt");
             var coverSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt");
             var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
@@ -99,6 +107,10 @@ public class ProgramTextBuilder
             _program = _program.Replace("##coverDeclaration##", coverDeclaration);
             _program = _program.Replace("##coverSetup##", coverSetup);
             _program = _program.Replace("##cover##", coverTemplate);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"{cover.Name}: {ex.Message}");
         }
     }
 
