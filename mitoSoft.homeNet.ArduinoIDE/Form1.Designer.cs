@@ -37,7 +37,6 @@
             saveToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             createToolStripMenuItem = new ToolStripMenuItem();
-            checkYAMLToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             selectHomeNetNodeToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
@@ -52,6 +51,7 @@
             toolStripButton2 = new ToolStripButton();
             OpenFileDialog = new OpenFileDialog();
             SaveFileDialog = new SaveFileDialog();
+            toolStripButton3 = new ToolStripButton();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -115,7 +115,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, checkYAMLToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(89, 36);
             toolsToolStripMenuItem.Text = "Tools";
@@ -126,13 +126,6 @@
             createToolStripMenuItem.Size = new Size(428, 44);
             createToolStripMenuItem.Text = "Create homeNet Elements";
             createToolStripMenuItem.Click += CreateHomeNetElementsToolStripMenuItem_Clicked;
-            // 
-            // checkYAMLToolStripMenuItem
-            // 
-            checkYAMLToolStripMenuItem.Name = "checkYAMLToolStripMenuItem";
-            checkYAMLToolStripMenuItem.Size = new Size(428, 44);
-            checkYAMLToolStripMenuItem.Text = "Check YAML";
-            checkYAMLToolStripMenuItem.Click += CheckYAMLToolStripMenuItem_Clicked;
             // 
             // toolStripSeparator2
             // 
@@ -187,7 +180,7 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox, toolStripButton3, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
             toolStrip1.Location = new Point(0, 40);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1443, 42);
@@ -244,6 +237,16 @@
             SaveFileDialog.FileName = "export";
             SaveFileDialog.Filter = "YAML|*.yaml";
             // 
+            // toolStripButton3
+            // 
+            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
+            toolStripButton3.ImageTransparentColor = Color.Magenta;
+            toolStripButton3.Name = "toolStripButton3";
+            toolStripButton3.Size = new Size(46, 36);
+            toolStripButton3.Text = "toolStripButton3";
+            toolStripButton3.Click += CheckToolStripButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -285,7 +288,6 @@
         private RichTextBox WarningTextBox;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem createToolStripMenuItem;
-        private ToolStripMenuItem checkYAMLToolStripMenuItem;
         private OpenFileDialog OpenFileDialog;
         private SaveFileDialog SaveFileDialog;
         private ToolStrip toolStrip1;
@@ -296,5 +298,6 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem selectHomeNetNodeToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton toolStripButton3;
     }
 }

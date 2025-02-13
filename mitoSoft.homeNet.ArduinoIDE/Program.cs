@@ -17,7 +17,7 @@ namespace mitoSoft.homeNet.ArduinoIDE
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
 #pragma warning disable WFO5001
-            Application.SetColorMode(SystemColorMode.Dark);
+            Application.SetColorMode(SystemColorMode.System);
 #pragma warning restore WFO5001
 
             Application.Run(new Form1());

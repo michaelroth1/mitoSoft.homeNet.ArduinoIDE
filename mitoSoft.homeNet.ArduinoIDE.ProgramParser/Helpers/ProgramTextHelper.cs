@@ -1,5 +1,5 @@
-﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+using Merge = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.Merge;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
@@ -38,7 +38,7 @@ public class ProgramTextBuilder
         _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
     }
 
-    public string Build(HomeNetConfig config)
+    public string Build(Merge.Config config)
     {
         this.SetHeaderInfo();
 
@@ -72,7 +72,7 @@ public class ProgramTextBuilder
         _program = _program.ReplaceWithWhiteSpaces(2, "##additionalCode##", _additionalCode);
     }
 
-    private void SetCoverInfo(IList<HomeNetCover> covers)
+    private void SetCoverInfo(IList<Merge.Cover> covers)
     {
         foreach (var cover in covers)
         {
@@ -80,7 +80,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void TrySetcoverInfos(HomeNetCover cover)
+    private void TrySetcoverInfos(Merge.Cover cover)
     {
         try
         {
@@ -112,7 +112,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void SetLightInfo(IList<HomeNetLight> lights)
+    private void SetLightInfo(IList<Merge.Light> lights)
     {
         foreach (var light in lights)
         {
@@ -120,7 +120,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void TrySetLightInfos(HomeNetLight light)
+    private void TrySetLightInfos(Merge.Light light)
     {
         try
         {

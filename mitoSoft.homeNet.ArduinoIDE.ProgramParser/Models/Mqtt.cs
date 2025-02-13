@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using YamlDotNet.Serialization;
 
-namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.Mqtt;
 
-public class MqttConfig
+public class Config
 {
     [YamlMember(Alias = "cover")]
     public List<Cover> Covers { get; set; } = [];
@@ -12,15 +12,8 @@ public class MqttConfig
     public List<Light> Lights { get; set; } = [];
 }
 
-public interface IItem
-{
-    string Name { get; set; }
-
-    string UniqueId { get; set; }
-}
-
 [DebuggerDisplay("{Name}")]
-public class Cover : IItem
+public class Cover 
 {
     [YamlMember(Alias = "name")]
     public required string Name { get; set; } = null!;
@@ -75,7 +68,7 @@ public class Cover : IItem
 }
 
 [DebuggerDisplay("{Name}")]
-public class Light : IItem
+public class Light
 {
     [YamlMember(Alias = "name")]
     public required string Name { get; set; } = null!;

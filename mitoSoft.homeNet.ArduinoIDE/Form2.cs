@@ -4,13 +4,13 @@ namespace mitoSoft.homeNet.ArduinoIDE
 {
     public partial class Form2 : Form
     {
-        private HomeNetController _controller;
+        private readonly string _controllerName;
 
-        public Form2(HomeNetController controller)
+        public Form2(string controllerName)
         {
             InitializeComponent();
 
-            _controller = controller;
+            _controllerName = controllerName;
 
             if (Properties.Settings.Default.TextZoom > 0)
             {
@@ -18,18 +18,18 @@ namespace mitoSoft.homeNet.ArduinoIDE
             }
         }
 
-        public void ShowDialog(string text, string title)
+        public void ShowDialog(string text)
         {
-            this.Text = $"Arduino IDE: {title}";
+            this.Text = $"Arduino IDE: {_controllerName}";
             this.TextBox.Text = text;
             this.CleanStatusStrip();
             this.CopyToClipboard();
             base.ShowDialog();
         }
 
-        public void Show(string text, string title)
+        public void Show(string text)
         {
-            this.Text = $"Arduino IDE: {title}";
+            this.Text = $"Arduino IDE: {_controllerName}";
             this.TextBox.Text = text;
             this.CleanStatusStrip();
             this.CopyToClipboard();
@@ -50,13 +50,11 @@ namespace mitoSoft.homeNet.ArduinoIDE
 
         private void SaveButton_Clicked(object sender, EventArgs e)
         {
-            var controllerName = _controller?.Name ?? "TestController";
-
             SaveFileDialog.InitialDirectory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "Arduino");
 
-            SaveFileDialog.FileName = $"{controllerName}.ino";
+            SaveFileDialog.FileName = $"{this._controllerName}.ino";
 
             if (SaveFileDialog.ShowDialog() == DialogResult.OK)
             {

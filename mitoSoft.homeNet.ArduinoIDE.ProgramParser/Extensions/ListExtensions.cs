@@ -2,10 +2,10 @@
 
 public static class ListExtensions
 {
-    public static IList<string> FindDuplicates(this List<string> list)
+    public static IList<int> FindDuplicates(this List<int> list)
     {
-        var seen = new HashSet<string>();  // Speichert eindeutige Werte
-        var duplicates = new HashSet<string>(); // Speichert nur doppelte Werte
+        var seen = new HashSet<int>();  // Speichert eindeutige Werte
+        var duplicates = new HashSet<int>(); // Speichert nur doppelte Werte
 
         foreach (var item in list)
         {
@@ -15,6 +15,6 @@ public static class ListExtensions
             }
         }
 
-        return new List<string>(duplicates); // Rückgabe als Liste
+        return new List<int>(duplicates); // Rückgabe als Liste
     }
 }

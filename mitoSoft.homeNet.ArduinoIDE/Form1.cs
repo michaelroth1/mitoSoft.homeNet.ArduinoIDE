@@ -1,6 +1,7 @@
 using mitoSoft.homeNet.ArduinoIDE.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
@@ -31,10 +32,10 @@ public partial class Form1 : Form
     {
         this.SaveYamlInProps();
 
-        var controllers = new YamlParser(YamlTextBox.Text)
+        var controllers = new TextCrawler(YamlTextBox.Text)
             .ParseHomeNetControllers();
 
-        var selected = this.toolStripComboBox.SelectedItem as HomeNetController;
+        var selected = this.toolStripComboBox.SelectedItem;
 
         this.toolStripComboBox.Items.Clear();
         this.toolStripComboBox.SelectedIndex = -1;
@@ -44,14 +45,7 @@ public partial class Form1 : Form
             this.toolStripComboBox.Items.Add(controller);
         }
 
-        foreach (HomeNetController item in this.toolStripComboBox.Items)
-        {
-            if (item.Name == selected?.Name)
-            {
-                toolStripComboBox.SelectedItem = item;
-                break;
-            }
-        }
+        this.toolStripComboBox.SelectedItem = selected;
     }
 
     private void SaveYamlInProps()
@@ -60,17 +54,49 @@ public partial class Form1 : Form
         Properties.Settings.Default.Save();
     }
 
+    private void CheckToolStripButton_Click(object sender, EventArgs e)
+    {
+        this.CheckErrors();
+    }
+
+    private HomeNet.Controller CheckErrors()
+    {
+        this.WarningTextBox.Text = "";
+
+        string controllerName = (string)toolStripComboBox.SelectedItem!;
+
+        if (string.IsNullOrWhiteSpace(controllerName))
+        {
+            this.WarningTextBox.Text = "No controller selected...";
+            return null!;
+        }
+
+        var controller = (new YamlParser(YamlTextBox.Text)).GetController(controllerName);
+
+        var config = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
+
+        this.WarningTextBox.Text += config.GetGpioWarnings();
+
+        this.WarningTextBox.Text += config.GetPartnerWarnings();
+
+        if (string.IsNullOrWhiteSpace(this.WarningTextBox.Text))
+        {
+            this.WarningTextBox.Text = "No warnings found...";
+        }
+
+        return controller;
+    }
+
     private void BuildToolStripButton_Click(object sender, EventArgs e)
     {
-        this.SaveYamlInProps();
-        this.CheckEntries();
+        var controller = this.CheckErrors();
 
-        this.CheckYaml();
+        if (controller == null)
+        {
+            return;
+        }
 
-        var controller = (HomeNetController)toolStripComboBox.SelectedItem!;
-
-        var mqtt = new YamlParser(YamlTextBox.Text)
-            .Parse(controller!.UniqueId);
+        var config = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
 
         var programBuilder = new ProgramTextBuilder(
            controller!.Name,
@@ -83,17 +109,12 @@ public partial class Form1 : Form
            controller!.AdditionalSetup,
            controller!.AdditionalCode);
 
-        var program = programBuilder.Build(mqtt);
+        var program = programBuilder.Build(config);
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
-        f.Show(program, controller!.Name);
+        var f = new Form2(controller!.Name);
+        f.Show(program);
 
         programBuilder.Check();
-    }
-
-    private void CheckYAMLToolStripMenuItem_Clicked(object sender, EventArgs e)
-    {
-        this.CheckYaml();
     }
 
     private void CreateHomeNetElementsToolStripMenuItem_Clicked(object sender, EventArgs e)
@@ -101,8 +122,8 @@ public partial class Form1 : Form
         var newConfig = new YamlParser(YamlTextBox.Text)
             .AddHomeNetElements();
 
-        var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
-        f.ShowDialog(newConfig, "Missing HomeNet elements");
+        var f = new Form2("Missing HomeNet elements");
+        f.ShowDialog(newConfig);
     }
 
     private void CheckEntries()
@@ -116,14 +137,6 @@ public partial class Form1 : Form
         {
             throw new InvalidOperationException("Inspect and choose a controller.");
         }
-    }
-
-    private void CheckYaml()
-    {
-        var warnings = new YamlParser(YamlTextBox.Text)
-            .CheckYaml();
-
-        this.WarningTextBox.Text = warnings.ToString();
     }
 
     private void OpenToolStripMenuItem_Click(object sender, EventArgs e)

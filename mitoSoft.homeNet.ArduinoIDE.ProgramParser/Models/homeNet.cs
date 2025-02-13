@@ -2,18 +2,18 @@
 using System.Diagnostics;
 using YamlDotNet.Serialization;
 
-namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
+namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
-public class HomeNetConfig
+public class Config
 {
     [YamlMember(Alias = "cover")]
-    public List<HomeNetCover> Covers { get; set; } = [];
+    public List<Cover> Covers { get; set; } = [];
 
     [YamlMember(Alias = "light")]
-    public List<HomeNetLight> Lights { get; set; } = [];
+    public List<Light> Lights { get; set; } = [];
 
     [YamlMember(Alias = "controller")]
-    public List<HomeNetController> Controllers { get; set; } = [];
+    public List<Controller> Controllers { get; set; } = [];
 }
 
 /*
@@ -23,7 +23,7 @@ public class HomeNetConfig
   mac: "0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D"
  */
 [DebuggerDisplay("{Name}-{IPAddress}")]
-public class HomeNetController
+public class Controller
 {
     [YamlMember(Alias = "name")]
     public required string Name { get; set; } = null!;
@@ -62,7 +62,7 @@ public class HomeNetController
 }
 
 [DebuggerDisplay("{UniqueId}")]
-public class HomeNetCover
+public class Cover
 {
     [YamlMember(Alias = "unique_id")]
     [Required]
@@ -73,73 +73,31 @@ public class HomeNetCover
 
     [YamlMember(Alias = "controller_id")]
     [Required]
-    public int ControllerId { get; set; }
+    public int ControllerId { get; set; } = 1;
 
     [YamlMember(Alias = "gpio_open")]
     [Required]
-    public int GpioOpen { get; set; }
+    public int GpioOpen { get; set; } = 1;
 
     [YamlMember(Alias = "gpio_close")]
     [Required]
-    public int GpioClose { get; set; }
+    public int GpioClose { get; set; } = 2;
 
     [YamlMember(Alias = "gpio_in_open")]
     [Required]
-    public int GpioOpenButton { get; set; }
+    public int GpioOpenButton { get; set; } = 3;
 
     [YamlMember(Alias = "gpio_in_close")]
     [Required]
-    public int GpioCloseButton { get; set; }
+    public int GpioCloseButton { get; set; } = 4;
 
     [YamlMember(Alias = "running_time")]
     [Required]
-    public int RunningTime { get; set; }
-
-    [Required]
-    public string Name { get; set; } = null!;
-
-    [Required]
-    public string CommandTopic { get; set; } = "no_topic/command";
-
-    [Required]
-    public string StateTopic { get; set; } = "no_topic/state";
-
-    [Required]
-    public string SetPositionTopic { get; set; } = "no_topic/command/set";
-
-    [Required]
-    public string PositionTopic { get; set; } = "no_topic/state/pos";
-
-    public string PayloadOpen { get; set; } = "up";
-
-    public string PayloadClose { get; set; } = "close";
-
-    public string PayloadStop { get; set; } = "stop"!;
-
-    [Required]
-    public string PositionOpen { get; set; } = "open"!;
-
-    [Required]
-    public string PositionClosed { get; set; } = "close";
-
-    [Required]
-    public string StateOpen { get; set; } = "opened";
-
-    [Required]
-    public string StateOpening { get; set; } = "opening";
-
-    [Required]
-    public string StateClosed { get; set; } = "closed";
-
-    [Required]
-    public string StateClosing { get; set; } = "closing";
-
-    [Required]
-    public string StateStopped { get; set; } = "stopped";
+    public int RunningTime { get; set; } = 15000;
 }
 
 [DebuggerDisplay("{UniqueId}")]
-public class HomeNetLight
+public class Light
 {
     [YamlMember(Alias = "unique_id")]
     [Required]
@@ -150,15 +108,15 @@ public class HomeNetLight
 
     [YamlMember(Alias = "controller_id")]
     [Required]
-    public int ControllerId { get; set; }
+    public int ControllerId { get; set; } = 1;
 
     [YamlMember(Alias = "gpio_pin")]
     [Required]
-    public int GpioPin { get; set; }
+    public int GpioPin { get; set; } = 1;
 
     [YamlMember(Alias = "gpio_button")]
     [Required]
-    public int GpioButton { get; set; }
+    public int GpioButton { get; set; } = 2;
 
     [YamlMember(Alias = "state_on")]
     public string StateOn { get; set; } = "on";
@@ -169,17 +127,4 @@ public class HomeNetLight
     [YamlMember(Alias = "switch_mode")]
     [Required]
     public string SwitchMode { get; set; } = "button";
-
-    [Required]
-    public string Name { get; set; } = null!;
-
-    [Required]
-    public string CommandTopic { get; set; } = "no_topic/command";
-
-    [Required]
-    public string StateTopic { get; set; } = "no_topic/state";
-
-    public string PayloadOn { get; set; } = "on";
-
-    public string PayloadOff { get; set; } = "off";
 }
