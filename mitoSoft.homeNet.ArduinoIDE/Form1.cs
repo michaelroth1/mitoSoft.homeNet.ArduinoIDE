@@ -72,20 +72,23 @@ public partial class Form1 : Form
         var mqtt = new YamlParser(YamlTextBox.Text)
             .Parse(controller!.UniqueId);
 
-        var program = new ProgramTextBuilder(
+        var programBuilder = new ProgramTextBuilder(
            controller!.Name,
            controller!.IPAddress.GetArduinoIPFormat(),
            controller!.MacAddress.GetArduinoSignaturFormat(),
            controller!.BrokerIPAddress.GetArduinoIPFormat(),
            controller!.GpioMode,
            controller!.SubscribedTopic,
-           controller!.AdditionalDeclaration, 
+           controller!.AdditionalDeclaration,
            controller!.AdditionalSetup,
-           controller!.AdditionalCode)
-           .Build(mqtt);
+           controller!.AdditionalCode);
+
+        var program = programBuilder.Build(mqtt);
 
         var f = new Form2((HomeNetController)this.toolStripComboBox.SelectedItem!);
-        f.ShowDialog(program);
+        f.Show(program);
+
+        programBuilder.Check();
     }
 
     private void CheckYAMLToolStripMenuItem_Clicked(object sender, EventArgs e)

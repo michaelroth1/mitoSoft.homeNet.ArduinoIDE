@@ -26,6 +26,14 @@ namespace mitoSoft.homeNet.ArduinoIDE
             base.ShowDialog();
         }
 
+        public void Show(string text)
+        {
+            this.TextBox.Text = text;
+            this.CleanStatusStrip();
+            this.CopyToClipboard();
+            base.Show();
+        }
+
         private void CopyButton_Clicked(object sender, EventArgs e)
         {
             this.CopyToClipboard();

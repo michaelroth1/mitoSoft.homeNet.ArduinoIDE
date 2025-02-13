@@ -1,6 +1,7 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.ProgramParser.Extensions;
+using YamlDotNet.Core.Tokens;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -8,8 +9,9 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
 public class YamlParser
 {
-    private string _yamlText;
+    public string _yamlText;
     private List<string> _items = [];
+    private object mqttConfig;
 
     public YamlParser(string yaml)
     {
@@ -53,16 +55,16 @@ public class YamlParser
         }
     }
 
-    public MqttConfig Parse(int controllerId)
+    public HomeNetConfig Parse(int controllerId)
     {
         IDeserializer deserializer = GetDeserializer();
 
-        MqttConfig mqttConfig = GetMergedMqttConfig(deserializer);
+        var homeNetConfig = GetMergedMqttConfig(deserializer);
 
-        return new MqttConfig()
+        return new HomeNetConfig()
         {
-            Covers = mqttConfig.Covers.Where(c => c.ControllerId == controllerId).ToList(),
-            Lights = mqttConfig.Lights.Where(l => l.ControllerId == controllerId).ToList(),
+            Covers = homeNetConfig.Covers.Where(c => c.ControllerId == controllerId).ToList(),
+            Lights = homeNetConfig.Lights.Where(l => l.ControllerId == controllerId).ToList(),
         };
     }
 
@@ -72,11 +74,11 @@ public class YamlParser
 
         IDeserializer deserializer = GetDeserializer();
 
-        MqttConfig mqttConfig = GetMergedMqttConfig(deserializer);
+        var homeNetConfig = GetMergedMqttConfig(deserializer);
 
-        var gpios = mqttConfig.Covers
+        var gpios = homeNetConfig.Covers
             .SelectMany(c => new[] { c.GpioOpen, c.GpioClose, c.GpioOpenButton, c.GpioCloseButton }) // Alle GPIO-Werte sammeln
-            .Concat(mqttConfig.Lights.SelectMany(l => new[] { l.GpioPin, l.GpioButton })) // Light GPIOs hinzufügen
+            .Concat(homeNetConfig.Lights.SelectMany(l => new[] { l.GpioPin, l.GpioButton })) // Light GPIOs hinzufügen
             .Where(gpio => gpio > 0) // Falls es ungültige Werte gibt, ignorieren
             .OrderBy(gpio => gpio) // Sortieren
             .ToList();
@@ -85,7 +87,7 @@ public class YamlParser
 
         foreach (var duplicate in duplicates)
         {
-            foreach (var cover in mqttConfig.Covers)
+            foreach (var cover in homeNetConfig.Covers)
             {
                 if (cover.GpioClose == duplicate
                  || cover.GpioOpen == duplicate
@@ -95,7 +97,7 @@ public class YamlParser
                     errors.Add($"WARNING: In cover '{cover.Name}' a duplicate gpio is used: {duplicate}");
                 }
             }
-            foreach (var light in mqttConfig.Lights)
+            foreach (var light in homeNetConfig.Lights)
             {
                 if (light.GpioPin == duplicate
                  || light.GpioButton == duplicate)
@@ -167,7 +169,7 @@ public class YamlParser
         return yamlOutput;
     }
 
-    private MqttConfig GetMergedMqttConfig(IDeserializer deserializer)
+    private HomeNetConfig GetMergedMqttConfig(IDeserializer deserializer)
     {
         var mqttData = deserializer.Deserialize<Dictionary<string, MqttConfig>>(_yamlText);
         var mqttConfig = mqttData["mqtt"];// Extrahiere nur den "mqtt"-Teil
@@ -179,31 +181,39 @@ public class YamlParser
         CheckCovers(mqttConfig, homeNetConfig);
         CheckLights(mqttConfig, homeNetConfig);
 
-        foreach (var cover in mqttConfig.Covers)
+        foreach (var homeNetCover in homeNetConfig.Covers)
         {
-            var homeNetCover = homeNetConfig.Covers.Single(h => h.UniqueId == cover.UniqueId);
-            cover.GpioOpen = homeNetCover.GpioOpen;
-            cover.GpioOpenButton = homeNetCover.GpioOpenButton;
-            cover.GpioCloseButton = homeNetCover.GpioCloseButton;
-            cover.GpioClose = homeNetCover.GpioClose;
-            cover.RunningTime = homeNetCover.RunningTime;
-            cover.ControllerId = homeNetCover.ControllerId;
-            cover.Description = homeNetCover.Description;
+            var mqttCover = mqttConfig.Covers.SingleOrDefault(h => h.UniqueId == homeNetCover.UniqueId);
+
+            homeNetCover.Name = mqttCover?.Name ?? homeNetCover.UniqueId;
+            homeNetCover.CommandTopic = mqttCover?.CommandTopic ?? (new HomeNetCover()).CommandTopic;
+            homeNetCover.StateTopic = mqttCover?.StateTopic ?? (new HomeNetCover()).StateTopic;
+            homeNetCover.SetPositionTopic = mqttCover?.SetPositionTopic ?? (new HomeNetCover()).SetPositionTopic;
+            homeNetCover.PositionTopic = mqttCover?.PositionTopic ?? (new HomeNetCover()).PositionTopic;
+            homeNetCover.PayloadOpen = mqttCover?.PayloadOpen ?? (new HomeNetCover()).PayloadOpen;
+            homeNetCover.PayloadClose = mqttCover?.PayloadClose ?? (new HomeNetCover()).PayloadClose;
+            homeNetCover.PayloadStop = mqttCover?.PayloadStop ?? (new HomeNetCover()).PayloadStop;
+            homeNetCover.PositionOpen = mqttCover?.PositionOpen ?? (new HomeNetCover()).PositionOpen;
+            homeNetCover.PositionClosed = mqttCover?.PositionClosed ?? (new HomeNetCover()).PositionClosed;
+            homeNetCover.StateOpen = mqttCover?.StateOpen ?? (new HomeNetCover()).StateOpen;
+            homeNetCover.StateOpening = mqttCover?.StateOpening ?? (new HomeNetCover()).StateOpening;
+            homeNetCover.StateClosed = mqttCover?.StateClosed ?? (new HomeNetCover()).StateClosed;
+            homeNetCover.StateClosing = mqttCover?.StateClosing ?? (new HomeNetCover()).StateClosing;
+            homeNetCover.StateStopped = mqttCover?.StateStopped ?? (new HomeNetCover()).StateStopped;
         }
 
-        foreach (var light in mqttConfig.Lights)
+        foreach (var homeNetLight in homeNetConfig.Lights)
         {
-            var homeNetLight = homeNetConfig.Lights.Single(h => h.UniqueId == light.UniqueId);
-            light.GpioPin = homeNetLight.GpioPin;
-            light.GpioButton = homeNetLight.GpioButton;
-            light.ControllerId = homeNetLight.ControllerId;
-            light.Description = homeNetLight.Description;
-            light.StateOn = homeNetLight.StateOn;
-            light.StateOff = homeNetLight.StateOff;
-            light.SwitchMode = homeNetLight.SwitchMode;
+            var mqttLight = mqttConfig.Lights.SingleOrDefault(h => h.UniqueId == homeNetLight.UniqueId);
+
+            homeNetLight.Name = mqttLight?.Name! ?? homeNetLight.UniqueId;
+            homeNetLight.CommandTopic = mqttLight?.CommandTopic ?? (new HomeNetLight()).CommandTopic;
+            homeNetLight.StateTopic = mqttLight?.StateTopic ?? (new HomeNetLight()).StateTopic;
+            homeNetLight.PayloadOn = mqttLight?.PayloadOn ?? (new HomeNetLight()).PayloadOn;
+            homeNetLight.PayloadOff = mqttLight?.PayloadOff ?? (new HomeNetLight()).PayloadOff;
         }
 
-        return mqttConfig;
+        return homeNetConfig;
     }
 
     private void Truncate(string keyword)

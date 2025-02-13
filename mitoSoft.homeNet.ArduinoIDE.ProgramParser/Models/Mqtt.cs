@@ -16,10 +16,6 @@ public interface IItem
 {
     string Name { get; set; }
 
-    string Description { get; set; }
-
-    int ControllerId { get; set; }
-
     string UniqueId { get; set; }
 }
 
@@ -76,20 +72,6 @@ public class Cover : IItem
 
     [YamlMember(Alias = "optimistic")]
     public bool Optimistic { get; set; } = false;
-
-    public string Description { get; set; } = "";
-
-    public int ControllerId { get; set; }
-
-    public int GpioOpen { get; set; }
-
-    public int GpioClose { get; set; }
-
-    public int GpioOpenButton { get; set; }
-
-    public int GpioCloseButton { get; set; }
-
-    public int RunningTime { get; set; }
 }
 
 [DebuggerDisplay("{Name}")]
@@ -113,23 +95,6 @@ public class Light : IItem
     [YamlMember(Alias = "optimistic")]
     public bool Optimistic { get; set; } = false;
 
-    [YamlMember(Alias = "state_toggle")]
-    public string StateToggle { get; set; } = null!;
-
     [YamlMember(Alias = "unique_id")]
     public required string UniqueId { get; set; } = null!;
-
-    public int ControllerId { get; set; }
-
-    public string Description { get; set; } = null!;
-
-    public int GpioPin { get; set; }
-
-    public int GpioButton { get; set; }
-
-    public string StateOn { get; set; } = null!;
-
-    public string StateOff { get; set; } = null!;
-
-    public required string SwitchMode { get; set; } = null!;
 }

@@ -38,7 +38,7 @@ public class ProgramTextBuilder
         _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
     }
 
-    public string Build(MqttConfig config)
+    public string Build(HomeNetConfig config)
     {
         this.SetHeaderInfo();
 
@@ -49,8 +49,6 @@ public class ProgramTextBuilder
         this.SetGpioMode();
 
         this.CleanUp();
-
-        this.Check();
 
         return _program;
     }
@@ -74,7 +72,7 @@ public class ProgramTextBuilder
         _program = _program.ReplaceWithWhiteSpaces(2, "##additionalCode##", _additionalCode);
     }
 
-    private void SetCoverInfo(IList<Cover> covers)
+    private void SetCoverInfo(IList<HomeNetCover> covers)
     {
         foreach (var cover in covers)
         {
@@ -82,7 +80,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void TrySetcoverInfos(Cover cover)
+    private void TrySetcoverInfos(HomeNetCover cover)
     {
         try
         {
@@ -114,7 +112,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void SetLightInfo(IList<Light> lights)
+    private void SetLightInfo(IList<HomeNetLight> lights)
     {
         foreach (var light in lights)
         {
@@ -122,7 +120,7 @@ public class ProgramTextBuilder
         }
     }
 
-    private void TrySetLightInfos(Light light)
+    private void TrySetLightInfos(HomeNetLight light)
     {
         try
         {
@@ -177,7 +175,7 @@ public class ProgramTextBuilder
         _program = _program.Replace("\n\n}", "\n}");
     }
 
-    private void Check()
+    public void Check()
     {
         if (_program.Contains("##"))
         {
