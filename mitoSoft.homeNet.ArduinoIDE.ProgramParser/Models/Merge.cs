@@ -34,45 +34,45 @@ public class Cover : IItem
 
     public string Description { get; set; } = null!;
 
-    public int ControllerId { get; set; }
+    public int ControllerId { get; set; } = 1;
 
-    public int GpioOpen { get; set; }
+    public int GpioOpen { get; set; } = 1;
 
-    public int GpioClose { get; set; }
+    public int GpioClose { get; set; } = 2;
 
-    public int GpioOpenButton { get; set; }
+    public int GpioOpenButton { get; set; } = 3;
 
-    public int GpioCloseButton { get; set; }
+    public int GpioCloseButton { get; set; } = 4;
 
-    public int RunningTime { get; set; }
+    public int RunningTime { get; set; } = 15000;
 
-    public string CommandTopic { get; set; } = "no_topic/command";
+    public string CommandTopic { get; set; } = "_no_topic/command";
 
-    public string StateTopic { get; set; } = "no_topic/state";
+    public string StateTopic { get; set; } = "_no_topic/state";
 
-    public string SetPositionTopic { get; set; } = "no_topic/command/set";
+    public string SetPositionTopic { get; set; } = "_no_topic/command/set";
 
-    public string PositionTopic { get; set; } = "no_topic/state/pos";
+    public string PositionTopic { get; set; } = "_no_topic/state/pos";
 
-    public string PayloadOpen { get; set; } = "up";
+    public string PayloadOpen { get; set; } = "_no_payload";
 
-    public string PayloadClose { get; set; } = "close";
+    public string PayloadClose { get; set; } = "_no_payload";
 
-    public string PayloadStop { get; set; } = "no_message"!;
+    public string PayloadStop { get; set; } = "_no_payload"!;
 
     public int PositionOpen { get; set; } = 0;
 
     public int PositionClosed { get; set; } = 100;
 
-    public string StateOpen { get; set; } = "opened";
+    public string StateOpen { get; set; } = "_no_state";
 
-    public string StateOpening { get; set; } = "opening";
+    public string StateOpening { get; set; } = "_no_state";
 
-    public string StateClosed { get; set; } = "closed";
+    public string StateClosed { get; set; } = "_no_state";
 
-    public string StateClosing { get; set; } = "closing";
+    public string StateClosing { get; set; } = "_no_state";
 
-    public string StateStopped { get; set; } = "stopped";
+    public string StateStopped { get; set; } = "_no_state";
 }
 
 [DebuggerDisplay("{UniqueId}")]
@@ -86,23 +86,23 @@ public class Light : IItem
 
     public string Description { get; set; } = null!;
 
-    public int ControllerId { get; set; }
+    public int ControllerId { get; set; } = 1;
 
-    public int GpioPin { get; set; }
+    public int GpioPin { get; set; } = 1;
 
-    public int GpioButton { get; set; }
+    public int GpioButton { get; set; } = 2;
 
-    public string StateOn { get; set; } = "on";
+    public string StateOn { get; set; } = "_no_state";
 
-    public string StateOff { get; set; } = "off";
+    public string StateOff { get; set; } = "_no_state";
 
     public string SwitchMode { get; set; } = "button";
 
-    public string CommandTopic { get; set; } = "no_topic/command";
+    public string CommandTopic { get; set; } = "_no_topic/command";
 
-    public string StateTopic { get; set; } = "no_topic/state";
+    public string StateTopic { get; set; } = "_no_topic/state";
 
-    public string PayloadOn { get; set; } = "on";
+    public string PayloadOn { get; set; } = "_no_payload";
 
-    public string PayloadOff { get; set; } = "off";
+    public string PayloadOff { get; set; } = "_no_payload";
 }
