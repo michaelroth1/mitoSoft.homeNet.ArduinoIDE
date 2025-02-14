@@ -40,10 +40,10 @@ public class Cover
     public required string PayloadStop { get; set; } = null!;
 
     [YamlMember(Alias = "position_open")]
-    public string PositionOpen { get; set; } = "100";
+    public int PositionOpen { get; set; } = 0;
 
     [YamlMember(Alias = "position_closed")]
-    public string PositionClosed { get; set; } = "0";
+    public int PositionClosed { get; set; } = 100;
 
     [YamlMember(Alias = "state_open")]
     public string StateOpen { get; set; } = "opened";

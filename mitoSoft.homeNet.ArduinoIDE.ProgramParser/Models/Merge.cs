@@ -58,11 +58,11 @@ public class Cover : IItem
 
     public string PayloadClose { get; set; } = "close";
 
-    public string PayloadStop { get; set; } = "stop"!;
+    public string PayloadStop { get; set; } = "no_message"!;
 
-    public string PositionOpen { get; set; } = "open"!;
+    public int PositionOpen { get; set; } = 0;
 
-    public string PositionClosed { get; set; } = "close";
+    public int PositionClosed { get; set; } = 100;
 
     public string StateOpen { get; set; } = "opened";
 
