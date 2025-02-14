@@ -11,21 +11,25 @@ public class Config
 
 public interface IItem
 {
+    string Name { get; set; }
+
+    bool HasPartner { get; set; }
+
     string UniqueId { get; set; }
 
     string Description { get; set; }
 
     int ControllerId { get; set; }
-
-    string Name { get; set; }
-
-    bool HasPartner { get; set; }
 }
 
 
 [DebuggerDisplay("{UniqueId}")]
 public class Cover : IItem
 {
+    public string Name { get; set; } = null!;
+
+    public bool HasPartner { get; set; } = false;
+
     public string UniqueId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -41,10 +45,6 @@ public class Cover : IItem
     public int GpioCloseButton { get; set; }
 
     public int RunningTime { get; set; }
-
-    public string Name { get; set; } = null!;
-
-    public bool HasPartner { get; set; } = false;
 
     public string CommandTopic { get; set; } = "no_topic/command";
 
@@ -76,8 +76,12 @@ public class Cover : IItem
 }
 
 [DebuggerDisplay("{UniqueId}")]
-public class Light: IItem
+public class Light : IItem
 {
+    public string Name { get; set; } = null!;
+
+    public bool HasPartner { get; set; } = false;
+
     public string UniqueId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -93,10 +97,6 @@ public class Light: IItem
     public string StateOff { get; set; } = "off";
 
     public string SwitchMode { get; set; } = "button";
-
-    public string Name { get; set; } = null!;
-
-    public bool HasPartner { get; set; } = false;
 
     public string CommandTopic { get; set; } = "no_topic/command";
 
