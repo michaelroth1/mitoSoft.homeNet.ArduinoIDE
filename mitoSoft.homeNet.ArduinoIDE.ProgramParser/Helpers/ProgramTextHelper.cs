@@ -156,9 +156,14 @@ public class ProgramTextBuilder
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
 
-            //button oder switch replacement
-            lightTemplate = lightTemplate.Replace($"///{light.SwitchMode.ToLower().Trim()}: ", "");
-
+            if (light.SwitchMode.ToLower().Trim() == "button")
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnobuttonmode: ", "");
+            }
+            if (light.SwitchMode.ToLower().Trim() == "switch")
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnoswitchmode: ", "");
+            }
             if (!light.CommandTopic.StartsWith("_no_"))
             {
                 lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
@@ -203,15 +208,9 @@ public class ProgramTextBuilder
         _program = _program.CleanKeyWord("##lightDeclaration##");
         _program = _program.CleanKeyWord("##lightSetup##");
         _program = _program.CleanKeyWord("##light##");
-
         _program = _program.CleanKeyWord("##additionalDeclaration##");
         _program = _program.CleanKeyWord("##additionalSetup##");
         _program = _program.CleanKeyWord("##additionalCode##");
-
-        //_program = _program.RemoveDoubleEmptyRows();
-        //_program = _program.CleanEmptyRows();
-        //_program = _program.Replace("\n\n  }", "\n  }");
-        //_program = _program.Replace("\n\n}", "\n}");
     }
 
     public void Check()

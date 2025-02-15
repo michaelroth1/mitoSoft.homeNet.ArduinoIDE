@@ -3,8 +3,8 @@
   //
   if (false
       ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "toggle")
-      ///hasnobutton: ///button: || gpio_##Name##_button.risingEdge() //switch_mode: button
-      ///hasnobutton: ///switch: || gpio_##Name##_button.risingEdge() || gpio_##Name##_button.risingEdge() //switch_mode: switch
+      ///hasnobutton: ///hasnobuttonmode: || gpio_##Name##_button.risingEdge() //switch_mode: button
+      ///hasnobutton: ///hasnoswitchmode: || gpio_##Name##_button.risingEdge() || gpio_##Name##_button.risingEdge() //switch_mode: switch
      ) {
     int state = gpio_##Name##.toggle();
     if (state == 1) { //on
