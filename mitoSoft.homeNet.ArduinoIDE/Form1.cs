@@ -76,11 +76,11 @@ public partial class Form1 : Form
 
         var controller = (new YamlParser(YamlTextBox.Text)).GetController(controllerName);
 
-        var config = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
+        var controllerConfig = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
 
-        this.ErrorTextBox.Text += config.GetGpioErrors();
+        this.ErrorTextBox.Text += controllerConfig.GetGpioErrors();
 
-        this.ErrorTextBox.Text += config.GetPartnerWarnings();
+        this.ErrorTextBox.Text += controllerConfig.GetPartnerWarnings();
 
         if (string.IsNullOrWhiteSpace(this.ErrorTextBox.Text))
         {
