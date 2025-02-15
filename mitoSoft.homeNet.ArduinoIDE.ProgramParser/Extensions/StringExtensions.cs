@@ -10,7 +10,7 @@ internal static class StringExtensions
         // Wenn das Schlüsselwort gefunden wurde, schneide den Text ab
         if (index != -1)
         {
-            return inputText.Substring(0, index).Trim();
+            return inputText[..index].Trim();
         }
 
         // Wenn das Schlüsselwort nicht gefunden wurde, gib den gesamten Text zurück
@@ -32,7 +32,7 @@ internal static class StringExtensions
 
     public static string CleanEmptyRows(this string value)
     {
-        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[] lines = value.Split(["\r\n", "\n"], StringSplitOptions.None);
         var cleaned = new List<string>();
 
         foreach (string line in lines)
@@ -52,7 +52,7 @@ internal static class StringExtensions
 
     public static string CleanKeyWord(this string value, string keyWord)
     {
-        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[] lines = value.Split(["\r\n", "\n"], StringSplitOptions.None);
         var cleaned = new List<string>();
 
         foreach (string line in lines)
@@ -71,7 +71,7 @@ internal static class StringExtensions
 
     public static string RemoveDoubleEmptyRows(this string value)
     {
-        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[] lines = value.Split(["\r\n", "\n"], StringSplitOptions.None);
         var cleaned = new List<string>();
         bool lastWasEmpty = false;
 
@@ -91,12 +91,4 @@ internal static class StringExtensions
 
         return string.Join('\n', cleaned.ToArray());
     }
-
-    ///// <summary>
-    ///// All lines with publish messages that starts with "no_topic/..." will set as a comment
-    ///// </summary>
-    //public static string CommentOutInvalidMqttMessages(this string value)
-    //{
-    //    return value.Replace("mqttHelper.publish(\"_no_topic/", "//mqttHelper.publish(\"_no_topic/");
-    //}
 }

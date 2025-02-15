@@ -5,6 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "<Pending>", Scope = "member", Target = "~M:mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers.YamlParser.Parse(System.Int32)~mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNetConfig")]
-[assembly: SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>", Scope = "member", Target = "~M:mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions.ListExtensions.FindDuplicates(System.Collections.Generic.List{System.String})~System.Collections.Generic.IList{System.String}")]
-[assembly: SuppressMessage("Style", "IDE0306:Simplify collection initialization", Justification = "<Pending>", Scope = "member", Target = "~M:mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions.ListExtensions.FindDuplicates(System.Collections.Generic.List{System.String})~System.Collections.Generic.IList{System.String}")]
+[assembly: SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "<Pending>", Scope = "member", Target = "~M:mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions.HomeNetConfigExtensions.GetByControllerId(mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet.Config,System.Int32)~mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet.Config")]

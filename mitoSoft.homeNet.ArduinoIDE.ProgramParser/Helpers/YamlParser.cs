@@ -8,14 +8,9 @@ using Merge = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.Merge;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
-public class YamlParser
+public class YamlParser(string yaml)
 {
-    public string _yamlText;
-
-    public YamlParser(string yaml)
-    {
-        _yamlText = yaml;
-    }
+    public string _yamlText = yaml;
 
     public HomeNet.Controller GetController(string controllerName)
     {

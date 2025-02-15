@@ -43,7 +43,7 @@
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
-            WarningTextBox = new RichTextBox();
+            ErrorTextBox = new RichTextBox();
             toolStrip1 = new ToolStrip();
             toolStripComboBox = new ToolStripComboBox();
             toolStripButton3 = new ToolStripButton();
@@ -87,7 +87,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, toolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1443, 42);
+            menuStrip1.Size = new Size(1443, 40);
             menuStrip1.TabIndex = 4;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -95,7 +95,7 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 38);
+            fileToolStripMenuItem.Size = new Size(71, 36);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
@@ -118,7 +118,7 @@
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem, SearchToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 38);
+            toolsToolStripMenuItem.Size = new Size(89, 36);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // createToolStripMenuItem
@@ -150,7 +150,7 @@
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 38);
+            toolStripMenuItem1.Size = new Size(45, 36);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -171,25 +171,25 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(WarningTextBox);
+            splitContainer1.Panel2.Controls.Add(ErrorTextBox);
             splitContainer1.Size = new Size(1443, 733);
             splitContainer1.SplitterDistance = 507;
             splitContainer1.TabIndex = 5;
             // 
-            // WarningTextBox
+            // ErrorTextBox
             // 
-            WarningTextBox.Dock = DockStyle.Fill;
-            WarningTextBox.Location = new Point(0, 0);
-            WarningTextBox.Name = "WarningTextBox";
-            WarningTextBox.Size = new Size(1443, 222);
-            WarningTextBox.TabIndex = 0;
-            WarningTextBox.Text = "";
+            ErrorTextBox.Dock = DockStyle.Fill;
+            ErrorTextBox.Location = new Point(0, 0);
+            ErrorTextBox.Name = "ErrorTextBox";
+            ErrorTextBox.Size = new Size(1443, 222);
+            ErrorTextBox.TabIndex = 0;
+            ErrorTextBox.Text = "";
             // 
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox, toolStripButton3, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
-            toolStrip1.Location = new Point(0, 42);
+            toolStrip1.Location = new Point(0, 40);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1443, 42);
             toolStrip1.TabIndex = 2;
@@ -293,7 +293,7 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private SplitContainer splitContainer1;
-        private RichTextBox WarningTextBox;
+        private RichTextBox ErrorTextBox;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem createToolStripMenuItem;
         private OpenFileDialog OpenFileDialog;

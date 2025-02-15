@@ -3,40 +3,26 @@ using Merge = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.Merge;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 
-public class ProgramTextBuilder
+public class ProgramTextBuilder(string controllerName,
+                          string ip,
+                          string mac,
+                          string brokerIp,
+                          string gpioMode,
+                          string subscribedTopic,
+                          string additionalDeclaration,
+                          string additionalSetup,
+                          string additionalCode)
 {
-    private readonly string _controllerName;
-    private readonly string _ip;
-    private readonly string _mac;
-    private readonly string _brokerIp;
-    private readonly string _gpioMode;
-    private readonly string _subscribedTopic;
-    private readonly string _additionalSetup;
-    private readonly string _additionalDeclaration;
-    private readonly string _additionalCode;
-    private string _program;
-
-    public ProgramTextBuilder(string controllerName,
-                              string ip,
-                              string mac,
-                              string brokerIp,
-                              string gpioMode,
-                              string subscribedTopic,
-                              string additionalDeclaration,
-                              string additionalSetup,
-                              string additionalCode)
-    {
-        _controllerName = controllerName;
-        _ip = ip;
-        _mac = mac;
-        _brokerIp = brokerIp;
-        _gpioMode = gpioMode;
-        _subscribedTopic = subscribedTopic;
-        _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
-        _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
-        _additionalCode = additionalCode ?? "///hasnoadditionalcode";
-        _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
-    }
+    private readonly string _controllerName = controllerName;
+    private readonly string _ip = ip;
+    private readonly string _mac = mac;
+    private readonly string _brokerIp = brokerIp;
+    private readonly string _gpioMode = gpioMode;
+    private readonly string _subscribedTopic = subscribedTopic;
+    private readonly string _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
+    private readonly string _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
+    private readonly string _additionalCode = additionalCode ?? "///hasnoadditionalcode";
+    private string _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
 
     public string Build(Merge.Config config)
     {
@@ -174,7 +160,7 @@ public class ProgramTextBuilder
             if (!light.CommandTopic.StartsWith("_no_"))
             {
                 lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
-            }            
+            }
             if (!light.StateTopic.StartsWith("_no_"))
             {
                 lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");

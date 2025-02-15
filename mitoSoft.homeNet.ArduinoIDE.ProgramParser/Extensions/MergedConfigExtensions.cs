@@ -25,7 +25,7 @@ public static class MergedConfigExtensions
         return string.Join("\n", warnings);
     }
 
-    public static string GetGpioWarnings(this Merge.Config merged)
+    public static string GetGpioErrors(this Merge.Config merged)
     {
         var errors = new List<string>();
 
@@ -49,30 +49,30 @@ public static class MergedConfigExtensions
             {
                 if (cover.GpioClose == duplicate)
                 {
-                    errors.Add($"WARNING({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioClose.");
+                    errors.Add($"ERROR({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioClose.");
                 }
                 if (cover.GpioOpen == duplicate)
                 {
-                    errors.Add($"WARNING({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioOpen.");
+                    errors.Add($"ERROR({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioOpen.");
                 }
                 if (cover.GpioCloseButton == duplicate)
                 {
-                    errors.Add($"WARNING({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioCloseButton.");
+                    errors.Add($"ERROR({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioCloseButton.");
                 }
                 if (cover.GpioOpenButton == duplicate)
                 {
-                    errors.Add($"WARNING({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioOpenButton.");
+                    errors.Add($"ERROR({cover.UniqueId}): In controller '{cover.ControllerId}', cover '{cover.Name}' a duplicate gpio is used: {duplicate} GpioOpenButton.");
                 }
             }
             foreach (var light in merged.Lights)
             {
                 if (light.GpioPin == duplicate)
                 {
-                    errors.Add($"WARNING({light.UniqueId}): In controller '{light.ControllerId}', light '{light.Name}' a duplicate gpio is used: {duplicate} GpioPin.");
+                    errors.Add($"ERROR({light.UniqueId}): In controller '{light.ControllerId}', light '{light.Name}' a duplicate gpio is used: {duplicate} GpioPin.");
                 }
                 if (light.GpioButton == duplicate)
                 {
-                    errors.Add($"WARNING({light.UniqueId}): In controller '{light.ControllerId}', light '{light.Name}' a duplicate gpio is used: {duplicate} GpioButton.");
+                    errors.Add($"ERROR({light.UniqueId}): In controller '{light.ControllerId}', light '{light.Name}' a duplicate gpio is used: {duplicate} GpioButton.");
                 }
             }
         }

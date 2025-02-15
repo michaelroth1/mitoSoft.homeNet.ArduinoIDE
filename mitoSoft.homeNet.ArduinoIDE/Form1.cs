@@ -64,13 +64,13 @@ public partial class Form1 : Form
 
     private HomeNet.Controller CheckErrors()
     {
-        this.WarningTextBox.Text = "";
+        this.ErrorTextBox.Text = "";
 
         string controllerName = (string)toolStripComboBox.SelectedItem!;
 
         if (string.IsNullOrWhiteSpace(controllerName))
         {
-            this.WarningTextBox.Text = "No controller selected...";
+            this.ErrorTextBox.Text = "No controller selected...";
             return null!;
         }
 
@@ -78,13 +78,13 @@ public partial class Form1 : Form
 
         var config = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
 
-        this.WarningTextBox.Text += config.GetGpioWarnings();
+        this.ErrorTextBox.Text += config.GetGpioErrors();
 
-        this.WarningTextBox.Text += config.GetPartnerWarnings();
+        this.ErrorTextBox.Text += config.GetPartnerWarnings();
 
-        if (string.IsNullOrWhiteSpace(this.WarningTextBox.Text))
+        if (string.IsNullOrWhiteSpace(this.ErrorTextBox.Text))
         {
-            this.WarningTextBox.Text = "No warnings found...";
+            this.ErrorTextBox.Text = "No warnings found...";
         }
 
         return controller;
@@ -172,11 +172,11 @@ public partial class Form1 : Form
         }
 
         // Extrahiere die betroffenen Zeilen
-        string selectedText = this.YamlTextBox.Text.Substring(lineStart, lineEnd - lineStart);
+        string selectedText = this.YamlTextBox.Text[lineStart..lineEnd];
 
         // Jede Zeile mit "#" auskommentieren
         string commentedText = string.Join("\n", selectedText
-            .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+            .Split(["\r\n", "\n"], StringSplitOptions.None)
             .Select(line => "#" + line));
 
         // Ersetze den ursprünglichen Text
@@ -203,12 +203,12 @@ public partial class Form1 : Form
         }
 
         // Extrahiere die betroffenen Zeilen
-        string selectedText = this.YamlTextBox.Text.Substring(lineStart, lineEnd - lineStart);
+        string selectedText = this.YamlTextBox.Text[lineStart..lineEnd];
 
         // Entfernt das "#" am Zeilenanfang, falls vorhanden
         string uncommentedText = string.Join("\n", selectedText
-            .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
-            .Select(line => line.StartsWith("#") ? line.Substring(1) : line));
+            .Split(["\r\n", "\n"], StringSplitOptions.None)
+            .Select(line => line.StartsWith('#') ? line[1..] : line));
 
         // Ersetze den ursprünglichen Text
         this.YamlTextBox.Select(lineStart, lineEnd - lineStart);
