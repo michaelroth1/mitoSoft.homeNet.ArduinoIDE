@@ -17,15 +17,15 @@ internal static class StringExtensions
         return inputText;
     }
 
-    public static string ReplaceWithWhiteSpaces(this string value, int whiteSpaces, string oldValue, string newValue)
+    public static string Replace(this string value, string oldValue, string newValue, int indenting)
     {
-        var indenting = "";
-        for (int i = 0; i < whiteSpaces; i++)
+        var whiteSpaces = "";
+        for (int i = 0; i < indenting; i++)
         {
-            indenting += " ";
+            whiteSpaces += " ";
         }
 
-        var @new = indenting + newValue.Replace("\n", $"\n{indenting}");
+        var @new = whiteSpaces + newValue.Replace("\n", $"\n{whiteSpaces}");
 
         return value.Replace(oldValue, @new);
     }

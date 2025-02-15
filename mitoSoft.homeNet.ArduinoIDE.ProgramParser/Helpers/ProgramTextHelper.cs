@@ -67,9 +67,9 @@ public class ProgramTextBuilder
         _program = _program.Replace("##date##", DateTime.Now.ToString());
         _program = _program.Replace("##author##", "build with mitoSoft.ArduinoIDE");
         _program = _program.Replace("##subscribedTopic##", _subscribedTopic);
-        _program = _program.ReplaceWithWhiteSpaces(0, "##additionalDeclaration##", _additionalDeclaration);
-        _program = _program.ReplaceWithWhiteSpaces(2, "##additionalSetup##", _additionalSetup);
-        _program = _program.ReplaceWithWhiteSpaces(2, "##additionalCode##", _additionalCode);
+        _program = _program.Replace("##additionalDeclaration##", _additionalDeclaration);
+        _program = _program.Replace("##additionalSetup##", _additionalSetup, 2);
+        _program = _program.Replace("##additionalCode##", _additionalCode, 2);
     }
 
     private void SetCoverInfo(IList<Merge.Cover> covers)
@@ -95,10 +95,12 @@ public class ProgramTextBuilder
             if (cover.GpioCloseButton > 0)
             {
                 coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
+                coverDeclaration = coverDeclaration.Replace($"///hasnodownbutton: ", "");
             }
             if (cover.GpioOpenButton > 0)
             {
                 coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
+                coverDeclaration = coverDeclaration.Replace($"///hasnoupbutton: ", "");
             }
             if (!cover.PayloadStop.StartsWith("_no_"))
             {
@@ -156,6 +158,11 @@ public class ProgramTextBuilder
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
 
+            if (light.GpioButton > 0)
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
+                lightDeclaration = lightDeclaration.Replace($"///hasnobutton: ", "");
+            }
             if (light.SwitchMode.ToLower().Trim() == "button")
             {
                 lightTemplate = lightTemplate.Replace($"///hasnobuttonmode: ", "");
@@ -167,11 +174,7 @@ public class ProgramTextBuilder
             if (!light.CommandTopic.StartsWith("_no_"))
             {
                 lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
-            }
-            if (light.GpioButton > 0)
-            {
-                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
-            }
+            }            
             if (!light.StateTopic.StartsWith("_no_"))
             {
                 lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");
@@ -202,6 +205,15 @@ public class ProgramTextBuilder
 
     private void CleanUp()
     {
+        if (!string.IsNullOrEmpty(_ip)
+           && !string.IsNullOrEmpty(_brokerIp)
+           && !string.IsNullOrEmpty(_subscribedTopic)
+           && !string.IsNullOrEmpty(_mac))
+        {
+            //hasmqtt = true -> this means delete ///hasnomqtt:
+            _program = _program.Replace("///hasnomqtt: ", "");
+        }
+
         _program = _program.CleanKeyWord("##coverDeclaration##");
         _program = _program.CleanKeyWord("##coverSetup##");
         _program = _program.CleanKeyWord("##cover##");

@@ -23,6 +23,7 @@ public static class HomeNetConfigExtensions
             var merged = new Merge.Cover
             {
                 UniqueId = homeNetCover.UniqueId,
+                HasPartner = false,
                 Description = homeNetCover.Description,
                 RunningTime = homeNetCover.RunningTime,
                 GpioClose = homeNetCover.GpioClose,
@@ -66,6 +67,7 @@ public static class HomeNetConfigExtensions
             var merged = new Merge.Light
             {
                 UniqueId = homeNetLight.UniqueId,
+                HasPartner = false,
                 GpioButton = homeNetLight.GpioButton,
                 GpioPin = homeNetLight.GpioPin,
                 Description = homeNetLight.Description,

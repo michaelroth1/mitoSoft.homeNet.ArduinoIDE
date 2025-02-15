@@ -28,23 +28,23 @@ public class Cover : IItem
 {
     public string Name { get; set; } = null!;
 
-    public bool HasPartner { get; set; } = false;
+    public required bool HasPartner { get; set; } = false;
 
-    public string UniqueId { get; set; } = null!;
+    public required string UniqueId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
-    public int ControllerId { get; set; } = 1;
+    public required int ControllerId { get; set; } = 1;
 
-    public int GpioOpen { get; set; } = 1;
+    public required int GpioOpen { get; set; } = 1;
 
-    public int GpioClose { get; set; } = 2;
+    public required int GpioClose { get; set; } = 2;
 
-    public int GpioOpenButton { get; set; } = 3;
+    public int GpioOpenButton { get; set; } = -1;
 
-    public int GpioCloseButton { get; set; } = 4;
+    public int GpioCloseButton { get; set; } = -1;
 
-    public int RunningTime { get; set; } = 15000;
+    public required int RunningTime { get; set; } = 15000;
 
     public string CommandTopic { get; set; } = "_no_topic/command";
 
@@ -80,17 +80,17 @@ public class Light : IItem
 {
     public string Name { get; set; } = null!;
 
-    public bool HasPartner { get; set; } = false;
+    public required bool HasPartner { get; set; } = false;
 
-    public string UniqueId { get; set; } = null!;
+    public required string UniqueId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
-    public int ControllerId { get; set; } = 1;
+    public required int ControllerId { get; set; } = 1;
 
-    public int GpioPin { get; set; } = 1;
+    public required int GpioPin { get; set; } = 1;
 
-    public int GpioButton { get; set; } = 2;
+    public int GpioButton { get; set; } = -1;
 
     public string StateOn { get; set; } = "_no_state";
 

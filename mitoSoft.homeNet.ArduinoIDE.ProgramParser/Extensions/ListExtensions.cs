@@ -9,7 +9,7 @@ public static class ListExtensions
 
         foreach (var item in list)
         {
-            if (!seen.Add(item)) // Falls num bereits in "seen" ist, ist es ein Duplikat
+            if (item > 0 && !seen.Add(item)) // Falls num bereits in "seen" ist, ist es ein Duplikat
             {
                 duplicates.Add(item);
             }

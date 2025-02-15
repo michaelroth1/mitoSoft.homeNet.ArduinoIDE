@@ -84,12 +84,10 @@ public class Cover
     public int GpioClose { get; set; } = 2;
 
     [YamlMember(Alias = "gpio_in_open")]
-    [Required]
-    public int GpioOpenButton { get; set; } = 3;
+    public int GpioOpenButton { get; set; } = -1;
 
     [YamlMember(Alias = "gpio_in_close")]
-    [Required]
-    public int GpioCloseButton { get; set; } = 4;
+    public int GpioCloseButton { get; set; } = -1;
 
     [YamlMember(Alias = "running_time")]
     [Required]
@@ -115,8 +113,7 @@ public class Light
     public int GpioPin { get; set; } = 1;
 
     [YamlMember(Alias = "gpio_button")]
-    [Required]
-    public int GpioButton { get; set; } = 2;
+    public int GpioButton { get; set; } = -1;
 
     [YamlMember(Alias = "state_on")]
     public string StateOn { get; set; } = "on";
