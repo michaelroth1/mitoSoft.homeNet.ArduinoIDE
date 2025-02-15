@@ -39,19 +39,20 @@
             createToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             selectHomeNetNodeToolStripMenuItem = new ToolStripMenuItem();
+            SearchToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             WarningTextBox = new RichTextBox();
             toolStrip1 = new ToolStrip();
             toolStripComboBox = new ToolStripComboBox();
+            toolStripButton3 = new ToolStripButton();
             BuildToolStripButton = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton1 = new ToolStripButton();
             toolStripButton2 = new ToolStripButton();
             OpenFileDialog = new OpenFileDialog();
             SaveFileDialog = new SaveFileDialog();
-            toolStripButton3 = new ToolStripButton();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -86,7 +87,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, toolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1443, 40);
+            menuStrip1.Size = new Size(1443, 42);
             menuStrip1.TabIndex = 4;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -94,7 +95,7 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem, saveToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 36);
+            fileToolStripMenuItem.Size = new Size(71, 38);
             fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
@@ -115,9 +116,9 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { createToolStripMenuItem, toolStripSeparator2, selectHomeNetNodeToolStripMenuItem, SearchToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 36);
+            toolsToolStripMenuItem.Size = new Size(89, 38);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // createToolStripMenuItem
@@ -139,10 +140,17 @@
             selectHomeNetNodeToolStripMenuItem.Text = "Select HomeNet node";
             selectHomeNetNodeToolStripMenuItem.Click += SelectHomeNetNodeToolStripMenuItem_Clicked;
             // 
+            // SearchToolStripMenuItem
+            // 
+            SearchToolStripMenuItem.Name = "SearchToolStripMenuItem";
+            SearchToolStripMenuItem.Size = new Size(428, 44);
+            SearchToolStripMenuItem.Text = "Search...";
+            SearchToolStripMenuItem.Click += FindToolStripMenuItem_Clicked;
+            // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(45, 36);
+            toolStripMenuItem1.Size = new Size(45, 38);
             toolStripMenuItem1.Text = "?";
             // 
             // settingsToolStripMenuItem
@@ -181,7 +189,7 @@
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox, toolStripButton3, BuildToolStripButton, toolStripSeparator1, toolStripButton1, toolStripButton2 });
-            toolStrip1.Location = new Point(0, 40);
+            toolStrip1.Location = new Point(0, 42);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1443, 42);
             toolStrip1.TabIndex = 2;
@@ -192,6 +200,16 @@
             toolStripComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             toolStripComboBox.Name = "toolStripComboBox";
             toolStripComboBox.Size = new Size(350, 42);
+            // 
+            // toolStripButton3
+            // 
+            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
+            toolStripButton3.ImageTransparentColor = Color.Magenta;
+            toolStripButton3.Name = "toolStripButton3";
+            toolStripButton3.Size = new Size(46, 36);
+            toolStripButton3.Text = "toolStripButton3";
+            toolStripButton3.Click += CheckToolStripButton_Click;
             // 
             // BuildToolStripButton
             // 
@@ -236,16 +254,6 @@
             // 
             SaveFileDialog.FileName = "export";
             SaveFileDialog.Filter = "YAML|*.yaml";
-            // 
-            // toolStripButton3
-            // 
-            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
-            toolStripButton3.ImageTransparentColor = Color.Magenta;
-            toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(46, 36);
-            toolStripButton3.Text = "toolStripButton3";
-            toolStripButton3.Click += CheckToolStripButton_Click;
             // 
             // Form1
             // 
@@ -299,5 +307,6 @@
         private ToolStripMenuItem selectHomeNetNodeToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton toolStripButton3;
+        private ToolStripMenuItem SearchToolStripMenuItem;
     }
 }

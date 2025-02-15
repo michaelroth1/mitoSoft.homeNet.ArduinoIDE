@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using mitoSoft.homeNet.ArduinoIDE.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
@@ -7,6 +8,8 @@ namespace mitoSoft.homeNet.ArduinoIDE;
 
 public partial class Form1 : Form
 {
+    private string _search= "";
+
     public Form1()
     {
         InitializeComponent();
@@ -126,19 +129,6 @@ public partial class Form1 : Form
         f.ShowDialog(newConfig);
     }
 
-    private void CheckEntries()
-    {
-        if (string.IsNullOrEmpty(this.YamlTextBox.Text))
-        {
-            throw new InvalidOperationException("Add a YAML file.");
-        }
-
-        if (this.toolStripComboBox.SelectedItem == null)
-        {
-            throw new InvalidOperationException("Inspect and choose a controller.");
-        }
-    }
-
     private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (OpenFileDialog.ShowDialog() == DialogResult.OK)
@@ -245,5 +235,25 @@ public partial class Form1 : Form
         Properties.Settings.Default.FormSize = this.Size;
         Properties.Settings.Default.TextZoom = this.YamlTextBox.ZoomFactor;
         Properties.Settings.Default.Save();
+    }
+
+    private void FindToolStripMenuItem_Clicked(object sender, EventArgs e)
+    {
+        _search = Interaction.InputBox("Search text:", "", _search);
+
+        int startPosition = YamlTextBox.SelectionStart + YamlTextBox.SelectionLength;
+
+        // Suche ab der berechneten Position
+        int foundIndex = YamlTextBox.Find(_search, startPosition, RichTextBoxFinds.None);
+
+        if (foundIndex != -1)
+        {
+            // Das Wort wurde gefunden und die RichTextBox selektiert es automatisch.
+            YamlTextBox.Focus();
+        }
+        else
+        {
+            MessageBox.Show("Not found.");
+        }
     }
 }

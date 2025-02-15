@@ -32,9 +32,9 @@ public class ProgramTextBuilder
         _brokerIp = brokerIp;
         _gpioMode = gpioMode;
         _subscribedTopic = subscribedTopic;
-        _additionalDeclaration = additionalDeclaration;
-        _additionalSetup = additionalSetup;
-        _additionalCode = additionalCode;
+        _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
+        _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
+        _additionalCode = additionalCode ?? "///hasnoadditionalcode";
         _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
     }
 
@@ -76,11 +76,11 @@ public class ProgramTextBuilder
     {
         foreach (var cover in covers)
         {
-            this.TrySetcoverInfos(cover);
+            this.TrySetCoverInfo(cover);
         }
     }
 
-    private void TrySetcoverInfos(Merge.Cover cover)
+    private void TrySetCoverInfo(Merge.Cover cover)
     {
         try
         {
@@ -88,8 +88,36 @@ public class ProgramTextBuilder
             var coverSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt");
             var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
 
-            var properties = ReflectionHelper.GetAllProperties(cover);
+            if (!cover.CommandTopic.StartsWith("_no_"))
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnocommandtopic: ", "");
+            }
+            if (cover.GpioCloseButton > 0)
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
+            }
+            if (cover.GpioOpenButton > 0)
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
+            }
+            if (!cover.PayloadStop.StartsWith("_no_"))
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnostoppayload: ", "");
+            }
+            if (!cover.SetPositionTopic.StartsWith("_no_"))
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnosetTopic: ", "");
+            }
+            if (!cover.StateTopic.StartsWith("_no_"))
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnostatetopic: ", "");
+            }
+            if (!cover.PositionTopic.StartsWith("_no_"))
+            {
+                coverTemplate = coverTemplate.Replace($"///hasnopositiontopic: ", "");
+            }
 
+            var properties = ReflectionHelper.GetAllProperties(cover);
             foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
                 coverDeclaration = coverDeclaration.Replace($"##{prop.Key}##", prop.Value);
@@ -116,11 +144,11 @@ public class ProgramTextBuilder
     {
         foreach (var light in lights)
         {
-            this.TrySetLightInfos(light);
+            this.TrySetLightInfo(light);
         }
     }
 
-    private void TrySetLightInfos(Merge.Light light)
+    private void TrySetLightInfo(Merge.Light light)
     {
         try
         {
@@ -128,11 +156,23 @@ public class ProgramTextBuilder
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
 
-            var properties = ReflectionHelper.GetAllProperties(light);
-
             //button oder switch replacement
             lightTemplate = lightTemplate.Replace($"///{light.SwitchMode.ToLower().Trim()}: ", "");
 
+            if (!light.CommandTopic.StartsWith("_no_"))
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
+            }
+            if (light.GpioButton > 0)
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
+            }
+            if (!light.StateTopic.StartsWith("_no_"))
+            {
+                lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");
+            }
+
+            var properties = ReflectionHelper.GetAllProperties(light);
             foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
                 lightDeclaration = lightDeclaration.Replace($"##{prop.Key}##", prop.Value);
@@ -157,22 +197,21 @@ public class ProgramTextBuilder
 
     private void CleanUp()
     {
-        _program = _program.Replace("##coverDeclaration##", "");
-        _program = _program.Replace("##coverSetup##", "");
-        _program = _program.Replace("##cover##", "");
-        _program = _program.Replace("##lightDeclaration##", "");
-        _program = _program.Replace("##lightSetup##", "");
-        _program = _program.Replace("##light##", "");
+        _program = _program.CleanKeyWord("##coverDeclaration##");
+        _program = _program.CleanKeyWord("##coverSetup##");
+        _program = _program.CleanKeyWord("##cover##");
+        _program = _program.CleanKeyWord("##lightDeclaration##");
+        _program = _program.CleanKeyWord("##lightSetup##");
+        _program = _program.CleanKeyWord("##light##");
 
-        _program = _program.Replace("##additionalDeclaration##", "");
-        _program = _program.Replace("##additionalSetup##", "");
-        _program = _program.Replace("##additionalCode##", "");
+        _program = _program.CleanKeyWord("##additionalDeclaration##");
+        _program = _program.CleanKeyWord("##additionalSetup##");
+        _program = _program.CleanKeyWord("##additionalCode##");
 
-        _program = _program.CommentOutInvalidMqttMessages();
-        _program = _program.RemoveDoubleEmptyRows();
-        _program = _program.CleanEmptyRows();
-        _program = _program.Replace("\n\n  }", "\n  }");
-        _program = _program.Replace("\n\n}", "\n}");
+        //_program = _program.RemoveDoubleEmptyRows();
+        //_program = _program.CleanEmptyRows();
+        //_program = _program.Replace("\n\n  }", "\n  }");
+        //_program = _program.Replace("\n\n}", "\n}");
     }
 
     public void Check()

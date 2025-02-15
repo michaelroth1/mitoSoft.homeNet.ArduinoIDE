@@ -1,15 +1,23 @@
 ﻿  //***********************************************************************************************************
   // ##Description##
   //
-  if (gpio_##Name##_buttonDown.risingEdge() ||
-      (topic == "##CommandTopic##" && message == "##PayloadClose##")) {
+  if (false 
+      ///hasnodownbutton: || gpio_##Name##_buttonDown.risingEdge()
+      ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "##PayloadClose##")
+     ) {
     ##Name##.runDown();
-  } else if (gpio_##Name##_buttonUp.risingEdge() ||
-             (topic == "##CommandTopic##" && message == "##PayloadOpen##")) {
+  } else if (false 
+             ///hasnoupbutton: || gpio_##Name##_buttonUp.risingEdge()
+             ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "##PayloadOpen##")
+            ) {
     ##Name##.runUp();
-  } else if (topic == "##CommandTopic##" && message == "##PayloadStop##") {
+  } else if (false
+             ///hasnostoppayload: || (topic == "##CommandTopic##" && message == "##PayloadStop##")
+            ) {
     ##Name##.runStop();
-  } else if (topic == "##SetPositionTopic##") {
+  } else if (false
+             ///hasnosetTopic: || topic == "##SetPositionTopic##"
+            ) {
     ##Name##.setShutterPosition(message.toDouble());
   }
   
@@ -17,27 +25,27 @@
     if (1 == ##Name##.getDirection()) { //DOWN
       gpio_##Name##_up.setOff();
       gpio_##Name##_down.setOn();
-      mqttHelper.publish("##StateTopic##", "##StateClosing##", false); //state_closing:
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosing##", false); //state_closing:
     } else if (2 == ##Name##.getDirection()) { //UP
       gpio_##Name##_up.setOn();
       gpio_##Name##_down.setOff();
-      mqttHelper.publish("##StateTopic##", "##StateOpening##", false); //state_opening:
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpening##", false); //state_opening:
     }
   }
   
   if(##Name##.running()) {
-      mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
+      ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
   }
   
   if (##Name##.stopped()) {
     gpio_##Name##_up.setOff();
     gpio_##Name##_down.setOff();
-    mqttHelper.publish("##StateTopic##", "##StateStopped##", false);
-    mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
+    ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateStopped##", false);
+    ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
     if (0.0 >= ##Name##.getPosition()) { 
-      mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
     } else if (100.0 <= ##Name##.getPosition()) {
-      mqttHelper.publish("##StateTopic##", "##StateClosed##", false);
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosed##", false);
     }
   }
   

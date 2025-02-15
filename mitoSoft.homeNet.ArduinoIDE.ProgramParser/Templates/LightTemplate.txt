@@ -1,21 +1,27 @@
 ﻿  //***********************************************************************************************************
   // ##Description##
   //
-  if ((topic == "##CommandTopic##" && message == "toggle") ||
-      ///button: gpio_##Name##_button.risingEdge()) { //switch_mode: button
-      ///switch: gpio_##Name##_button.risingEdge() || gpio_##Name##_button.risingEdge()) {  //switch_mode: switch
+  if (false
+      ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "toggle")
+      ///hasnobutton: ///button: || gpio_##Name##_button.risingEdge() //switch_mode: button
+      ///hasnobutton: ///switch: || gpio_##Name##_button.risingEdge() || gpio_##Name##_button.risingEdge() //switch_mode: switch
+     ) {
     int state = gpio_##Name##.toggle();
     if (state == 1) { //on
-      mqttHelper.publish("##StateTopic##", "##StateOn##", true);
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOn##", true);
     } else { //off
-      mqttHelper.publish("##StateTopic##", "##StateOff##", true);
+      ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOff##", true);
     }    
-  } else if (topic == "##CommandTopic##" && message == "##PayloadOn##") {
+  } else if (false
+             ///hasnocommandtopic: || topic == "##CommandTopic##" && message == "##PayloadOn##"
+            ) {
     gpio_##Name##.setOn();
-    mqttHelper.publish("##StateTopic##", "##StateOn##", true);
-  } else if (topic == "##CommandTopic##" && message == "##PayloadOff##") {
+    ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOn##", true);
+  } else if (false
+             ///hasnocommandtopic: || topic == "##CommandTopic##" && message == "##PayloadOff##"
+            ) {
     gpio_##Name##.setOff();
-    mqttHelper.publish("##StateTopic##", "##StateOff##", true);
+    ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOff##", true);
   }
 
 ##light##

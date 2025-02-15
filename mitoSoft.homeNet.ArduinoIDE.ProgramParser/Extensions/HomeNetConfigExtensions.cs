@@ -27,7 +27,7 @@ public static class HomeNetConfigExtensions
                 RunningTime = homeNetCover.RunningTime,
                 GpioClose = homeNetCover.GpioClose,
                 GpioOpen = homeNetCover.GpioOpen,
-                GpioCloseButton = homeNetCover.GpioOpen,
+                GpioCloseButton = homeNetCover.GpioCloseButton,
                 GpioOpenButton = homeNetCover.GpioOpenButton,
                 ControllerId = homeNetCover.ControllerId,
             };

@@ -50,6 +50,24 @@ internal static class StringExtensions
         return string.Join('\n', cleaned.ToArray());
     }
 
+    public static string CleanKeyWord(this string value, string keyWord)
+    {
+        string[] lines = value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        var cleaned = new List<string>();
+
+        foreach (string line in lines)
+        {
+            if (line.Trim() != keyWord) //line is not the keyword
+            {
+                cleaned.Add(line);
+            }
+        }
+
+        var full = string.Join('\n', cleaned.ToArray());
+        //full = full.Replace(keyWord, "");
+        return full;
+    }
+
 
     public static string RemoveDoubleEmptyRows(this string value)
     {
@@ -74,11 +92,11 @@ internal static class StringExtensions
         return string.Join('\n', cleaned.ToArray());
     }
 
-    /// <summary>
-    /// All lines with publish messages that starts with "no_topic/..." will set as a comment
-    /// </summary>
-    public static string CommentOutInvalidMqttMessages(this string value)
-    {
-        return value.Replace("mqttHelper.publish(\"no_topic/", "//mqttHelper.publish(\"no_topic/");
-    }
+    ///// <summary>
+    ///// All lines with publish messages that starts with "no_topic/..." will set as a comment
+    ///// </summary>
+    //public static string CommentOutInvalidMqttMessages(this string value)
+    //{
+    //    return value.Replace("mqttHelper.publish(\"_no_topic/", "//mqttHelper.publish(\"_no_topic/");
+    //}
 }

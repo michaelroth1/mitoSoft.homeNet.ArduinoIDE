@@ -47,13 +47,13 @@ public class Controller
     public required string GpioMode { get; set; } = null!;
 
     [YamlMember(Alias = "additional_declaration")]
-    public string AdditionalDeclaration { get; set; } = "";
+    public string AdditionalDeclaration { get; set; } = null!;
 
     [YamlMember(Alias = "additional_setup")]
-    public string AdditionalSetup { get; set; } = "";
+    public string AdditionalSetup { get; set; } = null!;
 
     [YamlMember(Alias = "additional_code")]
-    public string AdditionalCode { get; set; } = "";
+    public string AdditionalCode { get; set; } = null!;
 
     public override string ToString()
     {
