@@ -1,6 +1,6 @@
 ﻿//Cover ##Name##**************************************************
-///hasnodownbutton: DebouncingInput gpio_##Name##_buttonDown(##GpioCloseButton##);
 ///hasnoupbutton: DebouncingInput gpio_##Name##_buttonUp(##GpioOpenButton##);
+///hasnodownbutton: DebouncingInput gpio_##Name##_buttonDown(##GpioCloseButton##);
 ShutterController ##Name##(##RunningTime##, 0, -5.0, 105.0, 500);
 InvertableOutput gpio_##Name##_up(##GpioOpen##, ##GpioMode##); //INVERTED or STANDARD
 InvertableOutput gpio_##Name##_down(##GpioClose##, ##GpioMode##); //INVERTED or STANDARD
