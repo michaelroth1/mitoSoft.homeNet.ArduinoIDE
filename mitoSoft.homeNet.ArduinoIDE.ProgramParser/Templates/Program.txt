@@ -28,6 +28,7 @@ void setup() {
 
   ethHelper.fixIpSetup();
 
+  // mqttClient.setUsernamePassword("user", "passwd"); // ArduinoMqttClient credentials
   mqttHelper.init(broker, "##controllerName##");
 
   // covers ***********************************************
