@@ -1,7 +1,35 @@
-﻿namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+﻿using System.Net;
+using System.Text.RegularExpressions;
+
+namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 
 internal static class StringExtensions
 {
+    public static bool IsValidMacAddress(this string value)
+    {
+        if (value.Replace(" ", "") == "0x00,0x00,0x00,0x00,0x00,0x00")
+        {
+            return false;
+        }
+        else
+        {
+            string pattern = @"^(0x[0-9A-Fa-f]{2}, ){5}0x[0-9A-Fa-f]{2}$";
+            return Regex.IsMatch(value, pattern);
+        }
+    }
+
+    public static bool IsValidIPAddress(this string value)
+    {
+        if (value.Replace(" ", "") == "0.0.0.0")
+        {
+            return false;
+        }
+        else
+        {
+            return IPAddress.TryParse(value, out _);
+        }
+    }
+
     public static string TruncateText(this string inputText, string keyword)
     {
         // Suche nach dem Schlüsselwort "!include"

@@ -103,9 +103,9 @@ public partial class Form1 : Form
 
         var programBuilder = new ProgramTextBuilder(
            controller!.Name,
-           controller!.IPAddress.GetArduinoIPFormat(),
-           controller!.MacAddress.GetArduinoSignaturFormat(),
-           controller!.BrokerIPAddress.GetArduinoIPFormat(),
+           controller!.IPAddress?.GetArduinoIPFormat()!,
+           controller!.MacAddress?.GetArduinoSignaturFormat()!,
+           controller!.BrokerIPAddress?.GetArduinoIPFormat()!,
            controller!.BrokerUserName,
            controller!.BrokerPassword,
            controller!.GpioMode,

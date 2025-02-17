@@ -197,10 +197,10 @@ public class ProgramTextBuilder(string controllerName,
 
     private void CleanUp()
     {
-        if (!string.IsNullOrEmpty(_ip)
-           && !string.IsNullOrEmpty(_brokerIp)
-           && !string.IsNullOrEmpty(_subscribedTopic)
-           && !string.IsNullOrEmpty(_mac))
+        if (_ip.IsValidIPAddress()
+           && _brokerIp.IsValidIPAddress()
+           && _subscribedTopic.StartsWith("_no_topic")
+           && _mac.IsValidMacAddress())
         {
             //hasmqtt = true -> this means delete ///hasnomqtt:
             _program = _program.Replace("///hasnomqtt: ", "");
