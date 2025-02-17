@@ -9,14 +9,14 @@
 #include <MitoSoft.h>
 
 // network configuration*******************************************
-byte mac[] = {##mac##}; //Format: { 0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D };
-IPAddress ip(##ip##); 
-IPAddress broker(##brokerIp##);
+///hasnomqtt: byte mac[] = {##mac##}; //Format: { 0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D };
+///hasnomqtt: IPAddress ip(##ip##); 
+///hasnomqtt: IPAddress broker(##brokerIp##);
 
-EthernetClient ethClient;
-EthernetHelper ethHelper(mac, ip, false);
-MqttClient mqttClient(ethClient);
-MqttHelper mqttHelper(mqttClient, 15000, false);
+///hasnomqtt: EthernetClient ethClient;
+///hasnomqtt: EthernetHelper ethHelper(mac, ip, false);
+///hasnomqtt: MqttClient mqttClient(ethClient);
+///hasnomqtt: MqttHelper mqttHelper(mqttClient, 15000, false);
 
 ##coverDeclaration##
 ##lightDeclaration##
@@ -26,10 +26,9 @@ void setup() {
   //Serial.begin(9600);
   //Serial.println("start ##controllerName##");
 
-  ethHelper.fixIpSetup();
+  ///hasnomqtt: ethHelper.fixIpSetup();
 
-  // mqttClient.setUsernamePassword("user", "passwd"); // ArduinoMqttClient credentials
-  mqttHelper.init(broker, "##controllerName##");
+  ///hasnomqtt: mqttHelper.init(broker, "##controllerName##", "##brokerUserName##", "##brokerPassword##");
 
   // covers ***********************************************
 ##coverSetup##
@@ -43,10 +42,10 @@ void loop() {
   String topic = "";
   String message = "";
   
-  if (mqttHelper.onMessageReceived()){
-    topic = mqttHelper.getLastTopic();
-    message = mqttHelper.getLastMessage();
-  }
+  ///hasnomqtt: if (mqttHelper.onMessageReceived()){
+  ///hasnomqtt:   topic = mqttHelper.getLastTopic();
+  ///hasnomqtt:   message = mqttHelper.getLastMessage();
+  ///hasnomqtt: }
   
 ##cover##
 ##light##
@@ -54,12 +53,12 @@ void loop() {
 ##additionalCode##
 
   // Subscribe******************************************************
-  if (mqttHelper.onConnected()){
-    mqttHelper.subscribe("##subscribedTopic##");
-  }
+  ///hasnomqtt: if (mqttHelper.onConnected()){
+  ///hasnomqtt:   mqttHelper.subscribe("##subscribedTopic##");
+  ///hasnomqtt: }
 
   //****************************************************************
-  ethHelper.loop();
-  mqttHelper.loop();
+  ///hasnomqtt: ethHelper.loop();
+  ///hasnomqtt: mqttHelper.loop();
   delay(10);
 }

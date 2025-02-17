@@ -28,24 +28,33 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
         public class Controller
         {
             [YamlMember(Alias = "name")]
+            [Required]
             public required string Name { get; set; } = null!;
 
             [YamlMember(Alias = "subscribed_topic")]
-            public required string SubscribedTopic { get; set; } = null!;
+            public string SubscribedTopic { get; set; } = null!;
 
             [YamlMember(Alias = "unique_id")]
+            [Required]
             public required int UniqueId { get; set; }
 
             [YamlMember(Alias = "ip")]
-            public required string IPAddress { get; set; } = null!;
+            public string IPAddress { get; set; } = null!;
 
             [YamlMember(Alias = "mac")]
-            public required string MacAddress { get; set; } = null!;
+            public string MacAddress { get; set; } = null!;
 
             [YamlMember(Alias = "broker")]
-            public required string BrokerIPAddress { get; set; } = null!;
+            public string BrokerIPAddress { get; set; } = null!;
+
+            [YamlMember(Alias = "broker_username")]
+            public string BrokerUserName { get; set; } = null!;
+
+            [YamlMember(Alias = "broker_password")]
+            public string BrokerPassword { get; set; } = null!;
 
             [YamlMember(Alias = "gpio_mode")]
+            [Required]
             public required string GpioMode { get; set; } = null!;
 
             [YamlMember(Alias = "additional_declaration")]

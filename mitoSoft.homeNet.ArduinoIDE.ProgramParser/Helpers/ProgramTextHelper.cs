@@ -7,6 +7,8 @@ public class ProgramTextBuilder(string controllerName,
                           string ip,
                           string mac,
                           string brokerIp,
+                          string brokerUserName,
+                          string brokerPassword,
                           string gpioMode,
                           string subscribedTopic,
                           string additionalDeclaration,
@@ -17,6 +19,8 @@ public class ProgramTextBuilder(string controllerName,
     private readonly string _ip = ip;
     private readonly string _mac = mac;
     private readonly string _brokerIp = brokerIp;
+    private readonly string _brokerUserName = brokerUserName ?? "";
+    private readonly string _brokerPassword = brokerPassword ?? "";
     private readonly string _gpioMode = gpioMode;
     private readonly string _subscribedTopic = subscribedTopic;
     private readonly string _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
@@ -50,6 +54,8 @@ public class ProgramTextBuilder(string controllerName,
         _program = _program.Replace("##ip##", _ip);
         _program = _program.Replace("##mac##", _mac);
         _program = _program.Replace("##brokerIp##", _brokerIp);
+        _program = _program.Replace("##brokerUserName##", _brokerUserName);
+        _program = _program.Replace("##brokerPassword##", _brokerPassword);
         _program = _program.Replace("##date##", DateTime.Now.ToString());
         _program = _program.Replace("##author##", "build with mitoSoft.ArduinoIDE");
         _program = _program.Replace("##subscribedTopic##", _subscribedTopic);

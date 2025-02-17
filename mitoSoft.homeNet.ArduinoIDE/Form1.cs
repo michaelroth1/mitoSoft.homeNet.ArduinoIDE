@@ -106,6 +106,8 @@ public partial class Form1 : Form
            controller!.IPAddress.GetArduinoIPFormat(),
            controller!.MacAddress.GetArduinoSignaturFormat(),
            controller!.BrokerIPAddress.GetArduinoIPFormat(),
+           controller!.BrokerUserName,
+           controller!.BrokerPassword,
            controller!.GpioMode,
            controller!.SubscribedTopic,
            controller!.AdditionalDeclaration,
