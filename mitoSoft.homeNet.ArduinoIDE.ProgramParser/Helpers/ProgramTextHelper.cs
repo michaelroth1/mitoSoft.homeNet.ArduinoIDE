@@ -16,13 +16,13 @@ public class ProgramTextBuilder(string controllerName,
                           string additionalCode)
 {
     private readonly string _controllerName = controllerName;
-    private readonly string _ip = ip;
-    private readonly string _mac = mac;
-    private readonly string _brokerIp = brokerIp;
+    private readonly string _ip = ip ?? "0, 0, 0, 0";
+    private readonly string _mac = mac ?? "0x00, 0x00, 0x00, 0x00, 0x00, 0x00";
+    private readonly string _brokerIp = brokerIp ?? "0, 0, 0, 0";
     private readonly string _brokerUserName = brokerUserName ?? "";
     private readonly string _brokerPassword = brokerPassword ?? "";
     private readonly string _gpioMode = gpioMode;
-    private readonly string _subscribedTopic = subscribedTopic;
+    private readonly string _subscribedTopic = subscribedTopic ?? "_no_topic/to_subcribe/#";
     private readonly string _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
     private readonly string _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
     private readonly string _additionalCode = additionalCode ?? "///hasnoadditionalcode";
