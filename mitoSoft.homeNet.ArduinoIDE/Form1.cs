@@ -1,5 +1,4 @@
 using Microsoft.VisualBasic;
-using mitoSoft.homeNet.ArduinoIDE.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
@@ -8,7 +7,7 @@ namespace mitoSoft.homeNet.ArduinoIDE;
 
 public partial class Form1 : Form
 {
-    private string _search= "";
+    private string _search = "";
 
     public Form1()
     {
@@ -103,9 +102,9 @@ public partial class Form1 : Form
 
         var programBuilder = new ProgramTextBuilder(
            controller!.Name,
-           controller!.IPAddress?.GetArduinoIPFormat()!,
-           controller!.MacAddress?.GetArduinoSignaturFormat()!,
-           controller!.BrokerIPAddress?.GetArduinoIPFormat()!,
+           controller!.IPAddress,
+           controller!.MacAddress,
+           controller!.BrokerIPAddress,
            controller!.BrokerUserName,
            controller!.BrokerPassword,
            controller!.GpioMode,

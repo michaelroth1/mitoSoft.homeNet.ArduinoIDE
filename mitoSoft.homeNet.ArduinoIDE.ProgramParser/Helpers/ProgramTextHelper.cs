@@ -16,9 +16,9 @@ public class ProgramTextBuilder(string controllerName,
                           string additionalCode)
 {
     private readonly string _controllerName = controllerName;
-    private readonly string _ip = ip ?? "0, 0, 0, 0";
+    private readonly string _ip = ip ?? "0.0.0.0";
     private readonly string _mac = mac ?? "0x00, 0x00, 0x00, 0x00, 0x00, 0x00";
-    private readonly string _brokerIp = brokerIp ?? "0, 0, 0, 0";
+    private readonly string _brokerIp = brokerIp ?? "0.0.0.0";
     private readonly string _brokerUserName = brokerUserName ?? "";
     private readonly string _brokerPassword = brokerPassword ?? "";
     private readonly string _gpioMode = gpioMode;
@@ -48,9 +48,9 @@ public class ProgramTextBuilder(string controllerName,
     private void SetHeaderInfo()
     {
         _program = _program.Replace("##controllerName##", _controllerName);
-        _program = _program.Replace("##ip##", _ip);
-        _program = _program.Replace("##mac##", _mac);
-        _program = _program.Replace("##brokerIp##", _brokerIp);
+        _program = _program.Replace("##ip##", _ip.GetArduinoIPFormat());
+        _program = _program.Replace("##mac##", _mac.GetArduinoSignaturFormat());
+        _program = _program.Replace("##brokerIp##", _brokerIp.GetArduinoIPFormat());
         _program = _program.Replace("##brokerUserName##", _brokerUserName);
         _program = _program.Replace("##brokerPassword##", _brokerPassword);
         _program = _program.Replace("##date##", DateTime.Now.ToString());
@@ -200,9 +200,9 @@ public class ProgramTextBuilder(string controllerName,
     private void SetMqttInfo()
     {
         if (_ip.IsValidIPAddress()
-                  && _brokerIp.IsValidIPAddress()
-                  && _subscribedTopic.StartsWith("_no_topic")
-                  && _mac.IsValidMacAddress())
+            && _brokerIp.IsValidIPAddress()
+            && _subscribedTopic.DontStartsWith("_no_topic")
+            && _mac.IsValidMacAddress())
         {
             //hasmqtt = true -> this means delete ///hasnomqtt:
             _program = _program.Replace("///hasnomqtt: ", "");

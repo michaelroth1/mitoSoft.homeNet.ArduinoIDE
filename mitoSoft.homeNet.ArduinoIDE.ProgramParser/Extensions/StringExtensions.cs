@@ -119,4 +119,21 @@ internal static class StringExtensions
 
         return string.Join('\n', cleaned.ToArray());
     }
+
+    public static string GetArduinoIPFormat(this string value)
+    {
+        return value.Replace(".", ",")
+                    .GetArduinoSignaturFormat();
+    }
+
+    public static string GetArduinoSignaturFormat(this string value)
+    {
+        return value.Replace(" ", "")
+                    .Replace(",", ", ");
+    }
+
+    public static bool DontStartsWith(this string text, string value)
+    {
+        return !text.StartsWith(value);
+    }
 }
