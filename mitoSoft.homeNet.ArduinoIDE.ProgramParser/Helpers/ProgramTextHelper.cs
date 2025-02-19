@@ -38,14 +38,11 @@ public class ProgramTextBuilder(string controllerName,
 
         this.SetGpioMode();
 
+        this.SetMqttInfo();
+
         this.CleanUp();
 
         return _program;
-    }
-
-    private void SetGpioMode()
-    {
-        _program = _program.Replace("##GpioMode##", _gpioMode);
     }
 
     private void SetHeaderInfo()
@@ -195,17 +192,25 @@ public class ProgramTextBuilder(string controllerName,
         }
     }
 
-    private void CleanUp()
+    private void SetGpioMode()
+    {
+        _program = _program.Replace("##GpioMode##", _gpioMode);
+    }
+
+    private void SetMqttInfo()
     {
         if (_ip.IsValidIPAddress()
-           && _brokerIp.IsValidIPAddress()
-           && _subscribedTopic.StartsWith("_no_topic")
-           && _mac.IsValidMacAddress())
+                  && _brokerIp.IsValidIPAddress()
+                  && _subscribedTopic.StartsWith("_no_topic")
+                  && _mac.IsValidMacAddress())
         {
             //hasmqtt = true -> this means delete ///hasnomqtt:
             _program = _program.Replace("///hasnomqtt: ", "");
         }
+    }
 
+    private void CleanUp()
+    {
         _program = _program.CleanKeyWord("##coverDeclaration##");
         _program = _program.CleanKeyWord("##coverSetup##");
         _program = _program.CleanKeyWord("##cover##");
