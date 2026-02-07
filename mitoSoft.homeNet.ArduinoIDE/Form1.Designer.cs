@@ -209,6 +209,7 @@
             toolStripButton3.Name = "toolStripButton3";
             toolStripButton3.Size = new Size(46, 36);
             toolStripButton3.Text = "toolStripButton3";
+            toolStripButton3.ToolTipText = "Check";
             toolStripButton3.Click += CheckToolStripButton_Click;
             // 
             // BuildToolStripButton
@@ -234,6 +235,7 @@
             toolStripButton1.Name = "toolStripButton1";
             toolStripButton1.Size = new Size(46, 36);
             toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.ToolTipText = "Comment";
             toolStripButton1.Click += CommentToolStripButton_Clicked;
             // 
             // toolStripButton2
@@ -244,6 +246,7 @@
             toolStripButton2.Name = "toolStripButton2";
             toolStripButton2.Size = new Size(46, 36);
             toolStripButton2.Text = "toolStripButton2";
+            toolStripButton2.ToolTipText = "Uncomment";
             toolStripButton2.Click += UncommentToolStripButton_Clicked;
             // 
             // OpenFileDialog
