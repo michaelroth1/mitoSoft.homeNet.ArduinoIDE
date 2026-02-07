@@ -61,7 +61,7 @@ public partial class Form1 : Form
         this.CheckErrors();
     }
 
-    private HomeNet.Controller CheckErrors()
+    private void CheckErrors()
     {
         this.ErrorTextBox.Text = "";
 
@@ -70,7 +70,6 @@ public partial class Form1 : Form
         if (string.IsNullOrWhiteSpace(controllerName))
         {
             this.ErrorTextBox.Text = "No controller selected...";
-            return null!;
         }
 
         var controller = (new YamlParser(YamlTextBox.Text)).GetController(controllerName);
@@ -85,13 +84,22 @@ public partial class Form1 : Form
         {
             this.ErrorTextBox.Text = "No warnings found...";
         }
+    }
+
+    private HomeNet.Controller GetController()
+    {
+        string controllerName = (string)toolStripComboBox.SelectedItem!;
+
+        var controller = (new YamlParser(YamlTextBox.Text)).GetController(controllerName);
 
         return controller;
     }
 
     private void BuildToolStripButton_Click(object sender, EventArgs e)
     {
-        var controller = this.CheckErrors();
+        this.CheckErrors();
+
+        var controller = this.GetController();
 
         if (controller == null)
         {
