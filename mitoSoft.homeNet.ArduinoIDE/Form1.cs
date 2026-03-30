@@ -70,11 +70,20 @@ public partial class Form1 : Form
         if (string.IsNullOrWhiteSpace(controllerName))
         {
             this.ErrorTextBox.Text = "No controller selected...";
+            return;
         }
 
-        var controller = (new YamlParser(YamlTextBox.Text)).GetController(controllerName);
+        var parser = new YamlParser(YamlTextBox.Text);
 
-        var controllerConfig = (new YamlParser(YamlTextBox.Text)).Parse(controller.UniqueId);
+        var controller = parser.GetController(controllerName);
+
+        if (controller == null)
+        {
+            this.ErrorTextBox.Text = "Controller not found...";
+            return;
+        }
+
+        var controllerConfig = parser.Parse(controller.UniqueId);
 
         this.ErrorTextBox.Text += controllerConfig.GetGpioErrors();
 
