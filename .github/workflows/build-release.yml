@@ -1,0 +1,48 @@
+name: Build WPF Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggert bei Tags wie v1.0.0, v1.2.3, etc.
+  workflow_dispatch:  # Ermöglicht manuelles Triggern
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build WPF Application
+      run: dotnet build mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj --configuration Release --no-restore
+      
+    - name: Publish WPF Application
+      run: dotnet publish mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj --configuration Release --output ./publish --no-build
+      
+    - name: Create Release Archive
+      run: Compress-Archive -Path ./publish/* -DestinationPath mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}.zip
+      shell: pwsh
+      
+    - name: Upload Release Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}
+        path: ./publish
+        
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}.zip
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
