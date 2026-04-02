@@ -1,4 +1,4 @@
-name: Build WPF Release
+name: Build and Release
 
 on:
   push:
@@ -9,40 +9,44 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    
+
+    env:
+      PROJECT_PATH: mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj
+      RELEASE_NAME: ArduinoIDE-${{ github.ref_name }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: '10.0.x'
         
     - name: Restore dependencies
       run: dotnet restore
-      
+
     - name: Build WPF Application
-      run: dotnet build mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj --configuration Release --no-restore
-      
+      run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
+
     - name: Publish WPF Application
-      run: dotnet publish mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj --configuration Release --output ./publish --no-build
-      
+      run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --output ./publish --no-build
+
     - name: Create Release Archive
-      run: Compress-Archive -Path ./publish/* -DestinationPath mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}.zip
+      run: Compress-Archive -Path ./publish/* -DestinationPath ${{ env.RELEASE_NAME }}.zip
       shell: pwsh
-      
+
     - name: Upload Release Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}
+        name: ${{ env.RELEASE_NAME }}
         path: ./publish
-        
+
     - name: Create GitHub Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
-        files: mitoSoft.homeNet.ArduinoIDE-${{ github.ref_name }}.zip
+        files: ${{ env.RELEASE_NAME }}.zip
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
