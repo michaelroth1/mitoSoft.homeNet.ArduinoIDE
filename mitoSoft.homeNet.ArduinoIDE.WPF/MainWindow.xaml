@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:local="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF"
         mc:Ignorable="d"
         Title="mitoSoft homeNet Arduino IDE" Height="600" Width="1000"
         WindowStartupLocation="CenterScreen">
@@ -29,6 +31,8 @@
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Find..." Click="FindMenuItem_Click" InputGestureText="Ctrl+F"/>
                 <Separator/>
+                <MenuItem Header="Copy to _Clipboard" Click="CopyToClipboardMenuItem_Click" InputGestureText="Ctrl+C"/>
+                <Separator/>
                 <MenuItem Header="_Comment" Click="CommentMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/CommentCode.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -43,13 +47,14 @@
                 <MenuItem Header="Select homeNet Node" Click="SelectHomeNetNodeMenuItem_Click"/>
                 <MenuItem Header="Create HomeNet Elements" Click="CreateHomeNetElementsMenuItem_Click"/>
             </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="_Controllers" x:Name="ViewControllersMenuItem" IsCheckable="True" IsChecked="True" Click="ViewControllersMenuItem_Click"/>
+                <MenuItem Header="_Errors / Warnings" x:Name="ViewErrorsMenuItem" IsCheckable="True" IsChecked="True" Click="ViewErrorsMenuItem_Click"/>
+            </MenuItem>
         </Menu>
 
         <!-- Toolbar -->
         <ToolBar DockPanel.Dock="Top">
-            <Label Content="Controller:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="ControllerComboBox" Width="200" VerticalAlignment="Center" SelectionChanged="ControllerComboBox_SelectionChanged"/>
-            <Separator/>
             <Button Click="CheckButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Check errors and warnings">
                 <Image Source="/Resources/Check.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
@@ -62,6 +67,9 @@
             </Button>
             <Button Click="UncommentButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Uncomment selected lines">
                 <Image Source="/Resources/UncommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Button>
+            <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Copy active panel content to clipboard">
+                <Image Source="/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
             <Label Content="Zoom:" VerticalAlignment="Center"/>
@@ -77,40 +85,58 @@
             </StatusBarItem>
         </StatusBar>
 
-        <!-- Main Content Grid -->
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="150"/>
-            </Grid.RowDefinitions>
+        <!-- AvalonDock DockingManager -->
+        <xcad:DockingManager x:Name="DockingManager" AllowMixedOrientation="True">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Vertical">
+                    <xcad:LayoutPanel Orientation="Horizontal">
+                        <!-- Left Side: Controller List -->
+                        <xcad:LayoutAnchorablePaneGroup DockWidth="250">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Controllers" x:Name="ControllersAnchorable" CanClose="True" CanHide="True" Hiding="LayoutAnchorable_Hiding">
+                                    <DockPanel>
+                                        <Label Content="Select Controller:" DockPanel.Dock="Top" Padding="5"/>
+                                        <ListBox x:Name="ControllerListBox" 
+                                                 SelectionChanged="ControllerListBox_SelectionChanged"
+                                                 Margin="5"/>
+                                    </DockPanel>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup>
 
-            <!-- YAML Editor -->
-            <TextBox x:Name="YamlTextBox" 
-                     Grid.Row="0"
-                     AcceptsReturn="True" 
-                     AcceptsTab="True"
-                     VerticalScrollBarVisibility="Auto"
-                     HorizontalScrollBarVisibility="Auto"
-                     FontFamily="Consolas"
-                     FontSize="12"
-                     TextChanged="YamlTextBox_TextChanged"/>
+                        <!-- Center: Main Content -->
+                        <xcad:LayoutDocumentPaneGroup>
+                            <xcad:LayoutDocumentPane x:Name="DocumentPane">
+                                <xcad:LayoutDocument Title="YAML Editor" CanClose="False">
+                                    <TextBox x:Name="YamlTextBox" 
+                                             AcceptsReturn="True" 
+                                             AcceptsTab="True"
+                                             VerticalScrollBarVisibility="Auto"
+                                             HorizontalScrollBarVisibility="Auto"
+                                             FontFamily="Consolas"
+                                             FontSize="12"
+                                             TextChanged="YamlTextBox_TextChanged"/>
+                                </xcad:LayoutDocument>
+                            </xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPaneGroup>
+                    </xcad:LayoutPanel>
 
-            <!-- Splitter -->
-            <GridSplitter Grid.Row="1" 
-                          HorizontalAlignment="Stretch" 
-                          VerticalAlignment="Stretch"
-                          Background="LightGray"/>
-
-            <!-- Error/Output TextBox -->
-            <TextBox x:Name="ErrorTextBox" 
-                     Grid.Row="2"
-                     IsReadOnly="True"
-                     VerticalScrollBarVisibility="Auto"
-                     HorizontalScrollBarVisibility="Auto"
-                     FontFamily="Consolas"
-                     FontSize="11"
-                     Background="#FFF5F5F5"/>
-        </Grid>
+                    <!-- Bottom: Errors and Warnings -->
+                    <xcad:LayoutAnchorablePaneGroup DockHeight="150">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="Errors / Warnings" x:Name="ErrorsAnchorable" CanClose="True" Hiding="LayoutAnchorable_Hiding">
+                                <TextBox x:Name="ErrorTextBox" 
+                                         IsReadOnly="True"
+                                         VerticalScrollBarVisibility="Auto"
+                                         HorizontalScrollBarVisibility="Auto"
+                                         FontFamily="Consolas"
+                                         FontSize="11"
+                                         Background="#FFF5F5F5"/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
     </DockPanel>
 </Window>

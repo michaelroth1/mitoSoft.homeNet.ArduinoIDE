@@ -13,6 +13,7 @@
     <None Remove="Build.png" />
     <None Remove="Check.png" />
     <None Remove="CommentCode.png" />
+    <None Remove="Copy.png" />
     <None Remove="UncommentCode.png" />
   </ItemGroup>
 
@@ -21,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Copy.png" />
     <Resource Include="Resources\Build.png" />
     <Resource Include="Resources\Check.png" />
     <Resource Include="Resources\CommentCode.png" />
@@ -31,6 +33,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\mitoSoft.homeNet.ArduinoIDE.ProgramParser\mitoSoft.homeNet.ArduinoIDE.ProgramParser.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonDock.Themes.VS2013" Version="2.0.0.5" />
   </ItemGroup>
 
 </Project>

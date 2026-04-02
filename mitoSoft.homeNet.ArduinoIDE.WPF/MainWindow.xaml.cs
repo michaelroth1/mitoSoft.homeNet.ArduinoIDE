@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF;
 
@@ -71,21 +72,21 @@ public partial class MainWindow : Window
     {
         var controllers = new TextCrawler(YamlTextBox.Text).ParseHomeNetControllers();
 
-        var selectedItem = ControllerComboBox.SelectedItem;
+        var selectedItem = ControllerListBox.SelectedItem;
 
-        ControllerComboBox.Items.Clear();
+        ControllerListBox.Items.Clear();
         foreach (var controller in controllers)
         {
-            ControllerComboBox.Items.Add(controller);
+            ControllerListBox.Items.Add(controller);
         }
 
-        if (selectedItem != null && ControllerComboBox.Items.Contains(selectedItem))
+        if (selectedItem != null && ControllerListBox.Items.Contains(selectedItem))
         {
-            ControllerComboBox.SelectedItem = selectedItem;
+            ControllerListBox.SelectedItem = selectedItem;
         }
     }
 
-    private void ControllerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ControllerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         ErrorTextBox.Text = string.Empty;
     }
@@ -99,7 +100,7 @@ public partial class MainWindow : Window
     {
         ErrorTextBox.Text = string.Empty;
 
-        string? controllerName = ControllerComboBox.SelectedItem as string;
+        string? controllerName = ControllerListBox.SelectedItem as string;
 
         if (string.IsNullOrWhiteSpace(controllerName))
         {
@@ -155,15 +156,100 @@ public partial class MainWindow : Window
 
         var program = programBuilder.Build(config);
 
-        var outputWindow = new OutputWindow(controller.Name, program);
-        outputWindow.Show();
+        CreateOutputDocument(controller.Name, program);
 
         programBuilder.Check();
     }
 
+    private void CreateOutputDocument(string controllerName, string content)
+    {
+        var existingDoc = DocumentPane.Children.OfType<LayoutDocument>()
+            .FirstOrDefault(d => d.Title == $"Output: {controllerName}");
+
+        if (existingDoc != null)
+        {
+            var dockPanel = existingDoc.Content as DockPanel;
+            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
+            if (textBox != null)
+            {
+                textBox.Text = content;
+            }
+            existingDoc.IsSelected = true;
+            existingDoc.IsActive = true;
+            return;
+        }
+
+        var outputDocument = new LayoutDocument
+        {
+            Title = $"Output: {controllerName}",
+            CanClose = true,
+            Content = CreateOutputContent(controllerName, content)
+        };
+
+        DocumentPane.Children.Add(outputDocument);
+        outputDocument.IsSelected = true;
+        outputDocument.IsActive = true;
+    }
+
+    private DockPanel CreateOutputContent(string controllerName, string content)
+    {
+        var dockPanel = new DockPanel();
+
+        var toolBar = new ToolBar();
+        DockPanel.SetDock(toolBar, Dock.Top);
+
+        var copyButton = new Button
+        {
+            Content = "Copy to Clipboard",
+            Padding = new Thickness(10, 2, 10, 2)
+        };
+        copyButton.Click += (s, e) =>
+        {
+            if (!string.IsNullOrEmpty(content))
+            {
+                Clipboard.SetText(content);
+                MessageBox.Show("Content copied to clipboard!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        };
+
+        toolBar.Items.Add(copyButton);
+
+        var textBox = new TextBox
+        {
+            Text = content,
+            IsReadOnly = true,
+            AcceptsReturn = true,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+            FontSize = 11 * ZoomSlider.Value,
+            Background = System.Windows.Media.Brushes.White
+        };
+
+        dockPanel.Children.Add(toolBar);
+        dockPanel.Children.Add(textBox);
+
+        return dockPanel;
+    }
+
+    private void SaveOutputToFile(string controllerName, string content)
+    {
+        var saveFileDialog = new SaveFileDialog
+        {
+            Filter = "Arduino files (*.ino)|*.ino|Text files (*.txt)|*.txt|All files (*.*)|*.*",
+            FileName = controllerName + ".ino"
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            File.WriteAllText(saveFileDialog.FileName, content);
+            MessageBox.Show($"File saved to: {saveFileDialog.FileName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    }
+
     private HomeNet.Controller? GetController()
     {
-        string? controllerName = ControllerComboBox.SelectedItem as string;
+        string? controllerName = ControllerListBox.SelectedItem as string;
 
         if (string.IsNullOrWhiteSpace(controllerName))
         {
@@ -191,9 +277,33 @@ public partial class MainWindow : Window
 
     private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
     {
+        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+
+        if (activeDocument == null)
+            return;
+
+        if (activeDocument.Title == "YAML Editor")
+        {
+            SaveYamlFile();
+        }
+        else if (activeDocument.Title.StartsWith("Output:"))
+        {
+            var controllerName = activeDocument.Title.Replace("Output: ", "");
+            var dockPanel = activeDocument.Content as DockPanel;
+            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
+            if (textBox != null)
+            {
+                SaveOutputToFile(controllerName, textBox.Text);
+            }
+        }
+    }
+
+    private void SaveYamlFile()
+    {
         var saveFileDialog = new SaveFileDialog
         {
-            Filter = "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*"
+            Filter = "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
+            FileName = !string.IsNullOrEmpty(_currentFilePath) ? Path.GetFileName(_currentFilePath) : "config.yaml"
         };
 
         if (saveFileDialog.ShowDialog() == true)
@@ -201,6 +311,33 @@ public partial class MainWindow : Window
             _currentFilePath = saveFileDialog.FileName;
             File.WriteAllText(_currentFilePath, YamlTextBox.Text);
             StatusText.Text = $"Saved: {_currentFilePath}";
+        }
+    }
+
+    private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+
+        if (activeDocument == null)
+            return;
+
+        string? contentToCopy = null;
+
+        if (activeDocument.Title == "YAML Editor")
+        {
+            contentToCopy = YamlTextBox.Text;
+        }
+        else if (activeDocument.Title.StartsWith("Output:"))
+        {
+            var dockPanel = activeDocument.Content as DockPanel;
+            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
+            contentToCopy = textBox?.Text;
+        }
+
+        if (!string.IsNullOrEmpty(contentToCopy))
+        {
+            Clipboard.SetText(contentToCopy);
+            StatusText.Text = "Content copied to clipboard";
         }
     }
 
@@ -316,9 +453,21 @@ public partial class MainWindow : Window
         {
             YamlTextBox.FontSize = 12 * ZoomSlider.Value;
         }
-        if (ErrorTextBox != null)
+
+        if (DocumentPane?.Children != null)
         {
-            ErrorTextBox.FontSize = 11 * ZoomSlider.Value;
+            foreach (var document in DocumentPane.Children.OfType<LayoutDocument>())
+            {
+                if (document.Title.StartsWith("Output:"))
+                {
+                    var dockPanel = document.Content as DockPanel;
+                    var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
+                    if (textBox != null)
+                    {
+                        textBox.FontSize = 11 * ZoomSlider.Value;
+                    }
+                }
+            }
         }
     }
 
@@ -342,19 +491,77 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(_searchText))
             return;
 
-        int startPosition = YamlTextBox.SelectionStart + YamlTextBox.SelectionLength;
-        int foundIndex = YamlTextBox.Text.IndexOf(_searchText, startPosition, StringComparison.OrdinalIgnoreCase);
+        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+        if (activeDocument == null)
+            return;
+
+        TextBox? targetTextBox = null;
+
+        if (activeDocument.Title == "YAML Editor")
+        {
+            targetTextBox = YamlTextBox;
+        }
+        else if (activeDocument.Title.StartsWith("Output:"))
+        {
+            var dockPanel = activeDocument.Content as DockPanel;
+            targetTextBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
+        }
+
+        if (targetTextBox == null)
+            return;
+
+        int startPosition = targetTextBox.SelectionStart + targetTextBox.SelectionLength;
+        int foundIndex = targetTextBox.Text.IndexOf(_searchText, startPosition, StringComparison.OrdinalIgnoreCase);
 
         if (foundIndex != -1)
         {
-            YamlTextBox.Focus();
-            YamlTextBox.SelectionStart = foundIndex;
-            YamlTextBox.SelectionLength = _searchText.Length;
-            YamlTextBox.ScrollToLine(GetLineNumber(YamlTextBox.Text, foundIndex));
+            targetTextBox.Focus();
+            targetTextBox.SelectionStart = foundIndex;
+            targetTextBox.SelectionLength = _searchText.Length;
+            targetTextBox.ScrollToLine(GetLineNumber(targetTextBox.Text, foundIndex));
         }
         else
         {
             MessageBox.Show("Not found.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    }
+
+    private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewControllersMenuItem.IsChecked)
+        {
+            ControllersAnchorable.Show();
+        }
+        else
+        {
+            ControllersAnchorable.Hide();
+        }
+    }
+
+    private void ViewErrorsMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewErrorsMenuItem.IsChecked)
+        {
+            ErrorsAnchorable.Show();
+        }
+        else
+        {
+            ErrorsAnchorable.Hide();
+        }
+    }
+
+    private void LayoutAnchorable_Hiding(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (sender is Xceed.Wpf.AvalonDock.Layout.LayoutAnchorable anchorable)
+        {
+            if (anchorable.Title == "Controllers")
+            {
+                ViewControllersMenuItem.IsChecked = false;
+            }
+            else if (anchorable.Title == "Errors / Warnings")
+            {
+                ViewErrorsMenuItem.IsChecked = false;
+            }
         }
     }
 }
