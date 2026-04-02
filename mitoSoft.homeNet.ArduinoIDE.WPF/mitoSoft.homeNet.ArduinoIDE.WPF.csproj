@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\mitoSoft.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Build.png" />
+    <None Remove="Check.png" />
+    <None Remove="CommentCode.png" />
+    <None Remove="UncommentCode.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\mitoSoft.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Build.png" />
+    <Resource Include="Resources\Check.png" />
+    <Resource Include="Resources\CommentCode.png" />
+    <Resource Include="Resources\UncommentCode.png" />
+    <Resource Include="Resources\OpenFile.png" />
+    <Resource Include="Resources\Save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mitoSoft.homeNet.ArduinoIDE.ProgramParser\mitoSoft.homeNet.ArduinoIDE.ProgramParser.csproj" />
+  </ItemGroup>
+
+</Project>
