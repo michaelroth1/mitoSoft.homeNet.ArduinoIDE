@@ -69,7 +69,7 @@
                 <Image Source="/Resources/UncommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Copy active panel content to clipboard">
-                <Image Source="/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Image Source="/Resources/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
             <Label Content="Zoom:" VerticalAlignment="Center"/>
