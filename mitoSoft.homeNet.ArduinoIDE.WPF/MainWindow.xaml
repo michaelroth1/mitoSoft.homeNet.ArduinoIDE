@@ -76,7 +76,7 @@
                 <Image Source="/Resources/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Button Click="FindMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Find (Ctrl+F)">
-                <Image Source="/Resources/magnifier.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Image Source="/Resources/Magnifier.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
             <Label Content="Zoom:" VerticalAlignment="Center"/>
