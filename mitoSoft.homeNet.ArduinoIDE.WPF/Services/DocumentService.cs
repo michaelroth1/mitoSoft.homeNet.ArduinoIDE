@@ -119,4 +119,36 @@ public class DocumentService
         gpioDocument.IsSelected = true;
         gpioDocument.IsActive = true;
     }
+
+    public void CreateOrUpdateHomeNetElementsDocument(string content)
+    {
+        const string title = "Missing HomeNet elements";
+
+        var existingDoc = _documentPane.Children.OfType<LayoutDocument>()
+            .FirstOrDefault(d => d.Title == title);
+
+        if (existingDoc != null)
+        {
+            var existingView = existingDoc.Content as HomeNetElementsView;
+            existingView?.SetContent(content);
+            existingDoc.IsSelected = true;
+            existingDoc.IsActive = true;
+            return;
+        }
+
+        var view = new HomeNetElementsView();
+        view.SetContent(content);
+        view.SetZoomFactor(_getCurrentZoomFactor());
+
+        var document = new LayoutDocument
+        {
+            Title = title,
+            CanClose = true,
+            Content = view
+        };
+
+        _documentPane.Children.Add(document);
+        document.IsSelected = true;
+        document.IsActive = true;
+    }
 }

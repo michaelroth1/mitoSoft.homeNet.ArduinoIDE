@@ -291,7 +291,7 @@ public partial class MainWindow : Window
 
     private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        SelectYamlNode("homeNet");
+        SelectYamlNode("homeNet:");
     }
 
     private void SelectYamlNode(string key)
@@ -303,8 +303,7 @@ public partial class MainWindow : Window
     {
         var newConfig = new YamlParser(YamlView.Text).AddHomeNetElements();
 
-        var outputWindow = new OutputWindow("Missing HomeNet elements", newConfig);
-        outputWindow.ShowDialog();
+        _documentService.CreateOrUpdateHomeNetElementsDocument(newConfig);
     }
 
     private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

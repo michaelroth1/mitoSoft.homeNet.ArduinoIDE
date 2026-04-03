@@ -1,0 +1,29 @@
+<UserControl x:Class="mitoSoft.homeNet.ArduinoIDE.WPF.Views.HomeNetElementsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:helpers="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Helpers">
+    <DockPanel>
+        <Border DockPanel.Dock="Top"
+                Background="#FFF0F4FF"
+                BorderBrush="#FFAEC6E8"
+                BorderThickness="0,0,0,1"
+                Padding="10,8">
+            <TextBlock TextWrapping="Wrap"
+                       Foreground="#FF1E3A5F"
+                       FontSize="12">
+                Hier wird gezeigt, welche <Run FontWeight="Bold">homeNet:</Run>-Einträge du noch in dein YAML einfügen musst, damit alle MQTT-Devices auch eine homeNet-Konfiguration haben.
+            </TextBlock>
+        </Border>
+        <avalonedit:TextEditor x:Name="TextEditor"
+                               IsReadOnly="True"
+                               ShowLineNumbers="True"
+                               VerticalScrollBarVisibility="Auto"
+                               HorizontalScrollBarVisibility="Auto"
+                               FontFamily="Consolas"
+                               FontSize="11"
+                               Background="White"
+                               IsManipulationEnabled="True"
+                               helpers:SyntaxHighlightingHelper.HighlightingFile="/Editor/YAML.xshd"/>
+    </DockPanel>
+</UserControl>
