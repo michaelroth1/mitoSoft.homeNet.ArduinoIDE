@@ -55,7 +55,7 @@ public class GpioOverviewService
                         usedGpios.Add(cover.GpioCloseButton);
                     }
 
-                    var name = ExtractFriendlyName(cover.UniqueId);
+                    var name = this.ExtractFriendlyName(cover.UniqueId);
 
                     overview.Items.Add(new GpioOverviewItem
                     {
@@ -85,7 +85,7 @@ public class GpioOverviewService
                         usedGpios.Add(light.GpioButton);
                     }
 
-                    var name = ExtractFriendlyName(light.UniqueId);
+                    var name = this.ExtractFriendlyName(light.UniqueId);
 
                     overview.Items.Add(new GpioOverviewItem
                     {
@@ -126,7 +126,7 @@ public class GpioOverviewService
 
     public string GenerateDocumentation(string yamlContent)
     {
-        var overviews = GenerateOverview(yamlContent);
+        var overviews = this.GenerateOverview(yamlContent);
 
         if (overviews.Count == 0)
         {

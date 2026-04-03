@@ -34,7 +34,7 @@ public partial class MainWindow : Window
         _textEditorService = new TextEditorService();
         _gpioOverviewService = new GpioOverviewService();
 
-        LoadSettings();
+        this.LoadSettings();
         Loaded += MainWindow_Loaded;
         Closing += MainWindow_Closing;
     }
@@ -65,14 +65,14 @@ public partial class MainWindow : Window
         // Subscribe to TextChanged event
         YamlView.TextChanged += (s, args) =>
         {
-            SaveYamlInSettings();
-            UpdateControllerList();
+            this.SaveYamlInSettings();
+            this.UpdateControllerList();
         };
 
         // Apply zoom after UI is fully initialized
-        ApplyZoom();
+        this.ApplyZoom();
 
-        UpdateControllerList();
+        this.UpdateControllerList();
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -110,7 +110,7 @@ public partial class MainWindow : Window
 
     private void CheckButton_Click(object sender, RoutedEventArgs e)
     {
-        CheckErrors();
+        this.CheckErrors();
     }
 
     private void CheckErrors()
@@ -147,9 +147,9 @@ public partial class MainWindow : Window
 
     private void BuildButton_Click(object sender, RoutedEventArgs e)
     {
-        CheckErrors();
+        this.CheckErrors();
 
-        var controller = GetController();
+        var controller = this.GetController();
 
         if (controller == null)
         {
@@ -216,15 +216,15 @@ public partial class MainWindow : Window
 
         if (activeDocument.Title == "YAML Editor")
         {
-            SaveYamlFile();
+            this.SaveYamlFile();
         }
         else if (activeDocument.Title.StartsWith("Output:"))
         {
             var controllerName = activeDocument.Title.Replace("Output: ", "");
-            var textEditor = GetActiveTextEditor();
+            var textEditor = this.GetActiveTextEditor();
             if (textEditor != null)
             {
-                SaveOutputToFile(controllerName, textEditor.Text);
+                this.SaveOutputToFile(controllerName, textEditor.Text);
             }
         }
     }
@@ -242,7 +242,7 @@ public partial class MainWindow : Window
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var textEditor = GetActiveTextEditor();
+        var textEditor = this.GetActiveTextEditor();
         if (textEditor != null)
         {
             var contentToCopy = textEditor.Text;
@@ -261,12 +261,12 @@ public partial class MainWindow : Window
 
     private void CommentMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        CommentSelectedLines();
+        this.CommentSelectedLines();
     }
 
     private void CommentButton_Click(object sender, RoutedEventArgs e)
     {
-        CommentSelectedLines();
+        this.CommentSelectedLines();
     }
 
     private void CommentSelectedLines()
@@ -276,12 +276,12 @@ public partial class MainWindow : Window
 
     private void UncommentMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        UncommentSelectedLines();
+        this.UncommentSelectedLines();
     }
 
     private void UncommentButton_Click(object sender, RoutedEventArgs e)
     {
-        UncommentSelectedLines();
+        this.UncommentSelectedLines();
     }
 
     private void UncommentSelectedLines()
@@ -291,7 +291,7 @@ public partial class MainWindow : Window
 
     private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        SelectYamlNode("homeNet:");
+        this.SelectYamlNode("homeNet:");
     }
 
     private void SelectYamlNode(string key)
@@ -308,7 +308,7 @@ public partial class MainWindow : Window
 
     private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        ApplyZoom();
+        this.ApplyZoom();
     }
 
     private void ApplyZoom()
@@ -326,7 +326,7 @@ public partial class MainWindow : Window
 
     private void FindMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        FindMenuItem_Click(sender);
+        this.FindMenuItem_Click(sender);
     }
 
     private void FindMenuItem_Click(object? sender)
@@ -354,7 +354,7 @@ public partial class MainWindow : Window
         if (findDialog2.ShowDialog() == true)
         {
             _searchText = findDialog2.SearchText;
-            FindNext();
+            this.FindNext();
         }
     }
 
@@ -383,7 +383,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(_searchText))
             return;
 
-        var textEditor = GetActiveTextEditor();
+        var textEditor = this.GetActiveTextEditor();
 
         // Perform search if TextEditor was found
         if (textEditor != null)

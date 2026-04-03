@@ -13,13 +13,13 @@ public partial class DocumentionView : UserControl
     public DocumentionView()
     {
         InitializeComponent();
-        SetupScrollViewer();
+        this.SetupScrollViewer();
     }
 
     public void SetContent(List<ControllerGpioOverview> overviews)
     {
         _overviews = overviews;
-        PopulateContent();
+        this.PopulateContent();
     }
 
     private void SetupScrollViewer()
@@ -179,12 +179,12 @@ public partial class DocumentionView : UserControl
 
     private void PrintButton_Click(object sender, RoutedEventArgs e)
     {
-        PrintGpioDocumentation();
+        this.PrintGpioDocumentation();
     }
 
     private void ClearHighlightsButton_Click(object sender, RoutedEventArgs e)
     {
-        ClearHighlights();
+        this.ClearHighlights();
     }
 
     private void PrintGpioDocumentation()
@@ -291,7 +291,7 @@ public partial class DocumentionView : UserControl
             return;
 
         bool found = false;
-        ClearHighlights();
+        this.ClearHighlights();
 
         foreach (var child in ContentPanel.Children)
         {

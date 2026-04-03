@@ -3,12 +3,12 @@ using System.Windows.Controls;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 
-public partial class HomeNetElementsView : UserControl
+public partial class MissingHomeNetElementsView : UserControl
 {
-    public HomeNetElementsView()
+    public MissingHomeNetElementsView()
     {
         InitializeComponent();
-        SetupTextEditor();
+        this.SetupTextEditor();
     }
 
     public void SetContent(string content)
@@ -18,7 +18,7 @@ public partial class HomeNetElementsView : UserControl
 
     public void SetZoomFactor(double zoomFactor)
     {
-        TextEditor.FontSize = 11 * zoomFactor;
+        TextEditor.FontSize = 12 * zoomFactor;
     }
 
     public TextEditor GetTextEditor()

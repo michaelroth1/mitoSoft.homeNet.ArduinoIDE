@@ -22,11 +22,11 @@ public class DocumentService
 
         if (existingDoc != null)
         {
-            UpdateExistingDocument(existingDoc, content);
+            this.UpdateExistingDocument(existingDoc, content);
             return;
         }
 
-        CreateNewDocument(controllerName, content);
+        this.CreateNewDocument(controllerName, content);
     }
 
     private void UpdateExistingDocument(LayoutDocument document, string content)
@@ -84,11 +84,11 @@ public class DocumentService
 
         if (existingDoc != null)
         {
-            UpdateExistingGpioDocument(existingDoc, overviews);
+            this.UpdateExistingGpioDocument(existingDoc, overviews);
             return;
         }
 
-        CreateNewGpioDocument(overviews);
+        this.CreateNewGpioDocument(overviews);
     }
 
     private void UpdateExistingGpioDocument(LayoutDocument document, List<ControllerGpioOverview> overviews)
@@ -122,21 +122,21 @@ public class DocumentService
 
     public void CreateOrUpdateHomeNetElementsDocument(string content)
     {
-        const string title = "Missing HomeNet elements";
+        const string title = "Missing homeNet elements";
 
         var existingDoc = _documentPane.Children.OfType<LayoutDocument>()
             .FirstOrDefault(d => d.Title == title);
 
         if (existingDoc != null)
         {
-            var existingView = existingDoc.Content as HomeNetElementsView;
+            var existingView = existingDoc.Content as MissingHomeNetElementsView;
             existingView?.SetContent(content);
             existingDoc.IsSelected = true;
             existingDoc.IsActive = true;
             return;
         }
 
-        var view = new HomeNetElementsView();
+        var view = new MissingHomeNetElementsView();
         view.SetContent(content);
         view.SetZoomFactor(_getCurrentZoomFactor());
 

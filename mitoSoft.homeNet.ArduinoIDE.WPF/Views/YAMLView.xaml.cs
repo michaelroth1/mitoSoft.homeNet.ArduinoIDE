@@ -12,7 +12,7 @@ public partial class YamlView : UserControl
     public YamlView()
     {
         InitializeComponent();
-        SetupTextEditor();
+        this.SetupTextEditor();
     }
 
     public string Text
@@ -40,7 +40,7 @@ public partial class YamlView : UserControl
             var editor = s as TextEditor;
             if (editor != null && editor.VerticalScrollBarVisibility != ScrollBarVisibility.Disabled)
             {
-                var scrollViewer = FindScrollViewer(editor);
+                var scrollViewer = this.FindScrollViewer(editor);
                 if (scrollViewer != null)
                 {
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 3.0);
@@ -52,7 +52,7 @@ public partial class YamlView : UserControl
         // Enable touch scrolling
         YamlTextEditor.Loaded += (s, e) =>
         {
-            var scrollViewer = FindScrollViewer(YamlTextEditor);
+            var scrollViewer = this.FindScrollViewer(YamlTextEditor);
             if (scrollViewer != null)
             {
                 scrollViewer.PanningMode = PanningMode.VerticalOnly;
@@ -70,7 +70,7 @@ public partial class YamlView : UserControl
             if (child is ScrollViewer scrollViewer)
                 return scrollViewer;
 
-            var result = FindScrollViewer(child);
+            var result = this.FindScrollViewer(child);
             if (result != null)
                 return result;
         }

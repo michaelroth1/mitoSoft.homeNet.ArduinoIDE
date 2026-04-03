@@ -60,7 +60,7 @@ public class TextEditorService
             textEditor.Focus();
             textEditor.SelectionStart = index;
             textEditor.SelectionLength = key.Length;
-            textEditor.ScrollToLine(GetLineNumber(text, index) + 1);
+            textEditor.ScrollToLine(this.GetLineNumber(text, index) + 1);
         }
     }
 
@@ -77,7 +77,7 @@ public class TextEditorService
             textEditor.Focus();
             textEditor.SelectionStart = foundIndex;
             textEditor.SelectionLength = searchText.Length;
-            textEditor.ScrollToLine(GetLineNumber(textEditor.Text, foundIndex) + 1);
+            textEditor.ScrollToLine(this.GetLineNumber(textEditor.Text, foundIndex) + 1);
             return true;
         }
 
@@ -139,7 +139,7 @@ public class TextEditorService
             textBox.Focus();
             textBox.SelectionStart = index;
             textBox.SelectionLength = key.Length;
-            textBox.ScrollToLine(GetLineNumber(text, index));
+            textBox.ScrollToLine(this.GetLineNumber(text, index));
         }
     }
 
@@ -156,7 +156,7 @@ public class TextEditorService
             textBox.Focus();
             textBox.SelectionStart = foundIndex;
             textBox.SelectionLength = searchText.Length;
-            textBox.ScrollToLine(GetLineNumber(textBox.Text, foundIndex));
+            textBox.ScrollToLine(this.GetLineNumber(textBox.Text, foundIndex));
             return true;
         }
 

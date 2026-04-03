@@ -10,7 +10,7 @@ public partial class OutputView : UserControl
     public OutputView()
     {
         InitializeComponent();
-        SetupTextEditor();
+        this.SetupTextEditor();
     }
 
     public void SetContent(string content)
@@ -20,7 +20,7 @@ public partial class OutputView : UserControl
 
     public void SetZoomFactor(double zoomFactor)
     {
-        TextEditor.FontSize = 11 * zoomFactor;
+        TextEditor.FontSize = 12 * zoomFactor;
     }
 
     public TextEditor GetTextEditor()
@@ -39,7 +39,7 @@ public partial class OutputView : UserControl
             var editor = s as TextEditor;
             if (editor != null)
             {
-                var scrollViewer = FindScrollViewer(editor);
+                var scrollViewer = this.FindScrollViewer(editor);
                 if (scrollViewer != null)
                 {
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 3.0);
@@ -51,7 +51,7 @@ public partial class OutputView : UserControl
         // Enable touch scrolling
         TextEditor.Loaded += (s, e) =>
         {
-            var scrollViewer = FindScrollViewer(TextEditor);
+            var scrollViewer = this.FindScrollViewer(TextEditor);
             if (scrollViewer != null)
             {
                 scrollViewer.PanningMode = PanningMode.VerticalOnly;
@@ -69,7 +69,7 @@ public partial class OutputView : UserControl
             if (child is ScrollViewer scrollViewer)
                 return scrollViewer;
 
-            var result = FindScrollViewer(child);
+            var result = this.FindScrollViewer(child);
             if (result != null)
                 return result;
         }
