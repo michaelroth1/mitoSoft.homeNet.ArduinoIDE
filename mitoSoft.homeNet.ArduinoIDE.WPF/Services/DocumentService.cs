@@ -135,7 +135,7 @@ public class DocumentService
         gpioDocument.IsActive = true;
     }
 
-    public void CreateOrUpdateHomeNetElementsDocument(string content)
+    public void CreateOrUpdateMissingHomeNetElementsDocument(string content)
     {
         const string title = "Missing homeNet elements";
 

@@ -31,9 +31,17 @@
                 <MenuItem Header="E_xit" Click="ExitMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Find..." Click="FindMenuItem_Click" InputGestureText="Ctrl+F"/>
+                <MenuItem Header="_Find..." Click="FindMenuItem_Click" InputGestureText="Ctrl+F">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Magnifier.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
-                <MenuItem Header="Copy to _Clipboard" Click="CopyToClipboardMenuItem_Click" InputGestureText="Ctrl+C"/>
+                <MenuItem Header="Copy to _Clipboard" Click="CopyToClipboardMenuItem_Click" InputGestureText="Ctrl+C">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Copy.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="_Comment" Click="CommentMenuItem_Click">
                     <MenuItem.Icon>
@@ -47,9 +55,9 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Select homeNet Node" Click="SelectHomeNetNodeMenuItem_Click"/>
-                <MenuItem Header="Create HomeNet Elements" Click="CreateHomeNetElementsMenuItem_Click"/>
+                <MenuItem Header="Missing HomeNet Elements" Click="MissingHomeNetElementsMenuItem_Click"/>
                 <Separator/>
-                <MenuItem Header="Create _GPIO Documentation" Click="CreateGpioDocumentationMenuItem_Click"/>
+                <MenuItem Header="_GPIO Documentation" Click="GpioDocumentationMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Controllers" x:Name="ViewControllersMenuItem" IsCheckable="True" IsChecked="True" Click="ViewControllersMenuItem_Click"/>

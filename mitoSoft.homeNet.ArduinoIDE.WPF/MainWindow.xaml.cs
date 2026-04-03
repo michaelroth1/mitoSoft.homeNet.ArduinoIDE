@@ -303,11 +303,11 @@ public partial class MainWindow : Window
         _textEditorService.SelectYamlNode(YamlView.GetTextEditor(), key);
     }
 
-    private void CreateHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
+    private void MissingHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
     {
         var newConfig = new YamlParser(YamlView.Text).AddHomeNetElements();
 
-        _documentService.CreateOrUpdateHomeNetElementsDocument(newConfig);
+        _documentService.CreateOrUpdateMissingHomeNetElementsDocument(newConfig);
     }
 
     private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -401,7 +401,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void CreateGpioDocumentationMenuItem_Click(object sender, RoutedEventArgs e)
+    private void GpioDocumentationMenuItem_Click(object sender, RoutedEventArgs e)
     {
         try
         {
