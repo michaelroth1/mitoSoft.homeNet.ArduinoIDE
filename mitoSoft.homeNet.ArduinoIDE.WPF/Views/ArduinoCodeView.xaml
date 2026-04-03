@@ -2,18 +2,22 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-             xmlns:helpers="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Helpers">
-    <avalonedit:TextEditor x:Name="TextEditor"
-                           IsReadOnly="True"
-                           ShowLineNumbers="True"
-                           VerticalScrollBarVisibility="Auto"
-                           HorizontalScrollBarVisibility="Auto"
-                           FontFamily="Consolas"
-                           FontSize="11"
-                           Background="White"
-                           IsManipulationEnabled="True"
-                           ScrollViewer.PanningMode="VerticalOnly"
-                           ScrollViewer.PanningDeceleration="0.001"
-                           ScrollViewer.PanningRatio="1.0"
-                           helpers:SyntaxHighlightingHelper.HighlightingFile="/Editor/Arduino.xshd"/>
+             xmlns:helpers="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Helpers"
+             xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views">
+    <DockPanel>
+        <views:FindBarControl x:Name="FindBar" DockPanel.Dock="Top" Visibility="Visible"/>
+        <avalonedit:TextEditor x:Name="TextEditor"
+                               IsReadOnly="True"
+                               ShowLineNumbers="True"
+                               VerticalScrollBarVisibility="Auto"
+                               HorizontalScrollBarVisibility="Auto"
+                               FontFamily="Consolas"
+                               FontSize="11"
+                               Background="White"
+                               IsManipulationEnabled="True"
+                               ScrollViewer.PanningMode="VerticalOnly"
+                               ScrollViewer.PanningDeceleration="0.001"
+                               ScrollViewer.PanningRatio="1.0"
+                               helpers:SyntaxHighlightingHelper.HighlightingFile="/Editor/Arduino.xshd"/>
+    </DockPanel>
 </UserControl>

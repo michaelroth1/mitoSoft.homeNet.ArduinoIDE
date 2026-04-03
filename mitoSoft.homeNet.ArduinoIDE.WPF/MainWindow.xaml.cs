@@ -13,7 +13,7 @@ namespace mitoSoft.homeNet.ArduinoIDE.WPF;
 public partial class MainWindow : Window
 {
     private string _currentFilePath = string.Empty;
-    private string _searchText = string.Empty;
+    private FrameworkElement? _lastFocusedView;
 
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
@@ -58,7 +58,11 @@ public partial class MainWindow : Window
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value);
+        _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value, () => DockingManager.ActiveContent);
+        _documentService.DocumentViewAdded += (s, view) => TrackViewFocus(view);
+
+        TrackViewFocus(YamlView);
+        _lastFocusedView = YamlView;
 
         YamlView.Text = _settingsService.GetYamlContent();
 
@@ -331,31 +335,27 @@ public partial class MainWindow : Window
 
     private void FindMenuItem_Click(object? sender)
     {
-        var activeDocument = _documentService.GetActiveDocument();
-
-        // Check if active document is GPIO Documentation
-        if (activeDocument?.Title == "GPIO Documentation")
+        if (_lastFocusedView is YamlView)
         {
-            var gpioView = activeDocument.Content as DocumentionView;
-            if (gpioView != null)
-            {
-                var findDialog = new FindDialog(_searchText);
-                if (findDialog.ShowDialog() == true)
-                {
-                    _searchText = findDialog.SearchText;
-                    gpioView.HighlightSearch(_searchText);
-                }
-                return;
-            }
+            YamlView.ShowFindBar(string.Empty);
+            return;
         }
 
-        // Default behavior for TextEditor-based documents
-        var findDialog2 = new FindDialog(_searchText);
-        if (findDialog2.ShowDialog() == true)
+        if (_lastFocusedView is OutputView outputView)
         {
-            _searchText = findDialog2.SearchText;
-            this.FindNext();
+            outputView.ShowFindBar(string.Empty);
+            return;
         }
+
+        if (_lastFocusedView is MissingHomeNetElementsView missingView)
+        {
+            missingView.ShowFindBar(string.Empty);
+        }
+    }
+
+    private void TrackViewFocus(FrameworkElement view)
+    {
+        view.GotKeyboardFocus += (s, e) => _lastFocusedView = view;
     }
 
     private TextEditor? GetActiveTextEditor()
@@ -364,7 +364,6 @@ public partial class MainWindow : Window
         if (activeDocument == null)
             return null;
 
-        // Find the TextEditor in the active document
         if (activeDocument.Title == "YAML Editor")
         {
             return YamlView.GetTextEditor();
@@ -376,23 +375,6 @@ public partial class MainWindow : Window
         }
 
         return null;
-    }
-
-    private void FindNext()
-    {
-        if (string.IsNullOrEmpty(_searchText))
-            return;
-
-        var textEditor = this.GetActiveTextEditor();
-
-        // Perform search if TextEditor was found
-        if (textEditor != null)
-        {
-            if (!_textEditorService.FindNext(textEditor, _searchText))
-            {
-                MessageBox.Show("Not found.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
     }
 
     private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)

@@ -182,11 +182,6 @@ public partial class DocumentionView : UserControl
         this.PrintGpioDocumentation();
     }
 
-    private void ClearHighlightsButton_Click(object sender, RoutedEventArgs e)
-    {
-        this.ClearHighlights();
-    }
-
     private void PrintGpioDocumentation()
     {
         try
@@ -282,100 +277,6 @@ public partial class DocumentionView : UserControl
         catch (Exception ex)
         {
             MessageBox.Show($"Fehler beim Drucken: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
-
-    public void HighlightSearch(string searchText)
-    {
-        if (string.IsNullOrWhiteSpace(searchText))
-            return;
-
-        bool found = false;
-        this.ClearHighlights();
-
-        foreach (var child in ContentPanel.Children)
-        {
-            if (child is DataGrid dataGrid)
-            {
-                foreach (var item in dataGrid.Items)
-                {
-                    if (item is GpioOverviewItem gpioItem)
-                    {
-                        if (gpioItem.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                            gpioItem.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                            gpioItem.GpioPins.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                            gpioItem.Type.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                        {
-                            found = true;
-                            var row = dataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                            if (row != null)
-                            {
-                                row.Background = new SolidColorBrush(Color.FromRgb(255, 255, 150));
-                            }
-                        }
-                    }
-                }
-
-                if (found)
-                {
-                    dataGrid.ScrollIntoView(dataGrid.Items[0]);
-                }
-            }
-            else if (child is Border border)
-            {
-                var stack = border.Child as StackPanel;
-                if (stack != null)
-                {
-                    foreach (var textBlock in stack.Children.OfType<TextBlock>())
-                    {
-                        if (textBlock.Text.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                        {
-                            found = true;
-                            border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 150));
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (child is TextBlock textBlock)
-            {
-                if (textBlock.Text.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                {
-                    found = true;
-                    textBlock.Background = new SolidColorBrush(Color.FromRgb(255, 255, 150));
-                }
-            }
-        }
-
-        if (!found)
-        {
-            MessageBox.Show($"'{searchText}' nicht gefunden.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-    }
-
-    public void ClearHighlights()
-    {
-        foreach (var child in ContentPanel.Children)
-        {
-            if (child is DataGrid dataGrid)
-            {
-                foreach (var item in dataGrid.Items)
-                {
-                    var row = dataGrid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                    if (row != null)
-                    {
-                        row.ClearValue(DataGridRow.BackgroundProperty);
-                    }
-                }
-            }
-            else if (child is Border border)
-            {
-                border.Background = new SolidColorBrush(Color.FromRgb(230, 240, 255));
-            }
-            else if (child is TextBlock textBlock)
-            {
-                textBlock.ClearValue(TextBlock.BackgroundProperty);
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using mitoSoft.homeNet.ArduinoIDE.WPF.Models;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Views;
+using System.Windows;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
@@ -8,12 +9,16 @@ public class DocumentService
 {
     private readonly LayoutDocumentPane _documentPane;
     private readonly Func<double> _getCurrentZoomFactor;
+    private readonly Func<object?> _getActiveContent;
 
-    public DocumentService(LayoutDocumentPane documentPane, Func<double> getCurrentZoomFactor)
+    public DocumentService(LayoutDocumentPane documentPane, Func<double> getCurrentZoomFactor, Func<object?> getActiveContent)
     {
         _documentPane = documentPane;
         _getCurrentZoomFactor = getCurrentZoomFactor;
+        _getActiveContent = getActiveContent;
     }
+
+    public event EventHandler<FrameworkElement>? DocumentViewAdded;
 
     public void CreateOrUpdateOutputDocument(string controllerName, string content)
     {
@@ -56,10 +61,20 @@ public class DocumentService
         _documentPane.Children.Add(outputDocument);
         outputDocument.IsSelected = true;
         outputDocument.IsActive = true;
+        DocumentViewAdded?.Invoke(this, view);
     }
 
     public LayoutDocument? GetActiveDocument()
     {
+        var activeContent = _getActiveContent();
+        if (activeContent != null)
+        {
+            var doc = _documentPane.Children.OfType<LayoutDocument>()
+                .FirstOrDefault(d => d.Content == activeContent);
+            if (doc != null)
+                return doc;
+        }
+
         return _documentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
     }
 
@@ -150,5 +165,6 @@ public class DocumentService
         _documentPane.Children.Add(document);
         document.IsSelected = true;
         document.IsActive = true;
+        DocumentViewAdded?.Invoke(this, view);
     }
 }
