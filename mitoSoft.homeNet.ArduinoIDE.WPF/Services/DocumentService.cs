@@ -51,16 +51,16 @@ public class DocumentService
         view.SetContent(content);
         view.SetZoomFactor(_getCurrentZoomFactor());
 
-        var outputDocument = new LayoutDocument
+        var document = new LayoutDocument
         {
             Title = $"Output: {controllerName}",
             CanClose = true,
             Content = view
         };
 
-        _documentPane.Children.Add(outputDocument);
-        outputDocument.IsSelected = true;
-        outputDocument.IsActive = true;
+        _documentPane.Children.Add(document);
+        document.IsSelected = true;
+        document.IsActive = true;
         DocumentViewAdded?.Invoke(this, view);
     }
 
@@ -83,16 +83,13 @@ public class DocumentService
         return _documentPane.Children.OfType<LayoutDocument>();
     }
 
-    public void UpdateZoomForOutputDocuments(double zoomFactor)
+    public void UpdateZoomForAllEditorViews(double zoomFactor)
     {
         foreach (var document in _documentPane.Children.OfType<LayoutDocument>())
         {
-            if (document.Title.StartsWith("Output:") || document.Title == "GPIO Documentation")
+            if (document.Content is IEditorView editorView)
             {
-                if (document.Content is OutputView outputView)
-                {
-                    outputView.SetZoomFactor(zoomFactor);
-                }
+                editorView.SetZoomFactor(zoomFactor);
             }
         }
     }

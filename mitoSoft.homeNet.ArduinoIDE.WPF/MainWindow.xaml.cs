@@ -17,8 +17,8 @@ public partial class MainWindow : Window
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
     private readonly TextEditorService _textEditorService;
-    private readonly GpioOverviewService _gpioOverviewService;
-    private readonly ViewFocusService _viewFocusService = new();
+    private readonly GpioDocumentationService _gpioDocumentationService;
+    private readonly FocusService _viewFocusService = new();
     private DocumentService _documentService = null!;
 
     public ICommand FindCommand { get; }
@@ -26,13 +26,13 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        FindCommand = new RelayCommand(FindMenuItem_Click);
+        FindCommand = new RelayCommand(_ => _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty));
         DataContext = this;
 
         _settingsService = new SettingsService();
         _fileService = new FileService();
         _textEditorService = new TextEditorService();
-        _gpioOverviewService = new GpioOverviewService();
+        _gpioDocumentationService = new GpioDocumentationService();
 
         this.LoadSettings();
         Loaded += MainWindow_Loaded;
@@ -207,7 +207,7 @@ public partial class MainWindow : Window
 
     private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        if (_viewFocusService.LastFocusedView is YamlView)
+        if (_viewFocusService.FocusedView is YamlView)
         {
             var saved = this.SaveToFile(
                 filter: "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
@@ -218,7 +218,7 @@ public partial class MainWindow : Window
             if (saved != null)
                 _currentFilePath = saved;
         }
-        else if (_viewFocusService.LastFocusedView is OutputView outputView)
+        else if (_viewFocusService.FocusedView is OutputView outputView)
         {
             var doc = _documentService.GetAllDocuments().FirstOrDefault(d => d.Content == outputView);
             var controllerName = doc?.Title.Replace("Output: ", "") ?? "output";
@@ -250,14 +250,7 @@ public partial class MainWindow : Window
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var textEditor = _viewFocusService.LastFocusedView switch
-        {
-            YamlView yv => yv.GetTextEditor(),
-            OutputView ov => ov.GetTextEditor(),
-            MissingHomeNetElementsView mv => mv.GetTextEditor(),
-            _ => null
-        };
-
+        var textEditor = _viewFocusService.FocusedEditorView?.GetTextEditor();
         if (!string.IsNullOrEmpty(textEditor?.Text))
         {
             Clipboard.SetText(textEditor.Text);
@@ -324,41 +317,12 @@ public partial class MainWindow : Window
 
     private void ApplyZoom()
     {
-        if (YamlView != null)
-        {
-            YamlView.SetZoomFactor(ZoomSlider.Value);
-        }
-
-        if (_documentService != null)
-        {
-            _documentService.UpdateZoomForOutputDocuments(ZoomSlider.Value);
-        }
+        _documentService?.UpdateZoomForAllEditorViews(ZoomSlider.Value);
     }
 
     private void FindMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        this.FindMenuItem_Click(sender);
-    }
-
-    private void FindMenuItem_Click(object? sender)
-    {
-        if (_viewFocusService.LastFocusedView is YamlView)
-        {
-            YamlView.ShowFindBar(string.Empty);
-            return;
-        }
-
-        if (_viewFocusService.LastFocusedView is OutputView outputView)
-        {
-            outputView.ShowFindBar(string.Empty);
-            return;
-        }
-
-        if (_viewFocusService.LastFocusedView is MissingHomeNetElementsView missingView)
-        {
-            missingView.ShowFindBar(string.Empty);
-            return;
-        }
+        _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty);
     }
 
     private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)
@@ -389,7 +353,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            var overviews = _gpioOverviewService.GenerateOverview(YamlView.Text);
+            var overviews = _gpioDocumentationService.GenerateOverview(YamlView.Text);
 
             if (overviews.Count == 0)
             {

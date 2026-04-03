@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 
-public partial class YamlView : UserControl
+public partial class YamlView : UserControl, IEditorView
 {
     private readonly TextEditorService _textEditorService = new();
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
-public class GpioOverviewService
+public class GpioDocumentationService
 {
     public List<ControllerGpioOverview> GenerateOverview(string yamlContent)
     {
@@ -122,77 +122,5 @@ public class GpioOverviewService
         }
 
         return uniqueId.Replace("_", " ");
-    }
-
-    public string GenerateDocumentation(string yamlContent)
-    {
-        var overviews = this.GenerateOverview(yamlContent);
-
-        if (overviews.Count == 0)
-        {
-            return "Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.";
-        }
-
-        var sb = new StringBuilder();
-        sb.AppendLine("================================================================================");
-        sb.AppendLine("               GPIO DOKUMENTATION - SCHALTSCHRANK ÜBERSICHT");
-        sb.AppendLine("================================================================================");
-        sb.AppendLine();
-
-        foreach (var overview in overviews)
-        {
-            sb.AppendLine("--------------------------------------------------------------------------------");
-            sb.AppendLine($"CONTROLLER: {overview.ControllerName} (ID: {overview.ControllerId})");
-            sb.AppendLine("--------------------------------------------------------------------------------");
-            sb.AppendLine($"IP-Adresse:      {overview.IPAddress}");
-            sb.AppendLine($"MAC-Adresse:     {overview.MacAddress}");
-            sb.AppendLine($"Verwendete GPIOs: {overview.TotalGpioCount}");
-            sb.AppendLine();
-
-            if (overview.Items.Count == 0)
-            {
-                sb.AppendLine("  Keine Geräte konfiguriert");
-                sb.AppendLine();
-                continue;
-            }
-
-            // Group by type
-            var covers = overview.Items.Where(i => i.Type == "Cover").ToList();
-            var lights = overview.Items.Where(i => i.Type == "Light").ToList();
-
-            if (covers.Count > 0)
-            {
-                sb.AppendLine("  ROLLLÄDEN / JALOUSIEN:");
-                sb.AppendLine("  " + new string('-', 76));
-                sb.AppendLine($"  {"Name",-30} {"GPIO Pins",-30} {"Info",-16}");
-                sb.AppendLine("  " + new string('-', 76));
-
-                foreach (var cover in covers)
-                {
-                    sb.AppendLine($"  {cover.Name,-30} {cover.GpioPins,-30} {cover.AdditionalInfo,-16}");
-                }
-                sb.AppendLine();
-            }
-
-            if (lights.Count > 0)
-            {
-                sb.AppendLine("  LICHTER:");
-                sb.AppendLine("  " + new string('-', 76));
-                sb.AppendLine($"  {"Name",-30} {"GPIO Pins",-30} {"Info",-16}");
-                sb.AppendLine("  " + new string('-', 76));
-
-                foreach (var light in lights)
-                {
-                    sb.AppendLine($"  {light.Name,-30} {light.GpioPins,-30} {light.AdditionalInfo,-16}");
-                }
-                sb.AppendLine();
-            }
-        }
-
-        sb.AppendLine("================================================================================");
-        sb.AppendLine($"Erstellt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
-        sb.AppendLine("================================================================================");
-
-        return sb.ToString();
     }
 }

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 
-public partial class OutputView : UserControl
+public partial class OutputView : UserControl, IEditorView
 {
     private readonly TextEditorService _textEditorService = new();
 

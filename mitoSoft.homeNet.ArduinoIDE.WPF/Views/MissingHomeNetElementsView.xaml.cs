@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 
-public partial class MissingHomeNetElementsView : UserControl
+public partial class MissingHomeNetElementsView : UserControl, IEditorView
 {
     private readonly TextEditorService _textEditorService = new();
 
