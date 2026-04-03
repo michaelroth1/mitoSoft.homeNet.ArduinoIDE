@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 using Xceed.Wpf.AvalonDock.Layout;
 
@@ -15,6 +16,11 @@ public partial class MainWindow : Window
     private string _currentFilePath = string.Empty;
     private string _searchText = string.Empty;
 
+    private readonly SettingsService _settingsService;
+    private readonly FileService _fileService;
+    private readonly TextEditorService _textEditorService;
+    private DocumentService _documentService = null!;
+
     public ICommand FindCommand { get; }
 
     public MainWindow()
@@ -22,6 +28,11 @@ public partial class MainWindow : Window
         InitializeComponent();
         FindCommand = new RelayCommand(FindMenuItem_Click);
         DataContext = this;
+
+        _settingsService = new SettingsService();
+        _fileService = new FileService();
+        _textEditorService = new TextEditorService();
+
         LoadSettings();
         Loaded += MainWindow_Loaded;
         Closing += MainWindow_Closing;
@@ -29,31 +40,31 @@ public partial class MainWindow : Window
 
     private void LoadSettings()
     {
-        if (Properties.Settings.Default.WindowWidth > 0 && Properties.Settings.Default.WindowHeight > 0)
+        _settingsService.LoadWindowSettings(out double width, out double height, out double zoomFactor);
+
+        if (width > 0 && height > 0)
         {
-            Width = Properties.Settings.Default.WindowWidth;
-            Height = Properties.Settings.Default.WindowHeight;
+            Width = width;
+            Height = height;
         }
 
-        if (Properties.Settings.Default.ZoomFactor > 0)
+        if (zoomFactor > 0)
         {
-            ZoomSlider.Value = Properties.Settings.Default.ZoomFactor;
+            ZoomSlider.Value = zoomFactor;
             ApplyZoom();
         }
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        YamlTextBox.Text = Properties.Settings.Default.YamlContent;
+        _documentService = new DocumentService(DocumentPane, ZoomSlider.Value);
+        YamlTextBox.Text = _settingsService.GetYamlContent();
         UpdateControllerList();
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        Properties.Settings.Default.WindowWidth = Width;
-        Properties.Settings.Default.WindowHeight = Height;
-        Properties.Settings.Default.ZoomFactor = ZoomSlider.Value;
-        Properties.Settings.Default.Save();
+        _settingsService.SaveWindowSettings(Width, Height, ZoomSlider.Value);
     }
 
     private void YamlTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -64,8 +75,7 @@ public partial class MainWindow : Window
 
     private void SaveYamlInSettings()
     {
-        Properties.Settings.Default.YamlContent = YamlTextBox.Text;
-        Properties.Settings.Default.Save();
+        _settingsService.SaveYamlContent(YamlTextBox.Text);
     }
 
     private void UpdateControllerList()
@@ -156,95 +166,14 @@ public partial class MainWindow : Window
 
         var program = programBuilder.Build(config);
 
-        CreateOutputDocument(controller.Name, program);
+        _documentService.CreateOrUpdateOutputDocument(controller.Name, program);
 
         programBuilder.Check();
     }
 
-    private void CreateOutputDocument(string controllerName, string content)
-    {
-        var existingDoc = DocumentPane.Children.OfType<LayoutDocument>()
-            .FirstOrDefault(d => d.Title == $"Output: {controllerName}");
-
-        if (existingDoc != null)
-        {
-            var dockPanel = existingDoc.Content as DockPanel;
-            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-            if (textBox != null)
-            {
-                textBox.Text = content;
-            }
-            existingDoc.IsSelected = true;
-            existingDoc.IsActive = true;
-            return;
-        }
-
-        var outputDocument = new LayoutDocument
-        {
-            Title = $"Output: {controllerName}",
-            CanClose = true,
-            Content = CreateOutputContent(controllerName, content)
-        };
-
-        DocumentPane.Children.Add(outputDocument);
-        outputDocument.IsSelected = true;
-        outputDocument.IsActive = true;
-    }
-
-    private DockPanel CreateOutputContent(string controllerName, string content)
-    {
-        var dockPanel = new DockPanel();
-
-        var toolBar = new ToolBar();
-        DockPanel.SetDock(toolBar, Dock.Top);
-
-        var copyButton = new Button
-        {
-            Content = "Copy to Clipboard",
-            Padding = new Thickness(10, 2, 10, 2)
-        };
-        copyButton.Click += (s, e) =>
-        {
-            if (!string.IsNullOrEmpty(content))
-            {
-                Clipboard.SetText(content);
-                MessageBox.Show("Content copied to clipboard!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        };
-
-        toolBar.Items.Add(copyButton);
-
-        var textBox = new TextBox
-        {
-            Text = content,
-            IsReadOnly = true,
-            AcceptsReturn = true,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-            FontFamily = new System.Windows.Media.FontFamily("Consolas"),
-            FontSize = 11 * ZoomSlider.Value,
-            Background = System.Windows.Media.Brushes.White
-        };
-
-        dockPanel.Children.Add(toolBar);
-        dockPanel.Children.Add(textBox);
-
-        return dockPanel;
-    }
-
     private void SaveOutputToFile(string controllerName, string content)
     {
-        var saveFileDialog = new SaveFileDialog
-        {
-            Filter = "Arduino files (*.ino)|*.ino|Text files (*.txt)|*.txt|All files (*.*)|*.*",
-            FileName = controllerName + ".ino"
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            File.WriteAllText(saveFileDialog.FileName, content);
-            MessageBox.Show($"File saved to: {saveFileDialog.FileName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        _fileService.SaveOutputFile(controllerName, content);
     }
 
     private HomeNet.Controller? GetController()
@@ -262,22 +191,18 @@ public partial class MainWindow : Window
 
     private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var openFileDialog = new OpenFileDialog
+        var filePath = _fileService.OpenYamlFile();
+        if (filePath != null)
         {
-            Filter = "YAML files (*.yaml;*.yml)|*.yaml;*.yml|All files (*.*)|*.*"
-        };
-
-        if (openFileDialog.ShowDialog() == true)
-        {
-            _currentFilePath = openFileDialog.FileName;
-            YamlTextBox.Text = File.ReadAllText(_currentFilePath);
+            _currentFilePath = filePath;
+            YamlTextBox.Text = _fileService.ReadFile(_currentFilePath);
             StatusText.Text = $"Opened: {_currentFilePath}";
         }
     }
 
     private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+        var activeDocument = _documentService.GetActiveDocument();
 
         if (activeDocument == null)
             return;
@@ -300,23 +225,18 @@ public partial class MainWindow : Window
 
     private void SaveYamlFile()
     {
-        var saveFileDialog = new SaveFileDialog
+        var filePath = _fileService.SaveYamlFile(_currentFilePath);
+        if (filePath != null)
         {
-            Filter = "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
-            FileName = !string.IsNullOrEmpty(_currentFilePath) ? Path.GetFileName(_currentFilePath) : "config.yaml"
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            _currentFilePath = saveFileDialog.FileName;
-            File.WriteAllText(_currentFilePath, YamlTextBox.Text);
+            _currentFilePath = filePath;
+            _fileService.WriteFile(_currentFilePath, YamlTextBox.Text);
             StatusText.Text = $"Saved: {_currentFilePath}";
         }
     }
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+        var activeDocument = _documentService.GetActiveDocument();
 
         if (activeDocument == null)
             return;
@@ -358,24 +278,7 @@ public partial class MainWindow : Window
 
     private void CommentSelectedLines()
     {
-        int selectionStart = YamlTextBox.SelectionStart;
-        int selectionLength = YamlTextBox.SelectionLength;
-
-        if (selectionLength == 0) return;
-
-        string text = YamlTextBox.Text;
-        int lineStart = text.LastIndexOf('\n', selectionStart) + 1;
-        int lineEnd = text.IndexOf('\n', selectionStart + selectionLength);
-        if (lineEnd == -1) lineEnd = text.Length;
-
-        string selectedText = text[lineStart..lineEnd];
-        string commentedText = string.Join("\n", selectedText
-            .Split(["\r\n", "\n"], StringSplitOptions.None)
-            .Select(line => "#" + line));
-
-        YamlTextBox.Text = text[..lineStart] + commentedText + text[lineEnd..];
-        YamlTextBox.SelectionStart = lineStart;
-        YamlTextBox.SelectionLength = commentedText.Length;
+        _textEditorService.CommentLines(YamlTextBox);
     }
 
     private void UncommentMenuItem_Click(object sender, RoutedEventArgs e)
@@ -390,24 +293,7 @@ public partial class MainWindow : Window
 
     private void UncommentSelectedLines()
     {
-        int selectionStart = YamlTextBox.SelectionStart;
-        int selectionLength = YamlTextBox.SelectionLength;
-
-        if (selectionLength == 0) return;
-
-        string text = YamlTextBox.Text;
-        int lineStart = text.LastIndexOf('\n', selectionStart) + 1;
-        int lineEnd = text.IndexOf('\n', selectionStart + selectionLength);
-        if (lineEnd == -1) lineEnd = text.Length;
-
-        string selectedText = text[lineStart..lineEnd];
-        string uncommentedText = string.Join("\n", selectedText
-            .Split(["\r\n", "\n"], StringSplitOptions.None)
-            .Select(line => line.StartsWith('#') ? line[1..] : line));
-
-        YamlTextBox.Text = text[..lineStart] + uncommentedText + text[lineEnd..];
-        YamlTextBox.SelectionStart = lineStart;
-        YamlTextBox.SelectionLength = uncommentedText.Length;
+        _textEditorService.UncommentLines(YamlTextBox);
     }
 
     private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -417,21 +303,7 @@ public partial class MainWindow : Window
 
     private void SelectYamlNode(string key)
     {
-        string text = YamlTextBox.Text;
-        int index = text.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-
-        if (index >= 0)
-        {
-            YamlTextBox.Focus();
-            YamlTextBox.SelectionStart = index;
-            YamlTextBox.SelectionLength = key.Length;
-            YamlTextBox.ScrollToLine(GetLineNumber(text, index));
-        }
-    }
-
-    private int GetLineNumber(string text, int index)
-    {
-        return text[..index].Count(c => c == '\n');
+        _textEditorService.SelectYamlNode(YamlTextBox, key);
     }
 
     private void CreateHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -454,20 +326,9 @@ public partial class MainWindow : Window
             YamlTextBox.FontSize = 12 * ZoomSlider.Value;
         }
 
-        if (DocumentPane?.Children != null)
+        if (_documentService != null)
         {
-            foreach (var document in DocumentPane.Children.OfType<LayoutDocument>())
-            {
-                if (document.Title.StartsWith("Output:"))
-                {
-                    var dockPanel = document.Content as DockPanel;
-                    var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-                    if (textBox != null)
-                    {
-                        textBox.FontSize = 11 * ZoomSlider.Value;
-                    }
-                }
-            }
+            _documentService.UpdateZoomForOutputDocuments(ZoomSlider.Value);
         }
     }
 
@@ -491,7 +352,7 @@ public partial class MainWindow : Window
         if (string.IsNullOrEmpty(_searchText))
             return;
 
-        var activeDocument = DocumentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
+        var activeDocument = _documentService.GetActiveDocument();
         if (activeDocument == null)
             return;
 
@@ -510,17 +371,7 @@ public partial class MainWindow : Window
         if (targetTextBox == null)
             return;
 
-        int startPosition = targetTextBox.SelectionStart + targetTextBox.SelectionLength;
-        int foundIndex = targetTextBox.Text.IndexOf(_searchText, startPosition, StringComparison.OrdinalIgnoreCase);
-
-        if (foundIndex != -1)
-        {
-            targetTextBox.Focus();
-            targetTextBox.SelectionStart = foundIndex;
-            targetTextBox.SelectionLength = _searchText.Length;
-            targetTextBox.ScrollToLine(GetLineNumber(targetTextBox.Text, foundIndex));
-        }
-        else
+        if (!_textEditorService.FindNext(targetTextBox, _searchText))
         {
             MessageBox.Show("Not found.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
         }
