@@ -428,7 +428,7 @@ public partial class MainWindow : Window
 
             if (overviews.Count == 0)
             {
-                MessageBox.Show("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.", 
+                MessageBox.Show("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.",
                     "Keine GPIOs gefunden", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
@@ -438,7 +438,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Fehler beim Erstellen der GPIO-Dokumentation: {ex.Message}", 
+            MessageBox.Show($"Fehler beim Erstellen der GPIO-Dokumentation: {ex.Message}",
                 "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
             StatusText.Text = "Error creating GPIO documentation";
         }

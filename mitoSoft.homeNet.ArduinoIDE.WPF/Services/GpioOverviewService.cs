@@ -36,10 +36,10 @@ public class GpioOverviewService
                 foreach (var cover in covers)
                 {
                     var gpioPins = new List<string>();
-                    
+
                     gpioPins.Add($"Open: {cover.GpioOpen}");
                     gpioPins.Add($"Close: {cover.GpioClose}");
-                    
+
                     usedGpios.Add(cover.GpioOpen);
                     usedGpios.Add(cover.GpioClose);
 
@@ -56,7 +56,7 @@ public class GpioOverviewService
                     }
 
                     var name = ExtractFriendlyName(cover.UniqueId);
-                    
+
                     overview.Items.Add(new GpioOverviewItem
                     {
                         Type = "Cover",
@@ -75,7 +75,7 @@ public class GpioOverviewService
                 foreach (var light in lights)
                 {
                     var gpioPins = new List<string>();
-                    
+
                     gpioPins.Add($"Pin: {light.GpioPin}");
                     usedGpios.Add(light.GpioPin);
 

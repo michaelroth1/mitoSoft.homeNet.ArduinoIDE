@@ -16,6 +16,6 @@ public class ControllerGpioOverview
     public string IPAddress { get; set; } = string.Empty;
     public string MacAddress { get; set; } = string.Empty;
     public List<GpioOverviewItem> Items { get; set; } = [];
-    
+
     public int TotalGpioCount { get; set; }
 }

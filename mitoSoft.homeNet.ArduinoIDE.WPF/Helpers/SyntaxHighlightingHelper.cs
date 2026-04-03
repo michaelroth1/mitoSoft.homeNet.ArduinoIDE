@@ -33,7 +33,7 @@ public static class SyntaxHighlightingHelper
             {
                 var uri = new Uri(resourcePath, UriKind.Relative);
                 using var stream = Application.GetResourceStream(uri)?.Stream;
-                
+
                 if (stream != null)
                 {
                     using var reader = new XmlTextReader(stream);
