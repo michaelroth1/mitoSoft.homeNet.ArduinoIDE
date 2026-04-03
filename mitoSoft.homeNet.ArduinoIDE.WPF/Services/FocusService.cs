@@ -1,4 +1,3 @@
-using mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 using System.Windows;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;

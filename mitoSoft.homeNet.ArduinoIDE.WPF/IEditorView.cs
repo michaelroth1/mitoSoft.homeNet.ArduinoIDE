@@ -1,6 +1,6 @@
 using ICSharpCode.AvalonEdit;
 
-namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
+namespace mitoSoft.homeNet.ArduinoIDE.WPF;
 
 public interface IEditorView
 {
