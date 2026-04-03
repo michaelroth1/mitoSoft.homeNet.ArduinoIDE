@@ -1,15 +1,11 @@
 using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
-using System.Reflection;
+using mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Xml;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF;
@@ -43,30 +39,6 @@ public partial class MainWindow : Window
         Closing += MainWindow_Closing;
     }
 
-    private void LoadYamlSyntaxHighlighting()
-    {
-        try
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "mitoSoft.homeNet.ArduinoIDE.WPF.Editor.YAML.xshd";
-
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (stream != null)
-                {
-                    using (var reader = new XmlTextReader(stream))
-                    {
-                        YamlTextBox.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error loading YAML syntax highlighting: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-    }
-
     private void LoadSettings()
     {
         _settingsService.LoadWindowSettings(out double width, out double height, out double zoomFactor);
@@ -88,68 +60,19 @@ public partial class MainWindow : Window
     {
         _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value);
 
-        // Load YAML syntax highlighting
-        LoadYamlSyntaxHighlighting();
+        YamlDocumentView.Text = _settingsService.GetYamlContent();
 
-        YamlTextBox.Text = _settingsService.GetYamlContent();
-
-        // Subscribe to TextChanged event for AvalonEdit
-        YamlTextBox.TextChanged += (s, args) =>
+        // Subscribe to TextChanged event
+        YamlDocumentView.TextChanged += (s, args) =>
         {
             SaveYamlInSettings();
             UpdateControllerList();
-        };
-
-        // Enable touch and manipulation for YAML Editor
-        YamlTextBox.IsManipulationEnabled = true;
-        YamlTextBox.ManipulationBoundaryFeedback += (s, e) => { e.Handled = true; };
-
-        // Improve YAML Editor scrolling with mouse wheel
-        YamlTextBox.PreviewMouseWheel += (s, e) =>
-        {
-            var editor = s as TextEditor;
-            if (editor != null && editor.VerticalScrollBarVisibility != ScrollBarVisibility.Disabled)
-            {
-                var scrollViewer = FindScrollViewer(editor);
-                if (scrollViewer != null)
-                {
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 3.0);
-                    e.Handled = true;
-                }
-            }
-        };
-
-        // Enable touch scrolling for YAML Editor
-        YamlTextBox.Loaded += (s, e) =>
-        {
-            var scrollViewer = FindScrollViewer(YamlTextBox);
-            if (scrollViewer != null)
-            {
-                scrollViewer.PanningMode = PanningMode.VerticalOnly;
-                scrollViewer.PanningDeceleration = 0.001;
-                scrollViewer.PanningRatio = 1.0;
-            }
         };
 
         // Apply zoom after UI is fully initialized
         ApplyZoom();
 
         UpdateControllerList();
-    }
-
-    private ScrollViewer? FindScrollViewer(DependencyObject obj)
-    {
-        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-        {
-            var child = VisualTreeHelper.GetChild(obj, i);
-            if (child is ScrollViewer scrollViewer)
-                return scrollViewer;
-
-            var result = FindScrollViewer(child);
-            if (result != null)
-                return result;
-        }
-        return null;
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -159,12 +82,12 @@ public partial class MainWindow : Window
 
     private void SaveYamlInSettings()
     {
-        _settingsService.SaveYamlContent(YamlTextBox.Text);
+        _settingsService.SaveYamlContent(YamlDocumentView.Text);
     }
 
     private void UpdateControllerList()
     {
-        var controllers = new TextCrawler(YamlTextBox.Text).ParseHomeNetControllers();
+        var controllers = new TextCrawler(YamlDocumentView.Text).ParseHomeNetControllers();
 
         var selectedItem = ControllerListBox.SelectedItem;
 
@@ -202,7 +125,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var parser = new YamlParser(YamlTextBox.Text);
+        var parser = new YamlParser(YamlDocumentView.Text);
         var controller = parser.GetController(controllerName);
 
         if (controller == null)
@@ -233,7 +156,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var config = new YamlParser(YamlTextBox.Text).Parse(controller.UniqueId);
+        var config = new YamlParser(YamlDocumentView.Text).Parse(controller.UniqueId);
 
         var programBuilder = new ProgramTextBuilder(
             controller.Name,
@@ -269,7 +192,7 @@ public partial class MainWindow : Window
             return null;
         }
 
-        var controller = new YamlParser(YamlTextBox.Text).GetController(controllerName);
+        var controller = new YamlParser(YamlDocumentView.Text).GetController(controllerName);
         return controller;
     }
 
@@ -279,7 +202,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _currentFilePath = filePath;
-            YamlTextBox.Text = _fileService.ReadFile(_currentFilePath);
+            YamlDocumentView.Text = _fileService.ReadFile(_currentFilePath);
             StatusText.Text = $"Opened: {_currentFilePath}";
         }
     }
@@ -312,7 +235,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _currentFilePath = filePath;
-            _fileService.WriteFile(_currentFilePath, YamlTextBox.Text);
+            _fileService.WriteFile(_currentFilePath, YamlDocumentView.Text);
             StatusText.Text = $"Saved: {_currentFilePath}";
         }
     }
@@ -348,7 +271,7 @@ public partial class MainWindow : Window
 
     private void CommentSelectedLines()
     {
-        _textEditorService.CommentLines(YamlTextBox);
+        _textEditorService.CommentLines(YamlDocumentView.GetTextEditor());
     }
 
     private void UncommentMenuItem_Click(object sender, RoutedEventArgs e)
@@ -363,7 +286,7 @@ public partial class MainWindow : Window
 
     private void UncommentSelectedLines()
     {
-        _textEditorService.UncommentLines(YamlTextBox);
+        _textEditorService.UncommentLines(YamlDocumentView.GetTextEditor());
     }
 
     private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -373,12 +296,12 @@ public partial class MainWindow : Window
 
     private void SelectYamlNode(string key)
     {
-        _textEditorService.SelectYamlNode(YamlTextBox, key);
+        _textEditorService.SelectYamlNode(YamlDocumentView.GetTextEditor(), key);
     }
 
     private void CreateHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var newConfig = new YamlParser(YamlTextBox.Text).AddHomeNetElements();
+        var newConfig = new YamlParser(YamlDocumentView.Text).AddHomeNetElements();
 
         var outputWindow = new OutputWindow("Missing HomeNet elements", newConfig);
         outputWindow.ShowDialog();
@@ -391,9 +314,9 @@ public partial class MainWindow : Window
 
     private void ApplyZoom()
     {
-        if (YamlTextBox != null)
+        if (YamlDocumentView != null)
         {
-            YamlTextBox.FontSize = 12 * ZoomSlider.Value;
+            YamlDocumentView.SetZoomFactor(ZoomSlider.Value);
         }
 
         if (_documentService != null)
@@ -414,17 +337,14 @@ public partial class MainWindow : Window
         // Check if active document is GPIO Documentation
         if (activeDocument?.Title == "GPIO Documentation")
         {
-            var dockPanel = activeDocument.Content as DockPanel;
-            var scrollViewer = dockPanel?.Children.OfType<ScrollViewer>().FirstOrDefault();
-            var stackPanel = scrollViewer?.Content as StackPanel;
-
-            if (stackPanel != null)
+            var gpioView = activeDocument.Content as DocumentionView;
+            if (gpioView != null)
             {
                 var findDialog = new FindDialog(_searchText);
                 if (findDialog.ShowDialog() == true)
                 {
                     _searchText = findDialog.SearchText;
-                    _documentService.FindInGpioDocumentation(stackPanel, _searchText);
+                    gpioView.HighlightSearch(_searchText);
                 }
                 return;
             }
@@ -448,12 +368,12 @@ public partial class MainWindow : Window
         // Find the TextEditor in the active document
         if (activeDocument.Title == "YAML Editor")
         {
-            return YamlTextBox;
+            return YamlDocumentView.GetTextEditor();
         }
         else if (activeDocument.Title.StartsWith("Output:"))
         {
-            var dockPanel = activeDocument.Content as DockPanel;
-            return dockPanel?.Children.OfType<TextEditor>().FirstOrDefault();
+            var outputView = activeDocument.Content as OutputView;
+            return outputView?.GetTextEditor();
         }
 
         return null;
@@ -504,7 +424,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            var overviews = _gpioOverviewService.GenerateOverview(YamlTextBox.Text);
+            var overviews = _gpioOverviewService.GenerateOverview(YamlDocumentView.Text);
 
             if (overviews.Count == 0)
             {

@@ -21,8 +21,8 @@
     <Resource Include="Resources\UncommentCode.png" />
     <Resource Include="Resources\OpenFile.png" />
     <Resource Include="Resources\Save.png" />
-    <EmbeddedResource Include="Editor\YAML.xshd" />
-    <EmbeddedResource Include="Editor\Arduino.xshd" />
+    <Resource Include="Editor\YAML.xshd" />
+    <Resource Include="Editor\Arduino.xshd" />
   </ItemGroup>
 
   <ItemGroup>

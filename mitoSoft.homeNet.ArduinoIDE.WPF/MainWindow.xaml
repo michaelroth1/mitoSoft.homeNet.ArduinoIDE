@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views"
         xmlns:local="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF"
         mc:Ignorable="d"
         Title="mitoSoft homeNet Arduino IDE" Height="600" Width="1000"
@@ -111,12 +112,7 @@
                         <xcad:LayoutDocumentPaneGroup>
                             <xcad:LayoutDocumentPane x:Name="DocumentPane">
                                 <xcad:LayoutDocument Title="YAML Editor" CanClose="False">
-                                    <avalonEdit:TextEditor x:Name="YamlTextBox" 
-                                             ShowLineNumbers="True"
-                                             FontFamily="Consolas"
-                                             FontSize="12"
-                                             VerticalScrollBarVisibility="Auto"
-                                             HorizontalScrollBarVisibility="Auto"/>
+                                    <views:YamlDocumentView x:Name="YamlDocumentView"/>
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
                         </xcad:LayoutDocumentPaneGroup>
