@@ -4,6 +4,11 @@ using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using System.Xml;
+using System.Reflection;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF;
@@ -35,6 +40,30 @@ public partial class MainWindow : Window
         Closing += MainWindow_Closing;
     }
 
+    private void LoadYamlSyntaxHighlighting()
+    {
+        try
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "mitoSoft.homeNet.ArduinoIDE.WPF.Editor.YAML.xshd";
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream != null)
+                {
+                    using (var reader = new XmlTextReader(stream))
+                    {
+                        YamlTextBox.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error loading YAML syntax highlighting: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
     private void LoadSettings()
     {
         _settingsService.LoadWindowSettings(out double width, out double height, out double zoomFactor);
@@ -48,26 +77,35 @@ public partial class MainWindow : Window
         if (zoomFactor > 0)
         {
             ZoomSlider.Value = zoomFactor;
-            ApplyZoom();
+            // Note: ApplyZoom will be called in MainWindow_Loaded after UI is initialized
         }
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        _documentService = new DocumentService(DocumentPane, ZoomSlider.Value);
+        _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value);
+
+        // Load YAML syntax highlighting
+        LoadYamlSyntaxHighlighting();
+
         YamlTextBox.Text = _settingsService.GetYamlContent();
+
+        // Subscribe to TextChanged event for AvalonEdit
+        YamlTextBox.TextChanged += (s, args) =>
+        {
+            SaveYamlInSettings();
+            UpdateControllerList();
+        };
+
+        // Apply zoom after UI is fully initialized
+        ApplyZoom();
+
         UpdateControllerList();
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
         _settingsService.SaveWindowSettings(Width, Height, ZoomSlider.Value);
-    }
-
-    private void YamlTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        SaveYamlInSettings();
-        UpdateControllerList();
     }
 
     private void SaveYamlInSettings()
@@ -211,11 +249,10 @@ public partial class MainWindow : Window
         else if (activeDocument.Title.StartsWith("Output:"))
         {
             var controllerName = activeDocument.Title.Replace("Output: ", "");
-            var dockPanel = activeDocument.Content as DockPanel;
-            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-            if (textBox != null)
+            var textEditor = GetActiveTextEditor();
+            if (textEditor != null)
             {
-                SaveOutputToFile(controllerName, textBox.Text);
+                SaveOutputToFile(controllerName, textEditor.Text);
             }
         }
     }
@@ -233,28 +270,15 @@ public partial class MainWindow : Window
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var activeDocument = _documentService.GetActiveDocument();
-
-        if (activeDocument == null)
-            return;
-
-        string? contentToCopy = null;
-
-        if (activeDocument.Title == "YAML Editor")
+        var textEditor = GetActiveTextEditor();
+        if (textEditor != null)
         {
-            contentToCopy = YamlTextBox.Text;
-        }
-        else if (activeDocument.Title.StartsWith("Output:"))
-        {
-            var dockPanel = activeDocument.Content as DockPanel;
-            var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-            contentToCopy = textBox?.Text;
-        }
-
-        if (!string.IsNullOrEmpty(contentToCopy))
-        {
-            Clipboard.SetText(contentToCopy);
-            StatusText.Text = "Content copied to clipboard";
+            var contentToCopy = textEditor.Text;
+            if (!string.IsNullOrEmpty(contentToCopy))
+            {
+                Clipboard.SetText(contentToCopy);
+                StatusText.Text = "Content copied to clipboard";
+            }
         }
     }
 
@@ -344,33 +368,40 @@ public partial class MainWindow : Window
         }
     }
 
+    private TextEditor? GetActiveTextEditor()
+    {
+        var activeDocument = _documentService.GetActiveDocument();
+        if (activeDocument == null)
+            return null;
+
+        // Find the TextEditor in the active document
+        if (activeDocument.Title == "YAML Editor")
+        {
+            return YamlTextBox;
+        }
+        else if (activeDocument.Title.StartsWith("Output:"))
+        {
+            var dockPanel = activeDocument.Content as DockPanel;
+            return dockPanel?.Children.OfType<TextEditor>().FirstOrDefault();
+        }
+
+        return null;
+    }
+
     private void FindNext()
     {
         if (string.IsNullOrEmpty(_searchText))
             return;
 
-        var activeDocument = _documentService.GetActiveDocument();
-        if (activeDocument == null)
-            return;
+        var textEditor = GetActiveTextEditor();
 
-        TextBox? targetTextBox = null;
-
-        if (activeDocument.Title == "YAML Editor")
+        // Perform search if TextEditor was found
+        if (textEditor != null)
         {
-            targetTextBox = YamlTextBox;
-        }
-        else if (activeDocument.Title.StartsWith("Output:"))
-        {
-            var dockPanel = activeDocument.Content as DockPanel;
-            targetTextBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-        }
-
-        if (targetTextBox == null)
-            return;
-
-        if (!_textEditorService.FindNext(targetTextBox, _searchText))
-        {
-            MessageBox.Show("Not found.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!_textEditorService.FindNext(textEditor, _searchText))
+            {
+                MessageBox.Show("Not found.", "Find", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 

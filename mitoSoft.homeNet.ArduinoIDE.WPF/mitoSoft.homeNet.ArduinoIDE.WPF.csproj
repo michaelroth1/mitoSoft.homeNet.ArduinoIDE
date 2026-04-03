@@ -21,6 +21,8 @@
     <Resource Include="Resources\UncommentCode.png" />
     <Resource Include="Resources\OpenFile.png" />
     <Resource Include="Resources\Save.png" />
+    <EmbeddedResource Include="Editor\YAML.xshd" />
+    <EmbeddedResource Include="Editor\Arduino.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonDock.Themes.VS2013" Version="2.0.0.5" />
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
   </ItemGroup>
 
   <ItemGroup>

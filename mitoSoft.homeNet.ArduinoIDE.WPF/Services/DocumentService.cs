@@ -1,7 +1,12 @@
 using System.Linq;
+using System.Reflection;
+using System.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
@@ -9,12 +14,39 @@ namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 public class DocumentService
 {
     private readonly LayoutDocumentPane _documentPane;
-    private readonly double _zoomFactor;
+    private readonly Func<double> _getCurrentZoomFactor;
+    private IHighlightingDefinition? _cppHighlighting;
 
-    public DocumentService(LayoutDocumentPane documentPane, double zoomFactor)
+    public DocumentService(LayoutDocumentPane documentPane, Func<double> getCurrentZoomFactor)
     {
         _documentPane = documentPane;
-        _zoomFactor = zoomFactor;
+        _getCurrentZoomFactor = getCurrentZoomFactor;
+        LoadCppSyntaxHighlighting();
+    }
+
+    private void LoadCppSyntaxHighlighting()
+    {
+        try
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "mitoSoft.homeNet.ArduinoIDE.WPF.Editor.Arduino.xshd";
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream != null)
+                {
+                    using (var reader = new XmlTextReader(stream))
+                    {
+                        _cppHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Silently fail if highlighting cannot be loaded
+            _cppHighlighting = null;
+        }
     }
 
     public void CreateOrUpdateOutputDocument(string controllerName, string content)
@@ -34,10 +66,10 @@ public class DocumentService
     private void UpdateExistingDocument(LayoutDocument document, string content)
     {
         var dockPanel = document.Content as DockPanel;
-        var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-        if (textBox != null)
+        var textEditor = dockPanel?.Children.OfType<TextEditor>().FirstOrDefault();
+        if (textEditor != null)
         {
-            textBox.Text = content;
+            textEditor.Text = content;
         }
         document.IsSelected = true;
         document.IsActive = true;
@@ -80,20 +112,25 @@ public class DocumentService
 
         toolBar.Items.Add(copyButton);
 
-        var textBox = new TextBox
+        var textEditor = new TextEditor
         {
             Text = content,
             IsReadOnly = true,
-            AcceptsReturn = true,
+            ShowLineNumbers = true,
             VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
             FontFamily = new FontFamily("Consolas"),
-            FontSize = 11 * _zoomFactor,
+            FontSize = 11 * _getCurrentZoomFactor(),
             Background = Brushes.White
         };
 
+        if (_cppHighlighting != null)
+        {
+            textEditor.SyntaxHighlighting = _cppHighlighting;
+        }
+
         dockPanel.Children.Add(toolBar);
-        dockPanel.Children.Add(textBox);
+        dockPanel.Children.Add(textEditor);
 
         return dockPanel;
     }
@@ -110,10 +147,10 @@ public class DocumentService
             if (document.Title.StartsWith("Output:"))
             {
                 var dockPanel = document.Content as DockPanel;
-                var textBox = dockPanel?.Children.OfType<TextBox>().FirstOrDefault();
-                if (textBox != null)
+                var textEditor = dockPanel?.Children.OfType<TextEditor>().FirstOrDefault();
+                if (textEditor != null)
                 {
-                    textBox.FontSize = 11 * zoomFactor;
+                    textEditor.FontSize = 11 * zoomFactor;
                 }
             }
         }

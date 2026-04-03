@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="C++" extensions=".cpp;.cc;.c;.h;.hpp;.ino" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="#008000" fontStyle="italic" />
+  <Color name="String" foreground="#A31515" />
+  <Color name="Char" foreground="#A31515" />
+  <Color name="Preprocessor" foreground="#9B9B9B" fontWeight="bold" />
+  <Color name="Punctuation" foreground="#000000" />
+  <Color name="Keyword" foreground="#0000FF" fontWeight="bold" />
+  <Color name="DataTypes" foreground="#0000FF" fontWeight="bold" />
+  <Color name="Constants" foreground="#A31515" fontWeight="bold" />
+  <Color name="Functions" foreground="#795E26" />
+  <Color name="Numbers" foreground="#09885A" />
+
+  <RuleSet ignoreCase="false">
+    <!-- Multi-line comments -->
+    <Span color="Comment" multiline="true">
+      <Begin>/\*</Begin>
+      <End>\*/</End>
+    </Span>
+
+    <!-- Single-line comments -->
+    <Span color="Comment" begin="//" />
+
+    <!-- Preprocessor directives -->
+    <Span color="Preprocessor" begin="#" />
+
+    <!-- Strings -->
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- Chars -->
+    <Span color="Char">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- Numbers -->
+    <Rule color="Numbers">
+      \b0[xX][0-9a-fA-F]+  # hex number
+      |
+      \b0[0-7]+            # octal number
+      |
+      \b\d+(\.\d+)?([eE][+-]?\d+)?[fFdDlL]? # decimal number with optional suffix
+    </Rule>
+
+    <!-- C++ Keywords -->
+    <Keywords color="Keyword">
+      <Word>if</Word>
+      <Word>else</Word>
+      <Word>switch</Word>
+      <Word>case</Word>
+      <Word>default</Word>
+      <Word>break</Word>
+      <Word>continue</Word>
+      <Word>return</Word>
+      <Word>for</Word>
+      <Word>while</Word>
+      <Word>do</Word>
+      <Word>goto</Word>
+      <Word>sizeof</Word>
+      <Word>typedef</Word>
+      <Word>struct</Word>
+      <Word>union</Word>
+      <Word>enum</Word>
+      <Word>class</Word>
+      <Word>public</Word>
+      <Word>private</Word>
+      <Word>protected</Word>
+      <Word>virtual</Word>
+      <Word>static</Word>
+      <Word>const</Word>
+      <Word>volatile</Word>
+      <Word>extern</Word>
+      <Word>inline</Word>
+      <Word>namespace</Word>
+      <Word>using</Word>
+      <Word>new</Word>
+      <Word>delete</Word>
+      <Word>template</Word>
+      <Word>typename</Word>
+      <Word>this</Word>
+      <Word>operator</Word>
+      <Word>friend</Word>
+      <Word>explicit</Word>
+      <Word>mutable</Word>
+      <Word>register</Word>
+      <Word>auto</Word>
+    </Keywords>
+
+    <!-- Data Types -->
+    <Keywords color="DataTypes">
+      <Word>void</Word>
+      <Word>bool</Word>
+      <Word>char</Word>
+      <Word>int</Word>
+      <Word>short</Word>
+      <Word>long</Word>
+      <Word>float</Word>
+      <Word>double</Word>
+      <Word>signed</Word>
+      <Word>unsigned</Word>
+      <Word>byte</Word>
+      <Word>word</Word>
+      <Word>String</Word>
+      <Word>IPAddress</Word>
+    </Keywords>
+
+    <!-- Arduino Constants -->
+    <Keywords color="Constants">
+      <Word>HIGH</Word>
+      <Word>LOW</Word>
+      <Word>INPUT</Word>
+      <Word>OUTPUT</Word>
+      <Word>INPUT_PULLUP</Word>
+      <Word>LED_BUILTIN</Word>
+      <Word>true</Word>
+      <Word>false</Word>
+      <Word>NULL</Word>
+      <Word>STANDARD</Word>
+      <Word>INVERTED</Word>
+    </Keywords>
+
+    <!-- Arduino Functions -->
+    <Keywords color="Functions">
+      <Word>setup</Word>
+      <Word>loop</Word>
+      <Word>pinMode</Word>
+      <Word>digitalWrite</Word>
+      <Word>digitalRead</Word>
+      <Word>analogWrite</Word>
+      <Word>analogRead</Word>
+      <Word>delay</Word>
+      <Word>delayMicroseconds</Word>
+      <Word>millis</Word>
+      <Word>micros</Word>
+      <Word>Serial</Word>
+      <Word>begin</Word>
+      <Word>print</Word>
+      <Word>println</Word>
+      <Word>read</Word>
+      <Word>write</Word>
+      <Word>available</Word>
+    </Keywords>
+
+    <!-- Punctuation -->
+    <Rule color="Punctuation">
+      [?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>
