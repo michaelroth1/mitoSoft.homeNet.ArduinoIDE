@@ -1,6 +1,5 @@
 using Microsoft.Win32;
 using System.IO;
-using System.Windows;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
@@ -21,35 +20,22 @@ public class FileService
         return null;
     }
 
-    public string? SaveYamlFile(string currentFilePath)
+    public string? ShowSaveDialog(string filter, string defaultFileName, string? currentFilePath = null)
     {
         var saveFileDialog = new SaveFileDialog
         {
-            Filter = "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
-            FileName = !string.IsNullOrEmpty(currentFilePath) ? Path.GetFileName(currentFilePath) : "config.yaml"
+            Filter = filter,
+            FileName = !string.IsNullOrEmpty(currentFilePath)
+                ? Path.GetFileName(currentFilePath)
+                : defaultFileName
         };
 
-        if (saveFileDialog.ShowDialog() == true)
+        if (!string.IsNullOrEmpty(currentFilePath))
         {
-            return saveFileDialog.FileName;
+            saveFileDialog.InitialDirectory = Path.GetDirectoryName(currentFilePath);
         }
 
-        return null;
-    }
-
-    public void SaveOutputFile(string controllerName, string content)
-    {
-        var saveFileDialog = new SaveFileDialog
-        {
-            Filter = "Arduino files (*.ino)|*.ino|Text files (*.txt)|*.txt|All files (*.*)|*.*",
-            FileName = controllerName + ".ino"
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            File.WriteAllText(saveFileDialog.FileName, content);
-            MessageBox.Show($"File saved to: {saveFileDialog.FileName}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        return saveFileDialog.ShowDialog() == true ? saveFileDialog.FileName : null;
     }
 
     public string ReadFile(string filePath)

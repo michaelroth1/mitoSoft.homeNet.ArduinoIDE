@@ -78,6 +78,11 @@ public class DocumentService
         return _documentPane.Children.OfType<LayoutDocument>().FirstOrDefault(d => d.IsActive);
     }
 
+    public IEnumerable<LayoutDocument> GetAllDocuments()
+    {
+        return _documentPane.Children.OfType<LayoutDocument>();
+    }
+
     public void UpdateZoomForOutputDocuments(double zoomFactor)
     {
         foreach (var document in _documentPane.Children.OfType<LayoutDocument>())

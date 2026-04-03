@@ -13,12 +13,12 @@ namespace mitoSoft.homeNet.ArduinoIDE.WPF;
 public partial class MainWindow : Window
 {
     private string _currentFilePath = string.Empty;
-    private FrameworkElement? _lastFocusedView;
 
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
     private readonly TextEditorService _textEditorService;
     private readonly GpioOverviewService _gpioOverviewService;
+    private readonly ViewFocusService _viewFocusService = new();
     private DocumentService _documentService = null!;
 
     public ICommand FindCommand { get; }
@@ -59,10 +59,9 @@ public partial class MainWindow : Window
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value, () => DockingManager.ActiveContent);
-        _documentService.DocumentViewAdded += (s, view) => TrackViewFocus(view);
+        _documentService.DocumentViewAdded += (s, view) => _viewFocusService.Track(view);
 
-        TrackViewFocus(YamlView);
-        _lastFocusedView = YamlView;
+        _viewFocusService.SetInitialView(YamlView);
 
         YamlView.Text = _settingsService.GetYamlContent();
 
@@ -182,11 +181,6 @@ public partial class MainWindow : Window
         programBuilder.Check();
     }
 
-    private void SaveOutputToFile(string controllerName, string content)
-    {
-        _fileService.SaveOutputFile(controllerName, content);
-    }
-
     private HomeNet.Controller? GetController()
     {
         string? controllerName = ControllerListBox.SelectedItem as string;
@@ -213,48 +207,61 @@ public partial class MainWindow : Window
 
     private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var activeDocument = _documentService.GetActiveDocument();
-
-        if (activeDocument == null)
-            return;
-
-        if (activeDocument.Title == "YAML Editor")
+        if (_viewFocusService.LastFocusedView is YamlView)
         {
-            this.SaveYamlFile();
+            var saved = this.SaveToFile(
+                filter: "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
+                defaultFileName: "config.yaml",
+                content: YamlView.Text,
+                currentFilePath: _currentFilePath);
+
+            if (saved != null)
+                _currentFilePath = saved;
         }
-        else if (activeDocument.Title.StartsWith("Output:"))
+        else if (_viewFocusService.LastFocusedView is OutputView outputView)
         {
-            var controllerName = activeDocument.Title.Replace("Output: ", "");
-            var textEditor = this.GetActiveTextEditor();
-            if (textEditor != null)
-            {
-                this.SaveOutputToFile(controllerName, textEditor.Text);
-            }
+            var doc = _documentService.GetAllDocuments().FirstOrDefault(d => d.Content == outputView);
+            var controllerName = doc?.Title.Replace("Output: ", "") ?? "output";
+            this.SaveToFile(
+                filter: "Arduino files (*.ino)|*.ino|Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                defaultFileName: $"{controllerName}.ino",
+                content: outputView.GetTextEditor().Text);
         }
     }
 
-    private void SaveYamlFile()
+    private string? SaveToFile(string filter,
+        string defaultFileName,
+        string content,
+        string? currentFilePath = null)
     {
-        var filePath = _fileService.SaveYamlFile(_currentFilePath);
+        var filePath = _fileService.ShowSaveDialog(
+            filter: filter,
+            defaultFileName: defaultFileName,
+            currentFilePath: currentFilePath);
+
         if (filePath != null)
         {
-            _currentFilePath = filePath;
-            _fileService.WriteFile(_currentFilePath, YamlView.Text);
-            StatusText.Text = $"Saved: {_currentFilePath}";
+            _fileService.WriteFile(filePath, content);
+            StatusText.Text = $"Saved: {filePath}";
         }
+
+        return filePath;
     }
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var textEditor = this.GetActiveTextEditor();
-        if (textEditor != null)
+        var textEditor = _viewFocusService.LastFocusedView switch
         {
-            var contentToCopy = textEditor.Text;
-            if (!string.IsNullOrEmpty(contentToCopy))
-            {
-                Clipboard.SetText(contentToCopy);
-                StatusText.Text = "Content copied to clipboard";
-            }
+            YamlView yv => yv.GetTextEditor(),
+            OutputView ov => ov.GetTextEditor(),
+            MissingHomeNetElementsView mv => mv.GetTextEditor(),
+            _ => null
+        };
+
+        if (!string.IsNullOrEmpty(textEditor?.Text))
+        {
+            Clipboard.SetText(textEditor.Text);
+            StatusText.Text = "Content copied to clipboard";
         }
     }
 
@@ -335,46 +342,23 @@ public partial class MainWindow : Window
 
     private void FindMenuItem_Click(object? sender)
     {
-        if (_lastFocusedView is YamlView)
+        if (_viewFocusService.LastFocusedView is YamlView)
         {
             YamlView.ShowFindBar(string.Empty);
             return;
         }
 
-        if (_lastFocusedView is OutputView outputView)
+        if (_viewFocusService.LastFocusedView is OutputView outputView)
         {
             outputView.ShowFindBar(string.Empty);
             return;
         }
 
-        if (_lastFocusedView is MissingHomeNetElementsView missingView)
+        if (_viewFocusService.LastFocusedView is MissingHomeNetElementsView missingView)
         {
             missingView.ShowFindBar(string.Empty);
+            return;
         }
-    }
-
-    private void TrackViewFocus(FrameworkElement view)
-    {
-        view.GotKeyboardFocus += (s, e) => _lastFocusedView = view;
-    }
-
-    private TextEditor? GetActiveTextEditor()
-    {
-        var activeDocument = _documentService.GetActiveDocument();
-        if (activeDocument == null)
-            return null;
-
-        if (activeDocument.Title == "YAML Editor")
-        {
-            return YamlView.GetTextEditor();
-        }
-        else if (activeDocument.Title.StartsWith("Output:"))
-        {
-            var outputView = activeDocument.Content as OutputView;
-            return outputView?.GetTextEditor();
-        }
-
-        return null;
     }
 
     private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)
