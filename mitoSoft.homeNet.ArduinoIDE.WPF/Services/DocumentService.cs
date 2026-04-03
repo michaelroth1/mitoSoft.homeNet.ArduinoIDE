@@ -1,12 +1,11 @@
-using System.Linq;
-using System.Reflection;
-using System.Xml;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Xml;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;

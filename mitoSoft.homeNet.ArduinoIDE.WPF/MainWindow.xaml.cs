@@ -1,14 +1,14 @@
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
-using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
-using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using System.Xml;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
+using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Xml;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF;

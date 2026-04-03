@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using ICSharpCode.AvalonEdit;
+using System.Windows.Controls;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
