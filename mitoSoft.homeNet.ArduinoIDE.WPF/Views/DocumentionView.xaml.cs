@@ -276,7 +276,7 @@ public partial class DocumentionView : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Fehler beim Drucken: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            throw new Exception($"Fehler beim Drucken: {ex.Message}");
         }
     }
 }

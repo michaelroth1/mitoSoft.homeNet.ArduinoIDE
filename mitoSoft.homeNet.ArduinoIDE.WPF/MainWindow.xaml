@@ -16,56 +16,56 @@
     <DockPanel>
         <!-- Menu -->
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Click="OpenMenuItem_Click">
+            <MenuItem Header="_Datei">
+                <MenuItem Header="_Öffnen..." Click="OpenMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/OpenFile.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Save..." Click="SaveMenuItem_Click">
+                <MenuItem Header="_Speichern..." Click="SaveMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Save.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="E_xit" Click="ExitMenuItem_Click"/>
+                <MenuItem Header="B_eenden" Click="ExitMenuItem_Click"/>
             </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Find..." Click="FindMenuItem_Click" InputGestureText="Ctrl+F">
+            <MenuItem Header="_Bearbeiten">
+                <MenuItem Header="_Suchen..." Click="FindMenuItem_Click" InputGestureText="Ctrl+F">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Magnifier.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Copy to _Clipboard" Click="CopyToClipboardMenuItem_Click" InputGestureText="Ctrl+C">
+                <MenuItem Header="In _Zwischenablage kopieren" Click="CopyToClipboardMenuItem_Click" InputGestureText="Ctrl+C">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Copy.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Missing HomeNet Elements" Click="MissingHomeNetElementsMenuItem_Click"/>
+                <MenuItem Header="Fehlende HomeNet-Elemente" Click="MissingHomeNetElementsMenuItem_Click"/>
                 <Separator/>
-                <MenuItem Header="_GPIO Documentation" Click="GpioDocumentationMenuItem_Click"/>
+                <MenuItem Header="_GPIO-Dokumentation" Click="GpioDocumentationMenuItem_Click"/>
             </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Controllers" x:Name="ViewControllersMenuItem" IsCheckable="True" IsChecked="True" Click="ViewControllersMenuItem_Click"/>
-                <MenuItem Header="_Errors / Warnings" x:Name="ViewErrorsMenuItem" IsCheckable="True" IsChecked="True" Click="ViewErrorsMenuItem_Click"/>
+            <MenuItem Header="_Ansicht">
+                <MenuItem Header="_Controller" x:Name="ViewControllersMenuItem" IsCheckable="True" IsChecked="True" Click="ViewControllersMenuItem_Click"/>
+                <MenuItem Header="_Fehler / Warnungen" x:Name="ViewErrorsMenuItem" IsCheckable="True" IsChecked="True" Click="ViewErrorsMenuItem_Click"/>
             </MenuItem>
         </Menu>
 
         <!-- Toolbar -->
         <ToolBar DockPanel.Dock="Top">
-            <Button Click="CheckButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Check errors and warnings">
+            <Button Click="CheckButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Fehler und Warnungen prüfen">
                 <Image Source="/Resources/Check.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
-            <Button Click="BuildButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Build Arduino code">
+            <Button Click="BuildButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Arduino-Code erstellen">
                 <Image Source="/Resources/Build.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
-            <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Copy active panel content to clipboard">
+            <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Aktiven Inhalt in die Zwischenablage kopieren">
                 <Image Source="/Resources/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
-            <Button Click="FindMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Find (Ctrl+F)">
+            <Button Click="FindMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Suchen (Strg+F)">
                 <Image Source="/Resources/Magnifier.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
@@ -78,7 +78,7 @@
         <!-- Status Bar -->
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock x:Name="StatusText" Text="Ready"/>
+                <TextBlock x:Name="StatusText" Text="Bereit"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -90,9 +90,9 @@
                         <!-- Left Side: Controller List -->
                         <xcad:LayoutAnchorablePaneGroup DockWidth="250">
                             <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable Title="Controllers" x:Name="ControllersAnchorable" CanClose="True" CanHide="True" Hiding="LayoutAnchorable_Hiding">
+                                <xcad:LayoutAnchorable Title="Controller" x:Name="ControllersAnchorable" CanClose="True" CanHide="True" Hiding="LayoutAnchorable_Hiding">
                                     <DockPanel>
-                                        <Label Content="Select Controller:" DockPanel.Dock="Top" Padding="5"/>
+                                        <Label Content="Controller auswählen:" DockPanel.Dock="Top" Padding="5"/>
                                         <ListBox x:Name="ControllerListBox" 
                                                  SelectionChanged="ControllerListBox_SelectionChanged"
                                                  Margin="5"/>
@@ -104,7 +104,7 @@
                         <!-- Center: Main Content -->
                         <xcad:LayoutDocumentPaneGroup>
                             <xcad:LayoutDocumentPane x:Name="DocumentPane">
-                                <xcad:LayoutDocument Title="YAML Editor" CanClose="False">
+                                <xcad:LayoutDocument Title="YAML-Editor" CanClose="False">
                                     <views:YamlView x:Name="YamlView"/>
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
@@ -114,7 +114,7 @@
                     <!-- Bottom: Errors and Warnings -->
                     <xcad:LayoutAnchorablePaneGroup DockHeight="150">
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Errors / Warnings" x:Name="ErrorsAnchorable" CanClose="True" Hiding="LayoutAnchorable_Hiding">
+                            <xcad:LayoutAnchorable Title="Fehler / Warnungen" x:Name="ErrorsAnchorable" CanClose="True" Hiding="LayoutAnchorable_Hiding">
                                 <TextBox x:Name="ErrorTextBox" 
                                          IsReadOnly="True"
                                          VerticalScrollBarVisibility="Auto"

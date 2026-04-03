@@ -15,7 +15,6 @@ public partial class MainWindow : Window
 
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
-    private readonly DocumentationService _gpioDocumentationService;
     private readonly FocusService _viewFocusService = new();
     private MainPanelService _documentService = null!;
 
@@ -29,7 +28,6 @@ public partial class MainWindow : Window
 
         _settingsService = new SettingsService();
         _fileService = new FileService();
-        _gpioDocumentationService = new DocumentationService();
 
         this.LoadSettings();
         Loaded += MainWindow_Loaded;
@@ -121,7 +119,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrWhiteSpace(controllerName))
         {
-            ErrorTextBox.Text = "No controller selected...";
+            ErrorTextBox.Text = "Kein Controller ausgewählt...";
             return;
         }
 
@@ -130,7 +128,7 @@ public partial class MainWindow : Window
 
         if (controller == null)
         {
-            ErrorTextBox.Text = "Controller not found...";
+            ErrorTextBox.Text = "Controller nicht gefunden...";
             return;
         }
 
@@ -141,7 +139,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrWhiteSpace(ErrorTextBox.Text))
         {
-            ErrorTextBox.Text = "No warnings found...";
+            ErrorTextBox.Text = "Keine Warnungen gefunden...";
         }
     }
 
@@ -156,26 +154,36 @@ public partial class MainWindow : Window
             return;
         }
 
-        var config = new YamlParser(YamlView.Text).Parse(controller.UniqueId);
+        try
+        {
+            var config = new YamlParser(YamlView.Text).Parse(controller.UniqueId);
 
-        var programBuilder = new ProgramTextBuilder(
-            controller.Name,
-            controller.IPAddress,
-            controller.MacAddress,
-            controller.BrokerIPAddress,
-            controller.BrokerUserName,
-            controller.BrokerPassword,
-            controller.GpioMode,
-            controller.SubscribedTopic,
-            controller.AdditionalDeclaration,
-            controller.AdditionalSetup,
-            controller.AdditionalCode);
+            var programBuilder = new ProgramTextBuilder(
+                controller.Name,
+                controller.IPAddress,
+                controller.MacAddress,
+                controller.BrokerIPAddress,
+                controller.BrokerUserName,
+                controller.BrokerPassword,
+                controller.GpioMode,
+                controller.SubscribedTopic,
+                controller.AdditionalDeclaration,
+                controller.AdditionalSetup,
+                controller.AdditionalCode);
 
-        var program = programBuilder.Build(config);
+            var program = programBuilder.Build(config);
 
-        _documentService.CreateOrUpdateOutputDocument(controller.Name, program);
+            _documentService.CreateOrUpdateOutputDocument(controller.Name, program);
 
-        programBuilder.Check();
+            programBuilder.Check();
+
+            StatusText.Text = $"Build erfolgreich: {controller.Name}";
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Build fehlgeschlagen: '{controller.Name}'";
+            throw new InvalidOperationException($"Fehler beim Build '{controller.Name}': {ex.Message}", ex);
+        }
     }
 
     private HomeNet.Controller? GetController()
@@ -198,7 +206,7 @@ public partial class MainWindow : Window
         {
             _currentFilePath = filePath;
             YamlView.Text = _fileService.ReadFile(_currentFilePath);
-            StatusText.Text = $"Opened: {_currentFilePath}";
+            StatusText.Text = $"Geöffnet: {_currentFilePath}";
         }
     }
 
@@ -207,7 +215,7 @@ public partial class MainWindow : Window
         if (_viewFocusService.FocusedView is YamlView)
         {
             var saved = this.SaveToFile(
-                filter: "YAML files (*.yaml)|*.yaml|All files (*.*)|*.*",
+                filter: "YAML-Dateien (*.yaml)|*.yaml|Alle Dateien (*.*)|*.*",
                 defaultFileName: "config.yaml",
                 content: YamlView.Text,
                 currentFilePath: _currentFilePath);
@@ -220,7 +228,7 @@ public partial class MainWindow : Window
             var doc = _documentService.GetAllDocuments().FirstOrDefault(d => d.Content == outputView);
             var controllerName = doc?.Title.Replace("Output: ", "") ?? "output";
             this.SaveToFile(
-                filter: "Arduino files (*.ino)|*.ino|Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                filter: "Arduino-Dateien (*.ino)|*.ino|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*",
                 defaultFileName: $"{controllerName}.ino",
                 content: outputView.GetTextEditor().Text);
         }
@@ -239,7 +247,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _fileService.WriteFile(filePath, content);
-            StatusText.Text = $"Saved: {filePath}";
+            StatusText.Text = $"Gespeichert: {filePath}";
         }
 
         return filePath;
@@ -251,7 +259,7 @@ public partial class MainWindow : Window
         if (!string.IsNullOrEmpty(textEditor?.Text))
         {
             Clipboard.SetText(textEditor.Text);
-            StatusText.Text = "Content copied to clipboard";
+            StatusText.Text = "Inhalt in die Zwischenablage kopiert";
         }
     }
 
@@ -308,37 +316,26 @@ public partial class MainWindow : Window
 
     private void GpioDocumentationMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var overviews = _gpioDocumentationService.GenerateOverview(YamlView.Text);
+        var overviews = DocumentationService.GenerateOverview(YamlView.Text);
 
-            if (overviews.Count == 0)
-            {
-                MessageBox.Show("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.",
-                    "Keine GPIOs gefunden", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            _documentService.CreateOrUpdateGpioDocumentation(overviews);
-            StatusText.Text = "GPIO Documentation created";
-        }
-        catch (Exception ex)
+        if (overviews.Count == 0)
         {
-            MessageBox.Show($"Fehler beim Erstellen der GPIO-Dokumentation: {ex.Message}",
-                "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-            StatusText.Text = "Error creating GPIO documentation";
+            throw new Exception("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.");
         }
+
+        _documentService.CreateOrUpdateGpioDocumentation(overviews);
+        StatusText.Text = "GPIO-Dokumentation erstellt";
     }
 
     private void LayoutAnchorable_Hiding(object sender, System.ComponentModel.CancelEventArgs e)
     {
         if (sender is Xceed.Wpf.AvalonDock.Layout.LayoutAnchorable anchorable)
         {
-            if (anchorable.Title == "Controllers")
+            if (anchorable.Title == "Controller")
             {
                 ViewControllersMenuItem.IsChecked = false;
             }
-            else if (anchorable.Title == "Errors / Warnings")
+            else if (anchorable.Title == "Fehler / Warnungen")
             {
                 ViewErrorsMenuItem.IsChecked = false;
             }

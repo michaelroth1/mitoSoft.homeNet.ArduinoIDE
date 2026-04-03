@@ -9,7 +9,7 @@ public class FileService
     {
         var openFileDialog = new OpenFileDialog
         {
-            Filter = "YAML files (*.yaml;*.yml)|*.yaml;*.yml|All files (*.*)|*.*"
+            Filter = "YAML-Dateien (*.yaml;*.yml)|*.yaml;*.yml|Alle Dateien (*.*)|*.*"
         };
 
         if (openFileDialog.ShowDialog() == true)

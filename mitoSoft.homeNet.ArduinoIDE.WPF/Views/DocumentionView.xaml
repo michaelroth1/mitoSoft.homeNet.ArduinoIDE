@@ -4,7 +4,7 @@
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button x:Name="PrintButton" 
-                    Content="Print / Export" 
+                    Content="Drucken / Exportieren"
                     Padding="10,2,10,2"
                     Click="PrintButton_Click"/>
         </ToolBar>

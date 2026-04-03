@@ -3,9 +3,9 @@ using mitoSoft.homeNet.ArduinoIDE.WPF.Models;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
-public class DocumentationService
+public static class DocumentationService
 {
-    public List<ControllerGpioOverview> GenerateOverview(string yamlContent)
+    public static List<ControllerGpioOverview> GenerateOverview(string yamlContent)
     {
         try
         {
@@ -54,7 +54,7 @@ public class DocumentationService
                         usedGpios.Add(cover.GpioCloseButton);
                     }
 
-                    var name = this.ExtractFriendlyName(cover.UniqueId);
+                    var name = ExtractFriendlyName(cover.UniqueId);
 
                     overview.Items.Add(new GpioOverviewItem
                     {
@@ -84,7 +84,7 @@ public class DocumentationService
                         usedGpios.Add(light.GpioButton);
                     }
 
-                    var name = this.ExtractFriendlyName(light.UniqueId);
+                    var name = ExtractFriendlyName(light.UniqueId);
 
                     overview.Items.Add(new GpioOverviewItem
                     {
@@ -108,7 +108,7 @@ public class DocumentationService
         }
     }
 
-    private string ExtractFriendlyName(string uniqueId)
+    private static string ExtractFriendlyName(string uniqueId)
     {
         // Extract friendly name from unique_id like "arduino_shutter_eg_kuche_schneider"
         if (uniqueId.StartsWith("arduino_shutter_"))
