@@ -18,6 +18,7 @@
     <Resource Include="Resources\Check.png" />
     <Resource Include="Resources\CommentCode.png" />
     <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\magnifier.png" />
     <Resource Include="Resources\UncommentCode.png" />
     <Resource Include="Resources\OpenFile.png" />
     <Resource Include="Resources\Save.png" />

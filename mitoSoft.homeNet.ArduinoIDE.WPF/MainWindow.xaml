@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views"
         xmlns:local="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF"
         mc:Ignorable="d"
-        Title="mitoSoft homeNet Arduino IDE" Height="600" Width="1000"
+        Title="homeNet" Height="600" Width="1000"
         WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
@@ -74,6 +74,9 @@
             </Button>
             <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Copy active panel content to clipboard">
                 <Image Source="/Resources/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Button>
+            <Button Click="FindMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Find (Ctrl+F)">
+                <Image Source="/Resources/magnifier.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
             <Label Content="Zoom:" VerticalAlignment="Center"/>
