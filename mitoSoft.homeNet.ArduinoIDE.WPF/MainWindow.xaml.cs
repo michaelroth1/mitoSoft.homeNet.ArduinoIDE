@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
@@ -21,6 +22,7 @@ public partial class MainWindow : Window
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
     private readonly TextEditorService _textEditorService;
+    private readonly GpioOverviewService _gpioOverviewService;
     private DocumentService _documentService = null!;
 
     public ICommand FindCommand { get; }
@@ -34,6 +36,7 @@ public partial class MainWindow : Window
         _settingsService = new SettingsService();
         _fileService = new FileService();
         _textEditorService = new TextEditorService();
+        _gpioOverviewService = new GpioOverviewService();
 
         LoadSettings();
         Loaded += MainWindow_Loaded;
@@ -97,10 +100,56 @@ public partial class MainWindow : Window
             UpdateControllerList();
         };
 
+        // Enable touch and manipulation for YAML Editor
+        YamlTextBox.IsManipulationEnabled = true;
+        YamlTextBox.ManipulationBoundaryFeedback += (s, e) => { e.Handled = true; };
+
+        // Improve YAML Editor scrolling with mouse wheel
+        YamlTextBox.PreviewMouseWheel += (s, e) =>
+        {
+            var editor = s as TextEditor;
+            if (editor != null && editor.VerticalScrollBarVisibility != ScrollBarVisibility.Disabled)
+            {
+                var scrollViewer = FindScrollViewer(editor);
+                if (scrollViewer != null)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 3.0);
+                    e.Handled = true;
+                }
+            }
+        };
+
+        // Enable touch scrolling for YAML Editor
+        YamlTextBox.Loaded += (s, e) =>
+        {
+            var scrollViewer = FindScrollViewer(YamlTextBox);
+            if (scrollViewer != null)
+            {
+                scrollViewer.PanningMode = PanningMode.VerticalOnly;
+                scrollViewer.PanningDeceleration = 0.001;
+                scrollViewer.PanningRatio = 1.0;
+            }
+        };
+
         // Apply zoom after UI is fully initialized
         ApplyZoom();
 
         UpdateControllerList();
+    }
+
+    private ScrollViewer? FindScrollViewer(DependencyObject obj)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+        {
+            var child = VisualTreeHelper.GetChild(obj, i);
+            if (child is ScrollViewer scrollViewer)
+                return scrollViewer;
+
+            var result = FindScrollViewer(child);
+            if (result != null)
+                return result;
+        }
+        return null;
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -360,10 +409,32 @@ public partial class MainWindow : Window
 
     private void FindMenuItem_Click(object? sender)
     {
-        var findDialog = new FindDialog(_searchText);
-        if (findDialog.ShowDialog() == true)
+        var activeDocument = _documentService.GetActiveDocument();
+
+        // Check if active document is GPIO Documentation
+        if (activeDocument?.Title == "GPIO Documentation")
         {
-            _searchText = findDialog.SearchText;
+            var dockPanel = activeDocument.Content as DockPanel;
+            var scrollViewer = dockPanel?.Children.OfType<ScrollViewer>().FirstOrDefault();
+            var stackPanel = scrollViewer?.Content as StackPanel;
+
+            if (stackPanel != null)
+            {
+                var findDialog = new FindDialog(_searchText);
+                if (findDialog.ShowDialog() == true)
+                {
+                    _searchText = findDialog.SearchText;
+                    _documentService.FindInGpioDocumentation(stackPanel, _searchText);
+                }
+                return;
+            }
+        }
+
+        // Default behavior for TextEditor-based documents
+        var findDialog2 = new FindDialog(_searchText);
+        if (findDialog2.ShowDialog() == true)
+        {
+            _searchText = findDialog2.SearchText;
             FindNext();
         }
     }
@@ -426,6 +497,30 @@ public partial class MainWindow : Window
         else
         {
             ErrorsAnchorable.Hide();
+        }
+    }
+
+    private void CreateGpioDocumentationMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var overviews = _gpioOverviewService.GenerateOverview(YamlTextBox.Text);
+
+            if (overviews.Count == 0)
+            {
+                MessageBox.Show("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.", 
+                    "Keine GPIOs gefunden", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            _documentService.CreateOrUpdateGpioDocumentation(overviews);
+            StatusText.Text = "GPIO Documentation created";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Fehler beim Erstellen der GPIO-Dokumentation: {ex.Message}", 
+                "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+            StatusText.Text = "Error creating GPIO documentation";
         }
     }
 
