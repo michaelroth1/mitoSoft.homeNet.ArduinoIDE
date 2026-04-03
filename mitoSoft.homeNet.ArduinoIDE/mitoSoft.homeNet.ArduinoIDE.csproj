@@ -2,15 +2,29 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\mitoSoft.ico</ApplicationIcon>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <Content Include="Resources\mitoSoft.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Build.png" />
+    <Resource Include="Resources\Check.png" />
+    <Resource Include="Resources\CommentCode.png" />
+    <Resource Include="Resources\Copy.png" />
+    <Resource Include="Resources\Magnifier.png" />
+    <Resource Include="Resources\UncommentCode.png" />
+    <Resource Include="Resources\OpenFile.png" />
+    <Resource Include="Resources\Save.png" />
+    <Resource Include="Editor\YAML.xshd" />
+    <Resource Include="Editor\Arduino.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,10 +32,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AvalonDock.Themes.VS2013" Version="2.0.0.5" />
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.de.resx">
+      <WithCulture>true</WithCulture>
+      <Culture>de</Culture>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -31,21 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

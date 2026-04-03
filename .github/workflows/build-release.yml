@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      PROJECT_PATH: mitoSoft.homeNet.ArduinoIDE.WPF\mitoSoft.homeNet.ArduinoIDE.WPF.csproj
+      PROJECT_PATH: mitoSoft.homeNet.ArduinoIDE\mitoSoft.homeNet.ArduinoIDE.csproj
       RELEASE_NAME: ArduinoIDE-${{ github.ref_name }}
 
     steps:
