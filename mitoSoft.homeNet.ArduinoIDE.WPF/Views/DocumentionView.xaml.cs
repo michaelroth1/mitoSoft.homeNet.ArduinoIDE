@@ -1,4 +1,5 @@
 using mitoSoft.homeNet.ArduinoIDE.WPF.Models;
+using Res = mitoSoft.homeNet.ArduinoIDE.WPF.Properties.Resources;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -42,7 +43,7 @@ public partial class DocumentionView : UserControl
 
         var title = new TextBlock
         {
-            Text = "GPIO Übersicht - Schaltschrank Dokumentation",
+            Text = Res.Doc_Title,
             FontSize = 18,
             FontWeight = FontWeights.Bold,
             Margin = new Thickness(0, 0, 0, 20)
@@ -53,7 +54,7 @@ public partial class DocumentionView : UserControl
         {
             var noData = new TextBlock
             {
-                Text = "Keine Controller mit GPIOs gefunden.",
+                Text = Res.Doc_NoData,
                 FontStyle = FontStyles.Italic,
                 Foreground = Brushes.Gray
             };
@@ -77,7 +78,7 @@ public partial class DocumentionView : UserControl
 
             var controllerTitle = new TextBlock
             {
-                Text = $"Controller: {overview.ControllerName} (ID: {overview.ControllerId})",
+                Text = string.Format(Res.Doc_ControllerTitle, overview.ControllerName, overview.ControllerId),
                 FontSize = 16,
                 FontWeight = FontWeights.Bold
             };
@@ -85,7 +86,7 @@ public partial class DocumentionView : UserControl
 
             var controllerInfo = new TextBlock
             {
-                Text = $"IP: {overview.IPAddress} | MAC: {overview.MacAddress} | Verwendete GPIOs: {overview.TotalGpioCount}",
+                Text = string.Format(Res.Doc_ControllerInfo, overview.IPAddress, overview.MacAddress, overview.TotalGpioCount),
                 FontSize = 11,
                 Foreground = Brushes.DarkBlue,
                 Margin = new Thickness(0, 3, 0, 0)
@@ -99,7 +100,7 @@ public partial class DocumentionView : UserControl
             {
                 var noItems = new TextBlock
                 {
-                    Text = "  Keine Geräte konfiguriert",
+                    Text = Res.Doc_NoDevices,
                     FontStyle = FontStyles.Italic,
                     Foreground = Brushes.Gray,
                     Margin = new Thickness(10, 5, 0, 10)
@@ -125,7 +126,7 @@ public partial class DocumentionView : UserControl
 
             dataGrid.Columns.Add(new DataGridTextColumn
             {
-                Header = "Typ",
+                Header = Res.Col_Type,
                 Binding = new System.Windows.Data.Binding("Type"),
                 Width = 80,
                 MinWidth = 10
@@ -133,7 +134,7 @@ public partial class DocumentionView : UserControl
 
             dataGrid.Columns.Add(new DataGridTextColumn
             {
-                Header = "Name",
+                Header = Res.Col_Name,
                 Binding = new System.Windows.Data.Binding("Name"),
                 Width = 180,
                 MinWidth = 10
@@ -141,7 +142,7 @@ public partial class DocumentionView : UserControl
 
             dataGrid.Columns.Add(new DataGridTextColumn
             {
-                Header = "Beschreibung",
+                Header = Res.Col_Description,
                 Binding = new System.Windows.Data.Binding("Description"),
                 Width = 200,
                 MinWidth = 10
@@ -149,7 +150,7 @@ public partial class DocumentionView : UserControl
 
             dataGrid.Columns.Add(new DataGridTextColumn
             {
-                Header = "GPIO Pins",
+                Header = Res.Col_GpioPins,
                 Binding = new System.Windows.Data.Binding("GpioPins"),
                 Width = 250,
                 MinWidth = 10
@@ -157,7 +158,7 @@ public partial class DocumentionView : UserControl
 
             dataGrid.Columns.Add(new DataGridTextColumn
             {
-                Header = "Zusatzinfo",
+                Header = Res.Col_AdditionalInfo,
                 Binding = new System.Windows.Data.Binding("AdditionalInfo"),
                 Width = 120,
                 MinWidth = 10
@@ -169,7 +170,7 @@ public partial class DocumentionView : UserControl
 
         var timestamp = new TextBlock
         {
-            Text = $"Erstellt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}",
+            Text = string.Format(Res.Doc_CreatedAt, DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")),
             FontSize = 10,
             Foreground = Brushes.Gray,
             Margin = new Thickness(0, 10, 0, 0)
@@ -196,7 +197,7 @@ public partial class DocumentionView : UserControl
                     ColumnWidth = printDialog.PrintableAreaWidth
                 };
 
-                var title = new Paragraph(new Run("GPIO Übersicht - Schaltschrank Dokumentation"))
+                var title = new Paragraph(new Run(Res.Doc_Title))
                 {
                     FontSize = 18,
                     FontWeight = FontWeights.Bold,
@@ -206,7 +207,7 @@ public partial class DocumentionView : UserControl
 
                 foreach (var overview in _overviews)
                 {
-                    var controllerHeader = new Paragraph(new Run($"Controller: {overview.ControllerName} (ID: {overview.ControllerId})"))
+                    var controllerHeader = new Paragraph(new Run(string.Format(Res.Doc_ControllerTitle, overview.ControllerName, overview.ControllerId)))
                     {
                         FontSize = 14,
                         FontWeight = FontWeights.Bold,
@@ -215,7 +216,7 @@ public partial class DocumentionView : UserControl
                     };
                     doc.Blocks.Add(controllerHeader);
 
-                    var controllerInfo = new Paragraph(new Run($"IP: {overview.IPAddress} | MAC: {overview.MacAddress} | Verwendete GPIOs: {overview.TotalGpioCount}"))
+                    var controllerInfo = new Paragraph(new Run(string.Format(Res.Doc_ControllerInfo, overview.IPAddress, overview.MacAddress, overview.TotalGpioCount)))
                     {
                         FontSize = 10,
                         Margin = new Thickness(0, 0, 0, 10)
@@ -238,11 +239,11 @@ public partial class DocumentionView : UserControl
                     var rowGroup = new TableRowGroup();
 
                     var headerRow = new TableRow { Background = new SolidColorBrush(Color.FromRgb(200, 200, 200)) };
-                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Typ")) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
-                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Name")) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
-                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Beschreibung")) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
-                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run("GPIO Pins")) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
-                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Zusatzinfo")) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
+                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run(Res.Col_Type)) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
+                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run(Res.Col_Name)) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
+                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run(Res.Col_Description)) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
+                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run(Res.Col_GpioPins)) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
+                    headerRow.Cells.Add(new TableCell(new Paragraph(new Run(Res.Col_AdditionalInfo)) { FontWeight = FontWeights.Bold, Margin = new Thickness(2) }));
                     rowGroup.Rows.Add(headerRow);
 
                     foreach (var item in overview.Items)
@@ -260,7 +261,7 @@ public partial class DocumentionView : UserControl
                     doc.Blocks.Add(table);
                 }
 
-                var timestampPara = new Paragraph(new Run($"Erstellt am: {DateTime.Now:dd.MM.yyyy HH:mm:ss}"))
+                var timestampPara = new Paragraph(new Run(string.Format(Res.Doc_CreatedAt, DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"))))
                 {
                     FontSize = 10,
                     Foreground = Brushes.Gray,
@@ -271,12 +272,12 @@ public partial class DocumentionView : UserControl
                 var documentPaginator = ((IDocumentPaginatorSource)doc).DocumentPaginator;
                 printDialog.PrintDocument(documentPaginator, "GPIO Documentation");
 
-                MessageBox.Show("Dokument wurde zum Drucker gesendet.", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Res.Msg_PrintSuccess, Res.Msg_PrintSuccessTitle, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         catch (Exception ex)
         {
-            throw new Exception($"Fehler beim Drucken: {ex.Message}");
+            throw new Exception(string.Format(Res.Msg_PrintError, ex.Message));
         }
     }
 }

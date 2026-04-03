@@ -1,25 +1,26 @@
 <UserControl x:Class="mitoSoft.homeNet.ArduinoIDE.WPF.Views.FindBarControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Properties">
     <Border Background="#FFFDF0" BorderBrush="#FFCC88" BorderThickness="0,0,0,1" Padding="4,3">
         <DockPanel>
             <Button x:Name="CloseButton"
                     DockPanel.Dock="Right"
                     Content="✕"
                     Width="22" Height="22"
-                    ToolTip="Close (Esc)"
+                    ToolTip="{x:Static p:Resources.FindBar_Close}"
                     Click="CloseButton_Click"
                     Margin="4,0,0,0"
                     Padding="0"/>
             <Button x:Name="FindNextButton"
                     DockPanel.Dock="Right"
-                    Content="Find Next"
+                    Content="{x:Static p:Resources.FindBar_FindNext}"
                     Height="22"
                     Click="FindNextButton_Click"
                     Margin="4,0,0,0"
                     Padding="6,0"/>
             <Label DockPanel.Dock="Left"
-                   Content="Find:"
+                   Content="{x:Static p:Resources.FindBar_Label}"
                    VerticalAlignment="Center"
                    Padding="0,0,6,0"/>
             <TextBox x:Name="SearchTextBox"

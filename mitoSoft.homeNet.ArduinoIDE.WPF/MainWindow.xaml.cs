@@ -2,6 +2,7 @@ using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Views;
+using Res = mitoSoft.homeNet.ArduinoIDE.WPF.Properties.Resources;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -119,7 +120,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrWhiteSpace(controllerName))
         {
-            ErrorTextBox.Text = "Kein Controller ausgewählt...";
+            ErrorTextBox.Text = Res.Msg_NoControllerSelected;
             return;
         }
 
@@ -128,7 +129,7 @@ public partial class MainWindow : Window
 
         if (controller == null)
         {
-            ErrorTextBox.Text = "Controller nicht gefunden...";
+            ErrorTextBox.Text = Res.Msg_ControllerNotFound;
             return;
         }
 
@@ -139,7 +140,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrWhiteSpace(ErrorTextBox.Text))
         {
-            ErrorTextBox.Text = "Keine Warnungen gefunden...";
+            ErrorTextBox.Text = Res.Msg_NoWarningsFound;
         }
     }
 
@@ -177,12 +178,12 @@ public partial class MainWindow : Window
 
             programBuilder.Check();
 
-            StatusText.Text = $"Build erfolgreich: {controller.Name}";
+            StatusText.Text = string.Format(Res.Msg_BuildSuccessful, controller.Name);
         }
         catch (Exception ex)
         {
-            StatusText.Text = $"Build fehlgeschlagen: '{controller.Name}'";
-            throw new InvalidOperationException($"Fehler beim Build '{controller.Name}': {ex.Message}", ex);
+            StatusText.Text = string.Format(Res.Msg_BuildFailed, controller.Name);
+            throw new InvalidOperationException(string.Format(Res.Msg_BuildError, controller.Name, ex.Message), ex);
         }
     }
 
@@ -206,7 +207,7 @@ public partial class MainWindow : Window
         {
             _currentFilePath = filePath;
             YamlView.Text = _fileService.ReadFile(_currentFilePath);
-            StatusText.Text = $"Geöffnet: {_currentFilePath}";
+            StatusText.Text = string.Format(Res.Msg_Opened, _currentFilePath);
         }
     }
 
@@ -215,7 +216,7 @@ public partial class MainWindow : Window
         if (_viewFocusService.FocusedView is YamlView)
         {
             var saved = this.SaveToFile(
-                filter: "YAML-Dateien (*.yaml)|*.yaml|Alle Dateien (*.*)|*.*",
+                filter: Res.Filter_Yaml,
                 defaultFileName: "config.yaml",
                 content: YamlView.Text,
                 currentFilePath: _currentFilePath);
@@ -228,7 +229,7 @@ public partial class MainWindow : Window
             var doc = _documentService.GetAllDocuments().FirstOrDefault(d => d.Content == outputView);
             var controllerName = doc?.Title.Replace("Output: ", "") ?? "output";
             this.SaveToFile(
-                filter: "Arduino-Dateien (*.ino)|*.ino|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*",
+                filter: Res.Filter_Arduino,
                 defaultFileName: $"{controllerName}.ino",
                 content: outputView.GetTextEditor().Text);
         }
@@ -247,7 +248,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _fileService.WriteFile(filePath, content);
-            StatusText.Text = $"Gespeichert: {filePath}";
+            StatusText.Text = string.Format(Res.Msg_Saved, filePath);
         }
 
         return filePath;
@@ -259,7 +260,7 @@ public partial class MainWindow : Window
         if (!string.IsNullOrEmpty(textEditor?.Text))
         {
             Clipboard.SetText(textEditor.Text);
-            StatusText.Text = "Inhalt in die Zwischenablage kopiert";
+            StatusText.Text = Res.Msg_CopiedToClipboard;
         }
     }
 
@@ -320,25 +321,22 @@ public partial class MainWindow : Window
 
         if (overviews.Count == 0)
         {
-            throw new Exception("Keine Controller mit GPIOs gefunden.\n\nBitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.");
+            throw new Exception(Res.Msg_NoControllersWithGpios);
         }
 
         _documentService.CreateOrUpdateGpioDocumentation(overviews);
-        StatusText.Text = "GPIO-Dokumentation erstellt";
+        StatusText.Text = Res.Msg_GpioDocumentationCreated;
     }
 
     private void LayoutAnchorable_Hiding(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        if (sender is Xceed.Wpf.AvalonDock.Layout.LayoutAnchorable anchorable)
+        if (sender == ControllersAnchorable)
         {
-            if (anchorable.Title == "Controller")
-            {
-                ViewControllersMenuItem.IsChecked = false;
-            }
-            else if (anchorable.Title == "Fehler / Warnungen")
-            {
-                ViewErrorsMenuItem.IsChecked = false;
-            }
+            ViewControllersMenuItem.IsChecked = false;
+        }
+        else if (sender == ErrorsAnchorable)
+        {
+            ViewErrorsMenuItem.IsChecked = false;
         }
     }
 }

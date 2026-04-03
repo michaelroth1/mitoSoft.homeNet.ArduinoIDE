@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:helpers="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Helpers"
-             xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views">
+             xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views"
+             xmlns:p="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Properties">
     <DockPanel>
         <views:FindBarControl x:Name="FindBar" DockPanel.Dock="Top" Visibility="Visible"/>
         <Border DockPanel.Dock="Top"
@@ -13,9 +14,7 @@
                 Padding="10,8">
             <TextBlock TextWrapping="Wrap"
                        Foreground="#FF1E3A5F"
-                       FontSize="12">
-                Hier wird gezeigt, welche <Run FontWeight="Bold">homeNet:</Run>-Einträge du noch in dein YAML einfügen musst, damit alle MQTT-Devices auch eine homeNet-Konfiguration haben.
-            </TextBlock>
+                       FontSize="12"><Run Text="{x:Static p:Resources.MissingElements_Description}"/><Run FontWeight="Bold" Text="{x:Static p:Resources.MissingElements_TextBold}"/><Run Text="{x:Static p:Resources.MissingElements_TextAfter}"/></TextBlock>
         </Border>
         <avalonedit:TextEditor x:Name="TextEditor"
                                IsReadOnly="True"
