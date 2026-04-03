@@ -112,7 +112,7 @@
                         <xcad:LayoutDocumentPaneGroup>
                             <xcad:LayoutDocumentPane x:Name="DocumentPane">
                                 <xcad:LayoutDocument Title="YAML Editor" CanClose="False">
-                                    <views:YamlDocumentView x:Name="YamlDocumentView"/>
+                                    <views:YamlView x:Name="YamlView"/>
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
                         </xcad:LayoutDocumentPaneGroup>

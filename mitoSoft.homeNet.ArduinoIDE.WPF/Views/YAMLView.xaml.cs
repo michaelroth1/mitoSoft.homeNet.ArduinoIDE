@@ -5,11 +5,11 @@ using System.Windows.Media;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Views;
 
-public partial class YamlDocumentView : UserControl
+public partial class YamlView : UserControl
 {
     public event EventHandler? TextChanged;
 
-    public YamlDocumentView()
+    public YamlView()
     {
         InitializeComponent();
         SetupTextEditor();

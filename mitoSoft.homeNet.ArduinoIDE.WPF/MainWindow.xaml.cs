@@ -60,10 +60,10 @@ public partial class MainWindow : Window
     {
         _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value);
 
-        YamlDocumentView.Text = _settingsService.GetYamlContent();
+        YamlView.Text = _settingsService.GetYamlContent();
 
         // Subscribe to TextChanged event
-        YamlDocumentView.TextChanged += (s, args) =>
+        YamlView.TextChanged += (s, args) =>
         {
             SaveYamlInSettings();
             UpdateControllerList();
@@ -82,12 +82,12 @@ public partial class MainWindow : Window
 
     private void SaveYamlInSettings()
     {
-        _settingsService.SaveYamlContent(YamlDocumentView.Text);
+        _settingsService.SaveYamlContent(YamlView.Text);
     }
 
     private void UpdateControllerList()
     {
-        var controllers = new TextCrawler(YamlDocumentView.Text).ParseHomeNetControllers();
+        var controllers = new TextCrawler(YamlView.Text).ParseHomeNetControllers();
 
         var selectedItem = ControllerListBox.SelectedItem;
 
@@ -125,7 +125,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var parser = new YamlParser(YamlDocumentView.Text);
+        var parser = new YamlParser(YamlView.Text);
         var controller = parser.GetController(controllerName);
 
         if (controller == null)
@@ -156,7 +156,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var config = new YamlParser(YamlDocumentView.Text).Parse(controller.UniqueId);
+        var config = new YamlParser(YamlView.Text).Parse(controller.UniqueId);
 
         var programBuilder = new ProgramTextBuilder(
             controller.Name,
@@ -192,7 +192,7 @@ public partial class MainWindow : Window
             return null;
         }
 
-        var controller = new YamlParser(YamlDocumentView.Text).GetController(controllerName);
+        var controller = new YamlParser(YamlView.Text).GetController(controllerName);
         return controller;
     }
 
@@ -202,7 +202,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _currentFilePath = filePath;
-            YamlDocumentView.Text = _fileService.ReadFile(_currentFilePath);
+            YamlView.Text = _fileService.ReadFile(_currentFilePath);
             StatusText.Text = $"Opened: {_currentFilePath}";
         }
     }
@@ -235,7 +235,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _currentFilePath = filePath;
-            _fileService.WriteFile(_currentFilePath, YamlDocumentView.Text);
+            _fileService.WriteFile(_currentFilePath, YamlView.Text);
             StatusText.Text = $"Saved: {_currentFilePath}";
         }
     }
@@ -271,7 +271,7 @@ public partial class MainWindow : Window
 
     private void CommentSelectedLines()
     {
-        _textEditorService.CommentLines(YamlDocumentView.GetTextEditor());
+        _textEditorService.CommentLines(YamlView.GetTextEditor());
     }
 
     private void UncommentMenuItem_Click(object sender, RoutedEventArgs e)
@@ -286,7 +286,7 @@ public partial class MainWindow : Window
 
     private void UncommentSelectedLines()
     {
-        _textEditorService.UncommentLines(YamlDocumentView.GetTextEditor());
+        _textEditorService.UncommentLines(YamlView.GetTextEditor());
     }
 
     private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -296,12 +296,12 @@ public partial class MainWindow : Window
 
     private void SelectYamlNode(string key)
     {
-        _textEditorService.SelectYamlNode(YamlDocumentView.GetTextEditor(), key);
+        _textEditorService.SelectYamlNode(YamlView.GetTextEditor(), key);
     }
 
     private void CreateHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var newConfig = new YamlParser(YamlDocumentView.Text).AddHomeNetElements();
+        var newConfig = new YamlParser(YamlView.Text).AddHomeNetElements();
 
         var outputWindow = new OutputWindow("Missing HomeNet elements", newConfig);
         outputWindow.ShowDialog();
@@ -314,9 +314,9 @@ public partial class MainWindow : Window
 
     private void ApplyZoom()
     {
-        if (YamlDocumentView != null)
+        if (YamlView != null)
         {
-            YamlDocumentView.SetZoomFactor(ZoomSlider.Value);
+            YamlView.SetZoomFactor(ZoomSlider.Value);
         }
 
         if (_documentService != null)
@@ -368,7 +368,7 @@ public partial class MainWindow : Window
         // Find the TextEditor in the active document
         if (activeDocument.Title == "YAML Editor")
         {
-            return YamlDocumentView.GetTextEditor();
+            return YamlView.GetTextEditor();
         }
         else if (activeDocument.Title.StartsWith("Output:"))
         {
@@ -424,7 +424,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            var overviews = _gpioOverviewService.GenerateOverview(YamlDocumentView.Text);
+            var overviews = _gpioOverviewService.GenerateOverview(YamlView.Text);
 
             if (overviews.Count == 0)
             {
