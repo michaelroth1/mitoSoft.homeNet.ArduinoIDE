@@ -43,18 +43,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="_Comment" Click="CommentMenuItem_Click">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/CommentCode.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="_Uncomment" Click="UncommentMenuItem_Click">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/UncommentCode.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem Header="Select homeNet Node" Click="SelectHomeNetNodeMenuItem_Click"/>
                 <MenuItem Header="Missing HomeNet Elements" Click="MissingHomeNetElementsMenuItem_Click"/>
                 <Separator/>
                 <MenuItem Header="_GPIO Documentation" Click="GpioDocumentationMenuItem_Click"/>
@@ -74,12 +62,6 @@
                 <Image Source="/Resources/Build.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>
             <Separator/>
-            <Button Click="CommentButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Comment selected lines">
-                <Image Source="/Resources/CommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
-            </Button>
-            <Button Click="UncommentButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Uncomment selected lines">
-                <Image Source="/Resources/UncommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
-            </Button>
             <Button Click="CopyToClipboardMenuItem_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Copy active panel content to clipboard">
                 <Image Source="/Resources/Copy.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Button>

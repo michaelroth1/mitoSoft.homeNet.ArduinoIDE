@@ -1,4 +1,3 @@
-using ICSharpCode.AvalonEdit;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Services;
@@ -16,10 +15,9 @@ public partial class MainWindow : Window
 
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
-    private readonly TextEditorService _textEditorService;
-    private readonly GpioDocumentationService _gpioDocumentationService;
+    private readonly DocumentationService _gpioDocumentationService;
     private readonly FocusService _viewFocusService = new();
-    private DocumentService _documentService = null!;
+    private MainPanelService _documentService = null!;
 
     public ICommand FindCommand { get; }
 
@@ -31,8 +29,7 @@ public partial class MainWindow : Window
 
         _settingsService = new SettingsService();
         _fileService = new FileService();
-        _textEditorService = new TextEditorService();
-        _gpioDocumentationService = new GpioDocumentationService();
+        _gpioDocumentationService = new DocumentationService();
 
         this.LoadSettings();
         Loaded += MainWindow_Loaded;
@@ -58,7 +55,7 @@ public partial class MainWindow : Window
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        _documentService = new DocumentService(DocumentPane, () => ZoomSlider.Value, () => DockingManager.ActiveContent);
+        _documentService = new MainPanelService(DocumentPane, () => ZoomSlider.Value, () => DockingManager.ActiveContent);
         _documentService.DocumentViewAdded += (s, view) => _viewFocusService.Track(view);
 
         _viewFocusService.SetInitialView(YamlView);
@@ -261,46 +258,6 @@ public partial class MainWindow : Window
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
     {
         Close();
-    }
-
-    private void CommentMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        this.CommentSelectedLines();
-    }
-
-    private void CommentButton_Click(object sender, RoutedEventArgs e)
-    {
-        this.CommentSelectedLines();
-    }
-
-    private void CommentSelectedLines()
-    {
-        _textEditorService.CommentLines(YamlView.GetTextEditor());
-    }
-
-    private void UncommentMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        this.UncommentSelectedLines();
-    }
-
-    private void UncommentButton_Click(object sender, RoutedEventArgs e)
-    {
-        this.UncommentSelectedLines();
-    }
-
-    private void UncommentSelectedLines()
-    {
-        _textEditorService.UncommentLines(YamlView.GetTextEditor());
-    }
-
-    private void SelectHomeNetNodeMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        this.SelectYamlNode("homeNet:");
-    }
-
-    private void SelectYamlNode(string key)
-    {
-        _textEditorService.SelectYamlNode(YamlView.GetTextEditor(), key);
     }
 
     private void MissingHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)

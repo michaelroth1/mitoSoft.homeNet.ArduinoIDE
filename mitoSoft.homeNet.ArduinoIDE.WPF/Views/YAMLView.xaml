@@ -6,6 +6,18 @@
              xmlns:views="clr-namespace:mitoSoft.homeNet.ArduinoIDE.WPF.Views">
     <DockPanel>
         <views:FindBarControl x:Name="FindBar" DockPanel.Dock="Top" Visibility="Visible"/>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Click="CommentButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Comment selected lines">
+                <Image Source="/Resources/CommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Button>
+            <Button Click="UncommentButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Uncomment selected lines">
+                <Image Source="/Resources/UncommentCode.png" Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Button>
+            <Separator/>
+            <Button Click="SelectHomeNetNodeButton_Click" Style="{StaticResource IconButtonStyle}" ToolTip="Select homeNet node">
+                <TextBlock Text="homeNet:" FontFamily="Consolas" FontSize="11"/>
+            </Button>
+        </ToolBar>
         <avalonedit:TextEditor x:Name="YamlTextEditor"
                                ShowLineNumbers="True"
                                FontFamily="Consolas"

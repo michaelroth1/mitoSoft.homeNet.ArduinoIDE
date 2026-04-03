@@ -73,4 +73,19 @@ public partial class YamlView : UserControl, IEditorView
     {
         return YamlTextEditor;
     }
+
+    private void CommentButton_Click(object sender, RoutedEventArgs e)
+    {
+        _textEditorService.CommentLines(YamlTextEditor);
+    }
+
+    private void UncommentButton_Click(object sender, RoutedEventArgs e)
+    {
+        _textEditorService.UncommentLines(YamlTextEditor);
+    }
+
+    private void SelectHomeNetNodeButton_Click(object sender, RoutedEventArgs e)
+    {
+        _textEditorService.SelectYamlNode(YamlTextEditor, "homeNet:");
+    }
 }

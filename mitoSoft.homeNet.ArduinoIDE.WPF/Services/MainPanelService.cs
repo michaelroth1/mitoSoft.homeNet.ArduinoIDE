@@ -5,13 +5,13 @@ using Xceed.Wpf.AvalonDock.Layout;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
-public class DocumentService
+public class MainPanelService
 {
     private readonly LayoutDocumentPane _documentPane;
     private readonly Func<double> _getCurrentZoomFactor;
     private readonly Func<object?> _getActiveContent;
 
-    public DocumentService(LayoutDocumentPane documentPane, Func<double> getCurrentZoomFactor, Func<object?> getActiveContent)
+    public MainPanelService(LayoutDocumentPane documentPane, Func<double> getCurrentZoomFactor, Func<object?> getActiveContent)
     {
         _documentPane = documentPane;
         _getCurrentZoomFactor = getCurrentZoomFactor;

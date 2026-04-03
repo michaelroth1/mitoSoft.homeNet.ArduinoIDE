@@ -1,10 +1,9 @@
 using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.WPF.Models;
-using System.Text;
 
 namespace mitoSoft.homeNet.ArduinoIDE.WPF.Services;
 
-public class GpioDocumentationService
+public class DocumentationService
 {
     public List<ControllerGpioOverview> GenerateOverview(string yamlContent)
     {
