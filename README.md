@@ -39,50 +39,21 @@ Home Assistant YAML → mitoSoft.homeNet.ArduinoIDE → Arduino Code → Arduino
 - **Fehler- und Warnungs-Analyse** vor der Code-Generierung
 - **Multi-Document Interface** zum gleichzeitigen Bearbeiten mehrerer Controller
 
-## 📸 Screenshots
+## 📸 Die Anwendung
+
+Die WPF-Anwendung bietet eine benutzerfreundliche Oberfläche zur Verwaltung und Generierung von Arduino-Code. Das Tool verfügt über einen integrierten YAML-Editor mit Syntax-Highlighting, eine übersichtliche Controller-Liste zur schnellen Navigation zwischen verschiedenen Controllern sowie ein Fehleranalyse-Panel, das GPIO-Konflikte und fehlende Konfigurationen vor der Code-Generierung erkennt. Das Multi-Document Interface ermöglicht es, gleichzeitig mehrere Controller zu bearbeiten und die generierten Arduino-Sketches direkt zu vergleichen.
 
 ### Hauptansicht
 ![Hauptansicht](.screenshots/MainView.png)
 
-*YAML-Editor mit Controller-Liste und Fehleranalyse*
+Die Hauptansicht zeigt den YAML-Editor in der Mitte, die Controller-Liste auf der linken Seite und das Fehler/Warnungs-Panel unten. Mit den Buttons "Check" und "Build" können Sie die Konfiguration validieren und Arduino-Code generieren.
 
 ### Generierter Output
 ![Output](.screenshots/Output.png)
 
-*Automatisch generierter Arduino-Code für einen Controller*
-
-## 🏗️ Architektur
-
-Das Projekt besteht aus drei Hauptkomponenten:
-
-### 1. **mitoSoft.homeNet.ArduinoIDE.WPF**
-WPF-Benutzeroberfläche mit:
-- YAML-Editor
-- Controller-Verwaltung
-- Fehleranalyse
-- Code-Generierung
-
-### 2. **mitoSoft.homeNet.ArduinoIDE.ProgramParser**
-Parser und Code-Generator:
-- YAML-Parser für Home Assistant Konfigurationen
-- Arduino-Code-Generator
-- GPIO-Validierung
-- Template-Engine für Arduino-Sketches
-
-### 3. **mitoSoft.homeNet.Arduino** ([Repository](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20))
-Arduino-Bibliothek für Arduino Mega:
-- MQTT-Client-Implementierung (über Ethernet/WiFi-Shield)
-- Rollläden-Steuerung mit Positionsberechnung
-- Licht-/Schalter-Steuerung
-- Taster-Eingabe mit Debouncing
-- Home Assistant MQTT-Integration
+Nach dem Klick auf "Build" wird automatisch ein neuer Tab mit dem generierten Arduino-Code geöffnet. Der Code ist vollständig kompilierbar und kann direkt in die Arduino IDE kopiert oder als .ino-Datei gespeichert werden.
 
 ## 📋 Voraussetzungen
-
-### Entwicklung
-- .NET 10
-- Visual Studio 2022 oder höher
-- C# 14.0
 
 ### Für generierte Arduino-Sketches
 - Arduino IDE oder PlatformIO
@@ -91,23 +62,6 @@ Arduino-Bibliothek für Arduino Mega:
 - [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20)
 - Relais-Boards für Rollläden und Lichter
 - Physische Taster (optional)
-
-## 🔧 Installation
-
-1. Repository klonen:
-```bash
-git clone https://github.com/michaelroth1/mitoSoft.homeNet.ArduinoIDE.git
-```
-
-2. Solution in Visual Studio öffnen:
-```
-mitoSoft.homeNet.ArduinoIDE.sln
-```
-
-3. Build und Start:
-```
-F5 oder Build → Start Debugging
-```
 
 ## 📝 Verwendung
 
@@ -119,45 +73,45 @@ Das Tool arbeitet mit einer erweiterten Home Assistant YAML-Konfiguration. Diese
 ```yaml
 mqtt:
   light:
-  - name: eg_wohnzimmer
-    command_topic: "homenet/moeller/command/LichtWohnenDecke"
-    state_topic: "homenet/moeller/state/LichtWohnenDecke"
+  - name: light_living_room
+    command_topic: "homenet/controller1/command/light_1"
+    state_topic: "homenet/controller1/state/light_1"
     payload_on: "on"
     payload_off: "off"
     optimistic: false
-    unique_id: arduino_light_eg_wohnzimmer
+    unique_id: light_1
 
   cover:
-  - name: dg_schneider
-    command_topic: "MilasRoomController/In/Shutter2"
-    position_topic: "MilasRoomController/Out/Shutter2"
-    set_position_topic: "MilasRoomController/In/Shutter2/Pos"
+  - name: shutter_bedroom
+    command_topic: "homenet/controller2/command/shutter_1"
+    position_topic: "homenet/controller2/state/shutter_1"
+    set_position_topic: "homenet/controller2/command/shutter_1/pos"
     payload_open: "Up"
     payload_close: "Down"
     payload_stop: "Stop"
-    unique_id: arduino_shutter_dg_schneider
+    unique_id: shutter_1
 ```
 
 #### 2. homeNet-Abschnitt (Hardware-Zuordnung)
 ```yaml
 homeNet:
   controller:
-  - name: "MilaController"
-    subscribed_topic: "MilaController/+/+/command/#"
+  - name: "Controller1"
+    subscribed_topic: "homenet/controller1/+/+/command/#"
     unique_id: 1
-    ip: "192.168.2.200"
-    mac: "0xA8, 0x61, 0x0A, 0xAE, 0x65, 0x51"
-    broker: "192.168.2.100"
+    ip: "192.168.1.100"
+    mac: "0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01"
+    broker: "192.168.1.50"
     gpio_mode: "STANDARD"
 
   light:
-  - unique_id: arduino_light_eg_wohnzimmer
-    controller_id: 2
+  - unique_id: light_1
+    controller_id: 1
     gpio_pin: 15
     gpio_button: 14
 
   cover:
-  - unique_id: arduino_shutter_dg_schneider
+  - unique_id: shutter_1
     controller_id: 1
     gpio_open: 46
     gpio_close: 47
@@ -178,27 +132,27 @@ Erweitern Sie Ihre Home Assistant `configuration.yaml`:
 # Standard Home Assistant MQTT-Konfiguration
 mqtt:
   light:
-  - name: eg_flur
-    command_topic: "homenet/moeller/command/LichtEGFlur"
-    state_topic: "homenet/moeller/state/LichtEGFlur"
+  - name: light_hallway
+    command_topic: "homenet/controller1/command/light_2"
+    state_topic: "homenet/controller1/state/light_2"
     payload_on: "on"
     payload_off: "off"
-    unique_id: arduino_light_eg_flur
+    unique_id: light_2
 
 # homeNet Hardware-Zuordnung
 homeNet:
   controller:
   - name: "LightController"
-    subscribed_topic: "EG_OG_LichtController/+/+/command/#"
-    unique_id: 2
-    ip: "192.168.2.201"
-    mac: "0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D"
-    broker: "192.168.2.100"
+    subscribed_topic: "homenet/controller1/+/+/command/#"
+    unique_id: 1
+    ip: "192.168.1.100"
+    mac: "0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01"
+    broker: "192.168.1.50"
     gpio_mode: "INVERTED"
 
   light:
-  - unique_id: arduino_light_eg_flur
-    controller_id: 2
+  - unique_id: light_2
+    controller_id: 1
     gpio_pin: 2
     gpio_button: 1
 ```
@@ -224,7 +178,7 @@ homeNet:
 
 1. Generierten Code in Arduino IDE öffnen
 2. [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20) installieren
-3. Board auswählen (ESP8266/ESP32)
+3. Board auswählen (Arduino Mega)
 4. Sketch hochladen
 
 ### Erweiterte Features
@@ -236,15 +190,15 @@ Fügen Sie benutzerdefinierten Code zu Ihrem Controller hinzu:
 homeNet:
   controller:
   - name: "ShutterController"
-    unique_id: 3
+    unique_id: 2
     # ... weitere Konfiguration ...
     additional_declaration: |-
-      // Windmesser
-      DebouncingInput emergencyUp(49);
+      // Wind-Sensor
+      DebouncingInput windAlarm(49);
     additional_code: |-
-      if ((topic == "ShutterController/cover/jalousie/command/mode" && message == "emergency") || emergencyUp.risingEdge()) {
-        eg_jalousie_schneider.referenceRun();
-        eg_terrasse.referenceRun();
+      if ((topic == "homenet/controller2/blind/command" && message == "emergency") || windAlarm.risingEdge()) {
+        blind_1.referenceRun();
+        blind_2.referenceRun();
       }
 ```
 
@@ -258,7 +212,7 @@ homeNet:
 
 ```yaml
 light:
-- unique_id: arduino_light_dg_decke
+- unique_id: light_3
   controller_id: 1
   gpio_pin: 48
   gpio_button: 27
@@ -285,30 +239,30 @@ Definiert die Entities in Home Assistant (standard MQTT-Integration):
 ```yaml
 mqtt:
   light:
-  - name: eg_wohnzimmer              # Anzeigename in Home Assistant
-    command_topic: "homenet/moeller/command/LichtWohnenDecke"
-    state_topic: "homenet/moeller/state/LichtWohnenDecke"
+  - name: light_living_room        # Anzeigename in Home Assistant
+    command_topic: "homenet/controller1/command/light_1"
+    state_topic: "homenet/controller1/state/light_1"
     payload_on: "on"
     payload_off: "off"
     optimistic: false                # true = sofortiges Feedback ohne State
-    unique_id: arduino_light_eg_wohnzimmer  # Verknüpfung mit homeNet
+    unique_id: light_1               # Verknüpfung mit homeNet
 ```
 
 #### MQTT Cover (Rollläden/Jalousien)
 ```yaml
 mqtt:
   cover:
-  - name: dg_schneider
-    command_topic: "MilasRoomController/In/Shutter2"
-    position_topic: "MilasRoomController/Out/Shutter2"
-    set_position_topic: "MilasRoomController/In/Shutter2/Pos"
+  - name: shutter_bedroom
+    command_topic: "homenet/controller2/command/shutter_1"
+    position_topic: "homenet/controller2/state/shutter_1"
+    set_position_topic: "homenet/controller2/command/shutter_1/pos"
     payload_open: "Up"
     payload_close: "Down"
     payload_stop: "Stop"
     position_open: 0                 # Position vollständig geöffnet
     position_closed: 100             # Position vollständig geschlossen
     optimistic: false
-    unique_id: arduino_shutter_dg_schneider  # Verknüpfung mit homeNet
+    unique_id: shutter_1             # Verknüpfung mit homeNet
 ```
 
 ### homeNet-Abschnitt
@@ -321,21 +275,21 @@ Grundkonfiguration für jeden Arduino Mega Controller:
 ```yaml
 homeNet:
   controller:
-  - name: "MilaController"           # Name des Controllers
-    subscribed_topic: "MilaController/+/+/command/#"  # MQTT Subscribe Pattern
+  - name: "Controller1"             # Name des Controllers
+    subscribed_topic: "homenet/controller1/+/+/command/#"  # MQTT Subscribe Pattern
     unique_id: 1                     # Eindeutige Controller-ID
-    ip: "192.168.2.200"              # Statische IP-Adresse
-    mac: "0xA8, 0x61, 0x0A, 0xAE, 0x65, 0x51"  # MAC-Adresse
-    broker: "192.168.2.100"          # MQTT-Broker IP
+    ip: "192.168.1.100"              # Statische IP-Adresse
+    mac: "0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01"  # MAC-Adresse
+    broker: "192.168.1.50"           # MQTT-Broker IP
     broker_username: "user"          # Optional: MQTT-Benutzername
     broker_password: "passwd"        # Optional: MQTT-Passwort
     gpio_mode: "STANDARD"            # STANDARD oder INVERTED
     additional_declaration: |-       # Optional: Zusätzlicher Code (Deklarationen)
-      DebouncingInput emergencyUp(49);
+      DebouncingInput emergencyButton(49);
     additional_setup: |-             # Optional: Zusätzlicher Code (Setup)
       pinMode(49, INPUT_PULLUP);
     additional_code: |-              # Optional: Zusätzlicher Code (Loop)
-      if (emergencyUp.risingEdge()) {
+      if (emergencyButton.risingEdge()) {
         // Custom Logic
       }
 ```
@@ -355,9 +309,9 @@ homeNet:
 ```yaml
 homeNet:
   light:
-  - unique_id: arduino_light_eg_wohnzimmer  # Muss mit MQTT unique_id übereinstimmen
-    description: "Wohnzimmer Deckenleuchte"  # Optional: Beschreibung
-    controller_id: 2                # Referenz zur Controller unique_id
+  - unique_id: light_1              # Muss mit MQTT unique_id übereinstimmen
+    description: "Living Room Light"  # Optional: Beschreibung
+    controller_id: 1                # Referenz zur Controller unique_id
     gpio_pin: 15                    # GPIO-Pin für Relais/Ausgang
     gpio_button: 14                 # GPIO-Pin für physischen Taster
     state_off: 0                    # Optional: MQTT-Wert für "Aus" (default: "off")
@@ -374,8 +328,8 @@ homeNet:
 ```yaml
 homeNet:
   cover:
-  - unique_id: arduino_shutter_dg_schneider  # Muss mit MQTT unique_id übereinstimmen
-    description: "DG Rollladen Schneiderseite"  # Optional: Beschreibung
+  - unique_id: shutter_1            # Muss mit MQTT unique_id übereinstimmen
+    description: "Bedroom Shutter"    # Optional: Beschreibung
     controller_id: 1                # Referenz zur Controller unique_id
     gpio_open: 46                   # GPIO-Pin für Relais "Öffnen" (Motor Richtung 1)
     gpio_close: 47                  # GPIO-Pin für Relais "Schließen" (Motor Richtung 2)
@@ -398,58 +352,58 @@ homeNet:
 
 mqtt:
   light:
-  - name: eg_flur
-    command_topic: "homenet/moeller/command/LichtEGFlur"
-    state_topic: "homenet/moeller/state/LichtEGFlur"
+  - name: light_hallway
+    command_topic: "homenet/controller1/command/light_2"
+    state_topic: "homenet/controller1/state/light_2"
     payload_on: "on"
     payload_off: "off"
-    unique_id: arduino_light_eg_flur
+    unique_id: light_2
 
   cover:
-  - name: eg_terrasse
-    command_topic: "ShutterController/In/Jalousie"
-    position_topic: "ShutterController/Out/Jalousie"
-    set_position_topic: "ShutterController/In/Jalousie/Pos"
+  - name: blind_terrace
+    command_topic: "homenet/controller2/command/blind_1"
+    position_topic: "homenet/controller2/state/blind_1"
+    set_position_topic: "homenet/controller2/command/blind_1/pos"
     payload_open: "up"
     payload_close: "down"
     payload_stop: "stop"
     position_open: 0
     position_closed: 100
-    unique_id: arduino_shutter_eg_terrasse
+    unique_id: blind_1
 
 homeNet:
   controller:
   - name: "LightController"
-    subscribed_topic: "EG_OG_LichtController/+/+/command/#"
-    unique_id: 2
-    ip: "192.168.2.201"
-    mac: "0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3D"
-    broker: "192.168.2.100"
+    subscribed_topic: "homenet/controller1/+/+/command/#"
+    unique_id: 1
+    ip: "192.168.1.100"
+    mac: "0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x01"
+    broker: "192.168.1.50"
     gpio_mode: "INVERTED"
 
   - name: "ShutterController"
-    subscribed_topic: "ShutterController/+/+/command/#"
-    unique_id: 3
-    ip: "192.168.2.202"
-    mac: "0xA8, 0x61, 0x0A, 0xAE, 0x16, 0x3E"
-    broker: "192.168.2.100"
+    subscribed_topic: "homenet/controller2/+/+/command/#"
+    unique_id: 2
+    ip: "192.168.1.101"
+    mac: "0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x02"
+    broker: "192.168.1.50"
     gpio_mode: "INVERTED"
     additional_declaration: |-
-      DebouncingInput emergencyUp(49);
+      DebouncingInput windAlarm(49);
     additional_code: |-
-      if (emergencyUp.risingEdge()) {
-        eg_terrasse.referenceRun();  // Notfall: Alle Jalousien hochfahren
+      if (windAlarm.risingEdge()) {
+        blind_1.referenceRun();  // Notfall: Alle Jalousien hochfahren
       }
 
   light:
-  - unique_id: arduino_light_eg_flur
-    controller_id: 2
+  - unique_id: light_2
+    controller_id: 1
     gpio_pin: 2
     gpio_button: 1
 
   cover:
-  - unique_id: arduino_shutter_eg_terrasse
-    controller_id: 3
+  - unique_id: blind_1
+    controller_id: 2
     gpio_open: 26
     gpio_close: 27
     gpio_open_button: 24
