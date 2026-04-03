@@ -8,7 +8,12 @@ public partial class MissingHomeNetElementsView : UserControl
     public MissingHomeNetElementsView()
     {
         InitializeComponent();
-        this.SetupTextEditor();
+        TextEditor.ManipulationBoundaryFeedback += (s, e) => { e.Handled = true; };
+        TextEditor.PreviewMouseWheel += (s, e) =>
+        {
+            TextEditor.ScrollToVerticalOffset(TextEditor.VerticalOffset - e.Delta);
+            e.Handled = true;
+        };
     }
 
     public void SetContent(string content)
@@ -24,20 +29,5 @@ public partial class MissingHomeNetElementsView : UserControl
     public TextEditor GetTextEditor()
     {
         return TextEditor;
-    }
-
-    private void SetupTextEditor()
-    {
-        TextEditor.ManipulationBoundaryFeedback += (s, e) => { e.Handled = true; };
-
-        TextEditor.PreviewMouseWheel += (s, e) =>
-        {
-            var editor = s as TextEditor;
-            if (editor != null)
-            {
-                e.Handled = true;
-                editor.ScrollToVerticalOffset(editor.VerticalOffset - e.Delta);
-            }
-        };
     }
 }

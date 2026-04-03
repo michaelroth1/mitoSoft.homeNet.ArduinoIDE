@@ -12,5 +12,8 @@
                            FontSize="11"
                            Background="White"
                            IsManipulationEnabled="True"
+                           ScrollViewer.PanningMode="VerticalOnly"
+                           ScrollViewer.PanningDeceleration="0.001"
+                           ScrollViewer.PanningRatio="1.0"
                            helpers:SyntaxHighlightingHelper.HighlightingFile="/Editor/Arduino.xshd"/>
 </UserControl>
