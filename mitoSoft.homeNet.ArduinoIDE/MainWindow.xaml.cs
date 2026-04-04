@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
+using mitoSoft.homeNet.ArduinoIDE.Contracts;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 

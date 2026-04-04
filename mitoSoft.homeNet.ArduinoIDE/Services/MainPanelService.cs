@@ -1,3 +1,4 @@
+using mitoSoft.homeNet.ArduinoIDE.Contracts;
 using mitoSoft.homeNet.ArduinoIDE.Models;
 using mitoSoft.homeNet.ArduinoIDE.Views;
 using System.Windows;

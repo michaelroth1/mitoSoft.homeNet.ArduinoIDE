@@ -1,4 +1,5 @@
 using ICSharpCode.AvalonEdit;
+using mitoSoft.homeNet.ArduinoIDE.Contracts;
 using mitoSoft.homeNet.ArduinoIDE.Services;
 using System.Windows;
 using System.Windows.Controls;

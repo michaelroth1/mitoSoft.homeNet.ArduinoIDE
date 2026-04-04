@@ -1,4 +1,4 @@
-﻿namespace mitoSoft.homeNet.ArduinoIDE;
+﻿namespace mitoSoft.homeNet.ArduinoIDE.Contracts;
 
 public interface ISaveable
 {
