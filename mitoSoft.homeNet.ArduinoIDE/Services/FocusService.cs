@@ -13,6 +13,11 @@ public class FocusService
         this.Track(view);
     }
 
+    public void SetFocusedView(FrameworkElement view)
+    {
+        FocusedView = view;
+    }
+
     public void Track(FrameworkElement view)
     {
         view.GotKeyboardFocus += (s, e) => FocusedView = view;

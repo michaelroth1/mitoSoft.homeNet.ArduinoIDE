@@ -20,21 +20,20 @@ public class MainPanelService
 
     public event EventHandler<FrameworkElement>? DocumentViewAdded;
 
-    public void CreateOrUpdateOutputDocument(string controllerName, string content)
+    public FrameworkElement CreateOrUpdateOutputDocument(string controllerName, string content)
     {
         var existingDoc = _documentPane.Children.OfType<LayoutDocument>()
             .FirstOrDefault(d => d.Title == $"Output: {controllerName}");
 
         if (existingDoc != null)
         {
-            this.UpdateExistingDocument(existingDoc, content);
-            return;
+            return this.UpdateExistingDocument(existingDoc, content);
         }
 
-        this.CreateNewDocument(controllerName, content);
+        return this.CreateNewDocument(controllerName, content);
     }
 
-    private void UpdateExistingDocument(LayoutDocument document, string content)
+    private FrameworkElement UpdateExistingDocument(LayoutDocument document, string content)
     {
         var view = document.Content as OutputView;
         if (view != null)
@@ -43,9 +42,10 @@ public class MainPanelService
         }
         document.IsSelected = true;
         document.IsActive = true;
+        return view!;
     }
 
-    private void CreateNewDocument(string controllerName, string content)
+    private FrameworkElement CreateNewDocument(string controllerName, string content)
     {
         var view = new OutputView();
         view.SetContent(content);
@@ -62,6 +62,7 @@ public class MainPanelService
         document.IsSelected = true;
         document.IsActive = true;
         DocumentViewAdded?.Invoke(this, view);
+        return view;
     }
 
     public LayoutDocument? GetActiveDocument()

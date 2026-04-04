@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace mitoSoft.homeNet.ArduinoIDE.Views;
 
@@ -19,14 +20,21 @@ public partial class FindBarControl : UserControl
     public FindBarControl()
     {
         InitializeComponent();
+        IsVisibleChanged += (s, e) =>
+        {
+            if ((bool)e.NewValue)
+                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+                {
+                    Keyboard.Focus(SearchTextBox);
+                    SearchTextBox.SelectAll();
+                });
+        };
     }
 
     public void Show(string initialText)
     {
         SearchTextBox.Text = initialText;
         Visibility = Visibility.Visible;
-        SearchTextBox.Focus();
-        SearchTextBox.SelectAll();
     }
 
     public void SetNotFoundState(bool notFound)
@@ -39,6 +47,7 @@ public partial class FindBarControl : UserControl
     private void FindNextButton_Click(object sender, RoutedEventArgs e)
     {
         FindNextRequested?.Invoke(this, SearchTextBox.Text);
+        this.FocusSearchBox();
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +60,7 @@ public partial class FindBarControl : UserControl
         if (e.Key == Key.Enter)
         {
             FindNextRequested?.Invoke(this, SearchTextBox.Text);
+            this.FocusSearchBox();
             e.Handled = true;
         }
         else if (e.Key == Key.Escape)
@@ -63,5 +73,13 @@ public partial class FindBarControl : UserControl
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         SetNotFoundState(false);
+    }
+
+    private void FocusSearchBox()
+    {
+        Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+        {
+            Keyboard.Focus(SearchTextBox);
+        });
     }
 }

@@ -174,7 +174,8 @@ public partial class MainWindow : Window
 
             var program = programBuilder.Build(config);
 
-            _documentService.CreateOrUpdateOutputDocument(controller.Name, program);
+            var view = _documentService.CreateOrUpdateOutputDocument(controller.Name, program);
+            _viewFocusService.SetFocusedView(view);
 
             programBuilder.Check();
 

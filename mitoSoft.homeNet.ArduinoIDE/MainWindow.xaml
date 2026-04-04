@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:mitoSoft.homeNet.ArduinoIDE"
         xmlns:p="clr-namespace:mitoSoft.homeNet.ArduinoIDE.Properties"
         mc:Ignorable="d"
-        Title="homeNet" Height="600" Width="1000"
+        Title="homeNet IDE" Height="600" Width="1000"
         WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>

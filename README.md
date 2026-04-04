@@ -59,7 +59,7 @@ Nach dem Klick auf "Build" wird automatisch ein neuer Tab mit dem generierten Ar
 - Arduino IDE oder PlatformIO
 - Arduino Mega (ATmega2560)
 - Ethernet Shield oder WiFi Shield (für MQTT-Kommunikation)
-- [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20)
+- [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino30)
 - Relais-Boards für Rollläden und Lichter
 - Physische Taster (optional)
 
@@ -177,7 +177,7 @@ homeNet:
 ### 5. Auf Arduino hochladen
 
 1. Generierten Code in Arduino IDE öffnen
-2. [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20) installieren
+2. [mitoSoft.homeNet.Arduino Library](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino30) installieren
 3. Board auswählen (Arduino Mega)
 4. Sketch hochladen
 
@@ -431,7 +431,7 @@ Siehe [LICENSE](LICENSE) Datei für Details.
 
 ## 🔗 Verwandte Projekte
 
-- [mitoSoft.homeNet.Arduino](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino20) - Arduino-Bibliothek für die generierten Sketches
+- [mitoSoft.homeNet.Arduino](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino30) - Arduino-Bibliothek für
 - [Home Assistant](https://www.home-assistant.io/) - Open Source Home Automation Platform
 
 ## 📧 Kontakt
