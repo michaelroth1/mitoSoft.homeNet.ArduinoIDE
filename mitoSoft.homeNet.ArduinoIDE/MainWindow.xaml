@@ -13,6 +13,7 @@
         WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <!-- Menu -->
@@ -23,7 +24,12 @@
                         <Image Source="/Resources/OpenFile.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Resources.Menu_Save}" Click="SaveMenuItem_Click">
+                <MenuItem Header="{x:Static p:Resources.Menu_Save}" Click="SaveMenuItem_Click" InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Save.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.Menu_SaveAs}" Click="SaveAsMenuItem_Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Save.png" Width="16" Height="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Icon>

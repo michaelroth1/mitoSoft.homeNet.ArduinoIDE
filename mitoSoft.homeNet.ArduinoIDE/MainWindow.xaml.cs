@@ -3,16 +3,20 @@ using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
 using mitoSoft.homeNet.ArduinoIDE.Services;
 using mitoSoft.homeNet.ArduinoIDE.Views;
 using Res = mitoSoft.homeNet.ArduinoIDE.Properties.Resources;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using HomeNet = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.HomeNet;
 
 namespace mitoSoft.homeNet.ArduinoIDE;
 
 public partial class MainWindow : Window
 {
-    private string _currentFilePath = string.Empty;
+    private string _currentFileName = string.Empty;
+
+    private readonly DispatcherTimer _statusClearTimer = new();
 
     private readonly SettingsService _settingsService;
     private readonly FileService _fileService;
@@ -20,11 +24,17 @@ public partial class MainWindow : Window
     private MainPanelService _documentService = null!;
 
     public ICommand FindCommand { get; }
+    public ICommand SaveCommand { get; }
 
     public MainWindow()
     {
         InitializeComponent();
+
+        _statusClearTimer.Interval = TimeSpan.FromSeconds(5);
+        _statusClearTimer.Tick += StatusClearTimer_Tick;
+
         FindCommand = new RelayCommand(_ => _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty));
+        SaveCommand = new RelayCommand(_ => this.Save());
         DataContext = this;
 
         _settingsService = new SettingsService();
@@ -59,14 +69,16 @@ public partial class MainWindow : Window
 
         _viewFocusService.SetInitialView(YamlView);
 
-        YamlView.Text = _settingsService.GetYamlContent();
+        var lastFile = _settingsService.GetLastOpenedYamlFile();
+        if (!string.IsNullOrEmpty(lastFile) && File.Exists(lastFile))
+        {
+            _currentFileName = lastFile;
+            YamlView.Text = _fileService.ReadFile(_currentFileName);
+            SetStatusText(string.Format(Res.Msg_Opened, _currentFileName));
+        }
 
         // Subscribe to TextChanged event
-        YamlView.TextChanged += (s, args) =>
-        {
-            this.SaveYamlInSettings();
-            this.UpdateControllerList();
-        };
+        YamlView.TextChanged += (s, args) => this.UpdateControllerList();
 
         // Apply zoom after UI is fully initialized
         this.ApplyZoom();
@@ -79,9 +91,17 @@ public partial class MainWindow : Window
         _settingsService.SaveWindowSettings(Width, Height, ZoomSlider.Value);
     }
 
-    private void SaveYamlInSettings()
+    private void SetStatusText(string text)
     {
-        _settingsService.SaveYamlContent(YamlView.Text);
+        StatusText.Text = text;
+        _statusClearTimer.Stop();
+        _statusClearTimer.Start();
+    }
+
+    private void StatusClearTimer_Tick(object? sender, EventArgs e)
+    {
+        _statusClearTimer.Stop();
+        StatusText.Text = string.Empty;
     }
 
     private void UpdateControllerList()
@@ -179,11 +199,11 @@ public partial class MainWindow : Window
 
             programBuilder.Check();
 
-            StatusText.Text = string.Format(Res.Msg_BuildSuccessful, controller.Name);
+            SetStatusText(string.Format(Res.Msg_BuildSuccessful, controller.Name));
         }
         catch (Exception ex)
         {
-            StatusText.Text = string.Format(Res.Msg_BuildFailed, controller.Name);
+            SetStatusText(string.Format(Res.Msg_BuildFailed, controller.Name));
             throw new InvalidOperationException(string.Format(Res.Msg_BuildError, controller.Name, ex.Message), ex);
         }
     }
@@ -206,13 +226,39 @@ public partial class MainWindow : Window
         var filePath = _fileService.OpenYamlFile();
         if (filePath != null)
         {
-            _currentFilePath = filePath;
-            YamlView.Text = _fileService.ReadFile(_currentFilePath);
-            StatusText.Text = string.Format(Res.Msg_Opened, _currentFilePath);
+            _currentFileName = filePath;
+            YamlView.Text = _fileService.ReadFile(_currentFileName);
+            _settingsService.SaveLastOpenedYamlFile(_currentFileName);
+            SetStatusText(string.Format(Res.Msg_Opened, _currentFileName));
         }
     }
 
     private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        this.Save();
+    }
+
+    private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        this.SaveAs();
+    }
+
+    private void Save()
+    {
+        if (_viewFocusService.FocusedView is YamlView &&
+            !string.IsNullOrEmpty(_currentFileName) &&
+            File.Exists(_currentFileName))
+        {
+            _fileService.WriteFile(_currentFileName, YamlView.Text);
+            SetStatusText(string.Format(Res.Msg_Saved, _currentFileName));
+        }
+        else
+        {
+            this.SaveAs();
+        }
+    }
+
+    private void SaveAs()
     {
         if (_viewFocusService.FocusedView is YamlView)
         {
@@ -220,10 +266,10 @@ public partial class MainWindow : Window
                 filter: Res.Filter_Yaml,
                 defaultFileName: "config.yaml",
                 content: YamlView.Text,
-                currentFilePath: _currentFilePath);
+                currentFilePath: _currentFileName);
 
             if (saved != null)
-                _currentFilePath = saved;
+                _currentFileName = saved;
         }
         else if (_viewFocusService.FocusedView is OutputView outputView)
         {
@@ -249,7 +295,7 @@ public partial class MainWindow : Window
         if (filePath != null)
         {
             _fileService.WriteFile(filePath, content);
-            StatusText.Text = string.Format(Res.Msg_Saved, filePath);
+            SetStatusText(string.Format(Res.Msg_Saved, filePath));
         }
 
         return filePath;
@@ -261,7 +307,7 @@ public partial class MainWindow : Window
         if (!string.IsNullOrEmpty(textEditor?.Text))
         {
             Clipboard.SetText(textEditor.Text);
-            StatusText.Text = Res.Msg_CopiedToClipboard;
+            SetStatusText(Res.Msg_CopiedToClipboard);
         }
     }
 
@@ -326,7 +372,7 @@ public partial class MainWindow : Window
         }
 
         _documentService.CreateOrUpdateGpioDocumentation(overviews);
-        StatusText.Text = Res.Msg_GpioDocumentationCreated;
+        SetStatusText(Res.Msg_GpioDocumentationCreated);
     }
 
     private void LayoutAnchorable_Hiding(object sender, System.ComponentModel.CancelEventArgs e)

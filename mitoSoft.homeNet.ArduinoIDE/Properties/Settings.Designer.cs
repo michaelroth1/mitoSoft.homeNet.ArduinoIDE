@@ -70,5 +70,17 @@ namespace mitoSoft.homeNet.ArduinoIDE.Properties {
                 this["ZoomFactor"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastOpenedYamlFile {
+            get {
+                return ((string)(this["LastOpenedYamlFile"]));
+            }
+            set {
+                this["LastOpenedYamlFile"] = value;
+            }
+        }
     }
 }

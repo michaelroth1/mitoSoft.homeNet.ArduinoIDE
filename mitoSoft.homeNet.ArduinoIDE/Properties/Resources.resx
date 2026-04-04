@@ -67,7 +67,10 @@
     <value>_Open...</value>
   </data>
   <data name="Menu_Save" xml:space="preserve">
-    <value>_Save...</value>
+    <value>_Save</value>
+  </data>
+  <data name="Menu_SaveAs" xml:space="preserve">
+    <value>Save _As...</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>E_xit</value>

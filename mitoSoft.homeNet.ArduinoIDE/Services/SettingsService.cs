@@ -17,14 +17,14 @@ public class SettingsService
         Properties.Settings.Default.Save();
     }
 
-    public string GetYamlContent()
+    public string GetLastOpenedYamlFile()
     {
-        return Properties.Settings.Default.YamlContent;
+        return Properties.Settings.Default.LastOpenedYamlFile;
     }
 
-    public void SaveYamlContent(string content)
+    public void SaveLastOpenedYamlFile(string filePath)
     {
-        Properties.Settings.Default.YamlContent = content;
+        Properties.Settings.Default.LastOpenedYamlFile = filePath;
         Properties.Settings.Default.Save();
     }
 }

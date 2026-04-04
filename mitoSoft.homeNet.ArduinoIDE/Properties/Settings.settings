@@ -14,5 +14,8 @@
     <Setting Name="ZoomFactor" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1.0</Value>
     </Setting>
+    <Setting Name="LastOpenedYamlFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

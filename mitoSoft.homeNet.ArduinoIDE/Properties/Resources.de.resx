@@ -126,6 +126,9 @@
   <data name="Menu_Save" xml:space="preserve">
     <value>_Speichern...</value>
   </data>
+  <data name="Menu_SaveAs" xml:space="preserve">
+    <value>_Speichern unter...</value>
+  </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>B_eenden</value>
   </data>
