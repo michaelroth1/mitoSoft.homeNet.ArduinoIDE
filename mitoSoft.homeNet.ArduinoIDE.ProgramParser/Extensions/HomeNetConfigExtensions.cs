@@ -74,6 +74,7 @@ public static class HomeNetConfigExtensions
                 ControllerId = homeNetLight.ControllerId,
                 StateOn = homeNetLight.StateOn,
                 StateOff = homeNetLight.StateOff,
+                SwitchMode = homeNetLight.SwitchMode,
             };
 
             mergedLights.Add(merged);
