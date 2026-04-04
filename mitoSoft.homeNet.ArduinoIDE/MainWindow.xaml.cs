@@ -84,6 +84,8 @@ public partial class MainWindow : Window
         // Apply zoom after UI is fully initialized
         this.ApplyZoom();
 
+        this.ClearErrors();
+
         this.UpdateControllerList();
     }
 
@@ -123,47 +125,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ControllerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        ErrorTextBox.Text = string.Empty;
-    }
+    private void ControllerListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
+        this.ClearErrors();
 
-    private void CheckButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void CheckButton_Click(object sender, RoutedEventArgs e) =>
         this.CheckErrors();
-    }
-
-    private void CheckErrors()
-    {
-        ErrorTextBox.Text = string.Empty;
-
-        string? controllerName = ControllerListBox.SelectedItem as string;
-
-        if (string.IsNullOrWhiteSpace(controllerName))
-        {
-            ErrorTextBox.Text = Res.Msg_NoControllerSelected;
-            return;
-        }
-
-        var parser = new YamlParser(YamlView.Text);
-        var controller = parser.GetController(controllerName);
-
-        if (controller == null)
-        {
-            ErrorTextBox.Text = Res.Msg_ControllerNotFound;
-            return;
-        }
-
-        var controllerConfig = parser.Parse(controller.UniqueId);
-
-        ErrorTextBox.Text += controllerConfig.GetGpioErrors();
-        ErrorTextBox.Text += controllerConfig.GetPartnerWarnings();
-
-        if (string.IsNullOrWhiteSpace(ErrorTextBox.Text))
-        {
-            ErrorTextBox.Text = Res.Msg_NoWarningsFound;
-        }
-    }
 
     private void BuildButton_Click(object sender, RoutedEventArgs e)
     {
@@ -209,6 +175,41 @@ public partial class MainWindow : Window
         }
     }
 
+    private void CheckErrors()
+    {
+        this.ClearErrors();
+
+        string? controllerName = ControllerListBox.SelectedItem as string;
+
+        if (string.IsNullOrWhiteSpace(controllerName))
+        {
+            ErrorTextBox.Text = Res.Msg_NoControllerSelected;
+            return;
+        }
+
+        var parser = new YamlParser(YamlView.Text);
+        var controller = parser.GetController(controllerName);
+
+        if (controller == null)
+        {
+            ErrorTextBox.Text = Res.Msg_ControllerNotFound;
+            return;
+        }
+
+        var controllerConfig = parser.Parse(controller.UniqueId);
+
+        ErrorTextBox.Text += controllerConfig.GetGpioErrors();
+        ErrorTextBox.Text += controllerConfig.GetPartnerWarnings();
+
+        if (string.IsNullOrWhiteSpace(ErrorTextBox.Text))
+        {
+            ErrorTextBox.Text = Res.Msg_NoWarningsFound;
+        }
+    }
+
+    private void ClearErrors() =>
+        ErrorTextBox.Text = string.Empty;
+
     private HomeNet.Controller? GetController()
     {
         string? controllerName = ControllerListBox.SelectedItem as string;
@@ -234,15 +235,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
-    {
+    private void SaveMenuItem_Click(object sender, RoutedEventArgs e) =>
         this.Save();
-    }
 
-    private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
-    {
+    private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e) =>
         this.SaveAs();
-    }
 
     private void Save()
     {
@@ -295,10 +292,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
-    {
+    private void ExitMenuItem_Click(object sender, RoutedEventArgs e) =>
         Close();
-    }
 
     private void MissingHomeNetElementsMenuItem_Click(object sender, RoutedEventArgs e)
     {
@@ -308,20 +303,14 @@ public partial class MainWindow : Window
         _viewFocusService.SetFocusedView(view);
     }
 
-    private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-    {
+    private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) =>
         this.ApplyZoom();
-    }
 
-    private void ApplyZoom()
-    {
+    private void ApplyZoom() =>
         _documentService?.UpdateZoomForAllEditorViews(ZoomSlider.Value);
-    }
 
-    private void FindMenuItem_Click(object sender, RoutedEventArgs e)
-    {
+    private void FindMenuItem_Click(object sender, RoutedEventArgs e) =>
         _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty);
-    }
 
     private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)
     {
