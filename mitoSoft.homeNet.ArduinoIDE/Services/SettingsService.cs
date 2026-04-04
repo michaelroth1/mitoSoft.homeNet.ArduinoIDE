@@ -1,30 +1,37 @@
+using mitoSoft.homeNet.ArduinoIDE.Properties;
+
 namespace mitoSoft.homeNet.ArduinoIDE.Services;
 
 public class SettingsService
 {
+    private readonly Settings _properties;
+
+    public SettingsService()
+    {
+        _properties = Properties.Settings.Default;
+    }
+
     public void LoadWindowSettings(out double width, out double height, out double zoomFactor)
     {
-        width = Properties.Settings.Default.WindowWidth;
-        height = Properties.Settings.Default.WindowHeight;
-        zoomFactor = Properties.Settings.Default.ZoomFactor;
+        width = _properties.WindowWidth;
+        height = _properties.WindowHeight;
+        zoomFactor = _properties.ZoomFactor;
     }
 
     public void SaveWindowSettings(double width, double height, double zoomFactor)
     {
-        Properties.Settings.Default.WindowWidth = width;
-        Properties.Settings.Default.WindowHeight = height;
-        Properties.Settings.Default.ZoomFactor = zoomFactor;
-        Properties.Settings.Default.Save();
+        _properties.WindowWidth = width;
+        _properties.WindowHeight = height;
+        _properties.ZoomFactor = zoomFactor;
+        _properties.Save();
     }
 
-    public string GetLastOpenedYamlFile()
-    {
-        return Properties.Settings.Default.LastOpenedYamlFile;
-    }
+    public string GetLastOpenedYamlFile() =>
+        _properties.LastOpenedYamlFile;
 
     public void SaveLastOpenedYamlFile(string filePath)
     {
-        Properties.Settings.Default.LastOpenedYamlFile = filePath;
-        Properties.Settings.Default.Save();
+        _properties.LastOpenedYamlFile = filePath;
+        _properties.Save();
     }
 }

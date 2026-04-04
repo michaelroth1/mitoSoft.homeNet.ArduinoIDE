@@ -23,11 +23,9 @@ public partial class FindBarControl : UserControl
         IsVisibleChanged += (s, e) =>
         {
             if ((bool)e.NewValue)
-                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
-                {
-                    Keyboard.Focus(SearchTextBox);
-                    SearchTextBox.SelectAll();
-                });
+            {
+                this.FocusSearchBox();
+            }
         };
     }
 
@@ -35,6 +33,10 @@ public partial class FindBarControl : UserControl
     {
         SearchTextBox.Text = initialText;
         Visibility = Visibility.Visible;
+        if (!string.IsNullOrEmpty(initialText))
+        {
+            this.FocusSearchBox();
+        }
     }
 
     public void SetNotFoundState(bool notFound)
@@ -50,10 +52,8 @@ public partial class FindBarControl : UserControl
         this.FocusSearchBox();
     }
 
-    private void CloseButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void CloseButton_Click(object sender, RoutedEventArgs e) =>
         CloseRequested?.Invoke(this, EventArgs.Empty);
-    }
 
     private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
     {
@@ -70,16 +70,15 @@ public partial class FindBarControl : UserControl
         }
     }
 
-    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        SetNotFoundState(false);
-    }
+    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+        this.SetNotFoundState(false);
 
     private void FocusSearchBox()
     {
         Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
         {
             Keyboard.Focus(SearchTextBox);
+            SearchTextBox.SelectAll();
         });
     }
 }

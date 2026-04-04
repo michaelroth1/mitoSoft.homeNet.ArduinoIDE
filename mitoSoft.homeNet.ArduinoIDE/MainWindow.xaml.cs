@@ -317,7 +317,9 @@ public partial class MainWindow : Window
         if (_viewFocusService.FocusedView != null &&
             _viewFocusService.FocusedView is IEditorView view)
         {
-            view.ShowFindBar(string.Empty);
+            var editor = view.GetTextEditor();
+            var selectedText = editor.SelectedText ?? string.Empty;
+            view.ShowFindBar(selectedText);
         }
     }
 
