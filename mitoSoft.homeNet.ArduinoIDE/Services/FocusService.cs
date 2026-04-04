@@ -7,12 +7,6 @@ public class FocusService
     public FrameworkElement? FocusedView { get; private set; }
     public IEditorView? FocusedEditorView => FocusedView as IEditorView;
 
-    public void SetInitialView(FrameworkElement view)
-    {
-        FocusedView = view;
-        this.Track(view);
-    }
-
     public void SetFocusedView(FrameworkElement view)
     {
         FocusedView = view;
@@ -20,6 +14,6 @@ public class FocusService
 
     public void Track(FrameworkElement view)
     {
-        view.GotKeyboardFocus += (s, e) => FocusedView = view;
+        view.GotKeyboardFocus += (s, e) => this.SetFocusedView(view);
     }
 }

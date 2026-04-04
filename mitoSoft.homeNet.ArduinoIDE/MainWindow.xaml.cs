@@ -65,9 +65,10 @@ public partial class MainWindow : Window
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         _documentService = new MainPanelService(DocumentPane, () => ZoomSlider.Value, () => DockingManager.ActiveContent);
-        _documentService.DocumentViewAdded += (s, view) => _viewFocusService.Track(view);
 
-        _viewFocusService.SetInitialView(YamlView);
+        _documentService.MainPanelViewAdded += (s, view) => _viewFocusService.Track(view);
+        _viewFocusService.Track(YamlView);
+        _viewFocusService.SetFocusedView(YamlView);
 
         var lastFile = _settingsService.GetLastOpenedYamlFile();
         if (!string.IsNullOrEmpty(lastFile) && File.Exists(lastFile))
@@ -245,60 +246,43 @@ public partial class MainWindow : Window
 
     private void Save()
     {
-        if (_viewFocusService.FocusedView is YamlView &&
-            !string.IsNullOrEmpty(_currentFileName) &&
-            File.Exists(_currentFileName))
+        if (_viewFocusService.FocusedView is ISaveable view)
         {
-            _fileService.WriteFile(_currentFileName, YamlView.Text);
-            SetStatusText(string.Format(Res.Msg_Saved, _currentFileName));
-        }
-        else
-        {
-            this.SaveAs();
+            var file = view.Save(_currentFileName);
+            this.SetSaveText(file);
         }
     }
 
     private void SaveAs()
     {
-        if (_viewFocusService.FocusedView is YamlView)
+        if (_viewFocusService.FocusedView is ISaveable view)
         {
-            var saved = this.SaveToFile(
-                filter: Res.Filter_Yaml,
-                defaultFileName: "config.yaml",
-                content: YamlView.Text,
-                currentFilePath: _currentFileName);
-
-            if (saved != null)
-                _currentFileName = saved;
-        }
-        else if (_viewFocusService.FocusedView is OutputView outputView)
-        {
-            var doc = _documentService.GetAllDocuments().FirstOrDefault(d => d.Content == outputView);
-            var controllerName = doc?.Title.Replace("Output: ", "") ?? "output";
-            this.SaveToFile(
-                filter: Res.Filter_Arduino,
-                defaultFileName: $"{controllerName}.ino",
-                content: outputView.GetTextEditor().Text);
+            var file = view.SaveAs(_currentFileName);
+            this.SetSaveText(file);
         }
     }
 
-    private string? SaveToFile(string filter,
-        string defaultFileName,
-        string content,
-        string? currentFilePath = null)
+    private void SetSaveText(string? fileName)
     {
-        var filePath = _fileService.ShowSaveDialog(
-            filter: filter,
-            defaultFileName: defaultFileName,
-            currentFilePath: currentFilePath);
-
-        if (filePath != null)
+        if (fileName == null)
         {
-            _fileService.WriteFile(filePath, content);
-            SetStatusText(string.Format(Res.Msg_Saved, filePath));
+            return;
         }
 
-        return filePath;
+        var file = new FileInfo(fileName);
+
+        if (!file.Exists)
+        {
+            return;
+        }
+
+        if (file.Extension.Equals(".yaml", StringComparison.OrdinalIgnoreCase) ||
+            file.Extension.Equals(".yml", StringComparison.OrdinalIgnoreCase))
+        {
+            _currentFileName = file.FullName;
+        }
+
+        this.SetStatusText(string.Format(Res.Msg_Saved, file.FullName));
     }
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
@@ -320,7 +304,8 @@ public partial class MainWindow : Window
     {
         var newConfig = new YamlParser(YamlView.Text).AddHomeNetElements();
 
-        _documentService.CreateOrUpdateMissingHomeNetElementsDocument(newConfig);
+        var view = _documentService.CreateOrUpdateMissingHomeNetElementsDocument(newConfig);
+        _viewFocusService.SetFocusedView(view);
     }
 
     private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -371,7 +356,8 @@ public partial class MainWindow : Window
             throw new Exception(Res.Msg_NoControllersWithGpios);
         }
 
-        _documentService.CreateOrUpdateGpioDocumentation(overviews);
+        var view = _documentService.CreateOrUpdateGpioDocumentation(overviews);
+        _viewFocusService.SetFocusedView(view);
         SetStatusText(Res.Msg_GpioDocumentationCreated);
     }
 

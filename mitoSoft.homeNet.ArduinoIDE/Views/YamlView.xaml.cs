@@ -1,20 +1,25 @@
 using ICSharpCode.AvalonEdit;
 using mitoSoft.homeNet.ArduinoIDE.Services;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Res = mitoSoft.homeNet.ArduinoIDE.Properties.Resources;
 
 namespace mitoSoft.homeNet.ArduinoIDE.Views;
 
-public partial class YamlView : UserControl, IEditorView
+public partial class YamlView : UserControl, IEditorView, ISaveable
 {
     private readonly TextEditorService _textEditorService = new();
+    private FileService _fileService = new();
 
     public event EventHandler? TextChanged;
 
     public YamlView()
     {
         InitializeComponent();
+
         FindBar.Visibility = Visibility.Collapsed;
+
         YamlTextEditor.TextChanged += (s, e) => TextChanged?.Invoke(this, EventArgs.Empty);
         YamlTextEditor.ManipulationBoundaryFeedback += (s, e) => { e.Handled = true; };
         YamlTextEditor.PreviewMouseWheel += (s, e) =>
@@ -87,5 +92,34 @@ public partial class YamlView : UserControl, IEditorView
     private void SelectHomeNetNodeButton_Click(object sender, RoutedEventArgs e)
     {
         _textEditorService.SelectYamlNode(YamlTextEditor, "homeNet:");
+    }
+
+    public string? Save(string? fileName)
+    {
+        if (!string.IsNullOrEmpty(fileName) &&
+            File.Exists(fileName))
+        {
+            _fileService.WriteFile(fileName, this.GetTextEditor().Text);
+            return fileName;
+        }
+        else
+        {
+            return this.SaveAs(fileName);
+        }
+    }
+
+    public string? SaveAs(string? fileName)
+    {
+        var filePath = _fileService.ShowSaveDialog(
+            filter: Res.Filter_Yaml,
+            defaultFileName: "config.yaml",
+            currentFilePath: fileName);
+
+        if (filePath != null)
+        {
+            _fileService.WriteFile(filePath, this.GetTextEditor().Text);
+        }
+
+        return filePath;
     }
 }

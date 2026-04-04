@@ -18,7 +18,7 @@ public class MainPanelService
         _getActiveContent = getActiveContent;
     }
 
-    public event EventHandler<FrameworkElement>? DocumentViewAdded;
+    public event EventHandler<FrameworkElement>? MainPanelViewAdded;
 
     public FrameworkElement CreateOrUpdateOutputDocument(string controllerName, string content)
     {
@@ -47,7 +47,7 @@ public class MainPanelService
 
     private FrameworkElement CreateNewDocument(string controllerName, string content)
     {
-        var view = new OutputView();
+        var view = new OutputView(controllerName);
         view.SetContent(content);
         view.SetZoomFactor(_getCurrentZoomFactor());
 
@@ -61,7 +61,7 @@ public class MainPanelService
         _documentPane.Children.Add(document);
         document.IsSelected = true;
         document.IsActive = true;
-        DocumentViewAdded?.Invoke(this, view);
+        MainPanelViewAdded?.Invoke(this, view);
         return view;
     }
 
@@ -95,21 +95,20 @@ public class MainPanelService
         }
     }
 
-    public void CreateOrUpdateGpioDocumentation(List<ControllerGpioOverview> overviews)
+    public FrameworkElement CreateOrUpdateGpioDocumentation(List<ControllerGpioOverview> overviews)
     {
         var existingDoc = _documentPane.Children.OfType<LayoutDocument>()
             .FirstOrDefault(d => d.Title == "GPIO Documentation");
 
         if (existingDoc != null)
         {
-            this.UpdateExistingGpioDocument(existingDoc, overviews);
-            return;
+            return this.UpdateExistingGpioDocument(existingDoc, overviews);
         }
 
-        this.CreateNewGpioDocument(overviews);
+        return this.CreateNewGpioDocument(overviews);
     }
 
-    private void UpdateExistingGpioDocument(LayoutDocument document, List<ControllerGpioOverview> overviews)
+    private FrameworkElement UpdateExistingGpioDocument(LayoutDocument document, List<ControllerGpioOverview> overviews)
     {
         var view = document.Content as DocumentionView;
         if (view != null)
@@ -119,9 +118,10 @@ public class MainPanelService
 
         document.IsSelected = true;
         document.IsActive = true;
+        return view!;
     }
 
-    private void CreateNewGpioDocument(List<ControllerGpioOverview> overviews)
+    private FrameworkElement CreateNewGpioDocument(List<ControllerGpioOverview> overviews)
     {
         var view = new DocumentionView();
         view.SetContent(overviews);
@@ -136,9 +136,11 @@ public class MainPanelService
         _documentPane.Children.Add(gpioDocument);
         gpioDocument.IsSelected = true;
         gpioDocument.IsActive = true;
+        MainPanelViewAdded?.Invoke(this, view);
+        return view;
     }
 
-    public void CreateOrUpdateMissingHomeNetElementsDocument(string content)
+    public FrameworkElement CreateOrUpdateMissingHomeNetElementsDocument(string content)
     {
         const string title = "Missing homeNet elements";
 
@@ -151,7 +153,7 @@ public class MainPanelService
             existingView?.SetContent(content);
             existingDoc.IsSelected = true;
             existingDoc.IsActive = true;
-            return;
+            return existingView!;
         }
 
         var view = new MissingHomeNetElementsView();
@@ -168,6 +170,7 @@ public class MainPanelService
         _documentPane.Children.Add(document);
         document.IsSelected = true;
         document.IsActive = true;
-        DocumentViewAdded?.Invoke(this, view);
+        MainPanelViewAdded?.Invoke(this, view);
+        return view;
     }
 }
