@@ -178,10 +178,8 @@ public partial class DocumentionView : UserControl
         ContentPanel.Children.Add(timestamp);
     }
 
-    private void PrintButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void PrintButton_Click(object sender, RoutedEventArgs e) =>
         this.PrintGpioDocumentation();
-    }
 
     private void PrintGpioDocumentation()
     {

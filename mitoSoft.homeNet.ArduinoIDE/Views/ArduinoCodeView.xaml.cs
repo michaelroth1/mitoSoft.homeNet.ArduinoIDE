@@ -27,7 +27,7 @@ public partial class OutputView : UserControl, IEditorView, ISaveable
         };
 
         FindBar.FindNextRequested += FindBar_FindNextRequested;
-        FindBar.CloseRequested += (s, e) => FindBar.Visibility = Visibility.Collapsed;
+        FindBar.CloseRequested += FindBar_CloseRequested; ;
     }
 
     public void ShowFindBar(string searchText)
@@ -61,25 +61,20 @@ public partial class OutputView : UserControl, IEditorView, ISaveable
         }
     }
 
-    public void SetContent(string content)
-    {
-        TextEditor.Text = content;
-    }
+    private void FindBar_CloseRequested(object? sender, EventArgs e) =>
+        FindBar.Visibility = Visibility.Collapsed;
 
-    public void SetZoomFactor(double zoomFactor)
-    {
-        TextEditor.FontSize = 12 * zoomFactor;
-    }
+    public void SetContent(string content) =>
+        this.TextEditor.Text = content;
 
-    public TextEditor GetTextEditor()
-    {
-        return TextEditor;
-    }
+    public void SetZoomFactor(double zoomFactor) =>
+        this.TextEditor.FontSize = 12 * zoomFactor;
 
-    public string? Save(string? fileName)
-    {
-        return this.SaveAs(fileName);
-    }
+    public TextEditor GetTextEditor() =>
+        this.TextEditor;
+
+    public string? Save(string? fileName) =>
+        this.SaveAs(fileName);
 
     public string? SaveAs(string? fileName)
     {

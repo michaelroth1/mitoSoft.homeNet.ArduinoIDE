@@ -5,7 +5,6 @@ namespace mitoSoft.homeNet.ArduinoIDE.Services;
 public class FocusService
 {
     public FrameworkElement? FocusedView { get; private set; }
-    public IEditorView? FocusedEditorView => FocusedView as IEditorView;
 
     public void SetFocusedView(FrameworkElement view)
     {

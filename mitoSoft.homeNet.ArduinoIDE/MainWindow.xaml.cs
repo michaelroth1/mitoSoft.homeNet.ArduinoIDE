@@ -33,7 +33,7 @@ public partial class MainWindow : Window
         _statusClearTimer.Interval = TimeSpan.FromSeconds(5);
         _statusClearTimer.Tick += StatusClearTimer_Tick;
 
-        FindCommand = new RelayCommand(_ => _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty));
+        FindCommand = new RelayCommand(_ => this.ShowFindBar());
         SaveCommand = new RelayCommand(_ => this.Save());
         DataContext = this;
 
@@ -241,7 +241,8 @@ public partial class MainWindow : Window
 
     private void Save()
     {
-        if (_viewFocusService.FocusedView is ISaveable view)
+        if (_viewFocusService.FocusedView != null &&
+            _viewFocusService.FocusedView is ISaveable view)
         {
             var file = view.Save(_currentFileName);
             this.SetSaveText(file);
@@ -250,7 +251,8 @@ public partial class MainWindow : Window
 
     private void SaveAs()
     {
-        if (_viewFocusService.FocusedView is ISaveable view)
+        if (_viewFocusService.FocusedView != null &&
+            _viewFocusService.FocusedView is ISaveable view)
         {
             var file = view.SaveAs(_currentFileName);
             this.SetSaveText(file);
@@ -282,10 +284,10 @@ public partial class MainWindow : Window
 
     private void CopyToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var textEditor = _viewFocusService.FocusedEditorView?.GetTextEditor();
-        if (!string.IsNullOrEmpty(textEditor?.Text))
+        if (_viewFocusService.FocusedView != null &&
+            _viewFocusService.FocusedView is IEditorView view)
         {
-            Clipboard.SetText(textEditor.Text);
+            Clipboard.SetText(view.GetTextEditor().Text);
             SetStatusText(Res.Msg_CopiedToClipboard);
         }
     }
@@ -308,7 +310,16 @@ public partial class MainWindow : Window
         _documentService?.UpdateZoomForAllEditorViews(ZoomSlider.Value);
 
     private void FindMenuItem_Click(object sender, RoutedEventArgs e) =>
-        _viewFocusService.FocusedEditorView?.ShowFindBar(string.Empty);
+        this.ShowFindBar();
+
+    private void ShowFindBar()
+    {
+        if (_viewFocusService.FocusedView != null &&
+            _viewFocusService.FocusedView is IEditorView view)
+        {
+            view.ShowFindBar(string.Empty);
+        }
+    }
 
     private void ViewControllersMenuItem_Click(object sender, RoutedEventArgs e)
     {

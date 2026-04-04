@@ -24,28 +24,26 @@ public partial class MissingHomeNetElementsView : UserControl, IEditorView
         FindBar.CloseRequested += (s, e) => FindBar.Visibility = Visibility.Collapsed;
     }
 
-    public void ShowFindBar(string searchText)
-    {
+    public void ShowFindBar(string searchText) =>
         FindBar.Show(searchText);
-    }
 
     private void FindBar_FindNextRequested(object? sender, string searchText)
     {
         if (string.IsNullOrEmpty(searchText))
             return;
 
-        if (!_textEditorService.FindNext(TextEditor, searchText))
+        if (!_textEditorService.FindNext(this.TextEditor, searchText))
         {
             var savedStart = TextEditor.SelectionStart;
-            TextEditor.SelectionStart = 0;
-            TextEditor.SelectionLength = 0;
-            if (_textEditorService.FindNext(TextEditor, searchText))
+            this.TextEditor.SelectionStart = 0;
+            this.TextEditor.SelectionLength = 0;
+            if (_textEditorService.FindNext(this.TextEditor, searchText))
             {
                 FindBar.SetNotFoundState(false);
             }
             else
             {
-                TextEditor.SelectionStart = savedStart;
+                this.TextEditor.SelectionStart = savedStart;
                 FindBar.SetNotFoundState(true);
             }
         }
@@ -55,18 +53,12 @@ public partial class MissingHomeNetElementsView : UserControl, IEditorView
         }
     }
 
-    public void SetContent(string content)
-    {
-        TextEditor.Text = content;
-    }
+    public void SetContent(string content)=>
+        this.TextEditor.Text = content;
 
-    public void SetZoomFactor(double zoomFactor)
-    {
-        TextEditor.FontSize = 12 * zoomFactor;
-    }
+    public void SetZoomFactor(double zoomFactor)=>
+        this.TextEditor.FontSize = 12 * zoomFactor;
 
-    public TextEditor GetTextEditor()
-    {
-        return TextEditor;
-    }
+    public TextEditor GetTextEditor() =>
+        this.TextEditor;
 }

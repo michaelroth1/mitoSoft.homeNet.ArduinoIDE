@@ -29,13 +29,11 @@ public partial class YamlView : UserControl, IEditorView, ISaveable
         };
 
         FindBar.FindNextRequested += FindBar_FindNextRequested;
-        FindBar.CloseRequested += (s, e) => FindBar.Visibility = Visibility.Collapsed;
+        FindBar.CloseRequested += FindBar_CloseRequested;
     }
 
-    public void ShowFindBar(string searchText)
-    {
+    public void ShowFindBar(string searchText) =>
         FindBar.Show(searchText);
-    }
 
     private void FindBar_FindNextRequested(object? sender, string searchText)
     {
@@ -63,36 +61,29 @@ public partial class YamlView : UserControl, IEditorView, ISaveable
         }
     }
 
+    private void FindBar_CloseRequested(object? sender, EventArgs e) =>
+        FindBar.Visibility = Visibility.Collapsed;
+
     public string Text
     {
-        get => YamlTextEditor.Text;
-        set => YamlTextEditor.Text = value;
+        get => this.YamlTextEditor.Text;
+        set => this.YamlTextEditor.Text = value;
     }
 
-    public void SetZoomFactor(double zoomFactor)
-    {
-        YamlTextEditor.FontSize = 12 * zoomFactor;
-    }
+    public void SetZoomFactor(double zoomFactor) =>
+        this.YamlTextEditor.FontSize = 12 * zoomFactor;
 
-    public TextEditor GetTextEditor()
-    {
-        return YamlTextEditor;
-    }
+    public TextEditor GetTextEditor() =>
+        this.YamlTextEditor;
 
-    private void CommentButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void CommentButton_Click(object sender, RoutedEventArgs e) =>
         _textEditorService.CommentLines(YamlTextEditor);
-    }
 
-    private void UncommentButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void UncommentButton_Click(object sender, RoutedEventArgs e) =>
         _textEditorService.UncommentLines(YamlTextEditor);
-    }
 
-    private void SelectHomeNetNodeButton_Click(object sender, RoutedEventArgs e)
-    {
+    private void SelectHomeNetNodeButton_Click(object sender, RoutedEventArgs e) =>
         _textEditorService.SelectYamlNode(YamlTextEditor, "homeNet:");
-    }
 
     public string? Save(string? fileName)
     {
