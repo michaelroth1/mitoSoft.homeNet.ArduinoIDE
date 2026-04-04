@@ -36,11 +36,7 @@ public static class DocumentationService
                 {
                     var gpioPins = new List<string>();
 
-                    gpioPins.Add($"Open: {cover.GpioOpen}");
-                    gpioPins.Add($"Close: {cover.GpioClose}");
-
-                    usedGpios.Add(cover.GpioOpen);
-                    usedGpios.Add(cover.GpioClose);
+                    
 
                     if (cover.GpioOpenButton > 0)
                     {
@@ -53,6 +49,12 @@ public static class DocumentationService
                         gpioPins.Add($"Btn↓: {cover.GpioCloseButton}");
                         usedGpios.Add(cover.GpioCloseButton);
                     }
+
+                    gpioPins.Add($"Pin↑: {cover.GpioOpen}");
+                    gpioPins.Add($"Pin↓: {cover.GpioClose}");
+
+                    usedGpios.Add(cover.GpioOpen);
+                    usedGpios.Add(cover.GpioClose);
 
                     var name = ExtractFriendlyName(cover.UniqueId);
 
@@ -75,14 +77,14 @@ public static class DocumentationService
                 {
                     var gpioPins = new List<string>();
 
-                    gpioPins.Add($"Pin: {light.GpioPin}");
-                    usedGpios.Add(light.GpioPin);
-
                     if (light.GpioButton > 0)
                     {
                         gpioPins.Add($"Btn: {light.GpioButton}");
                         usedGpios.Add(light.GpioButton);
                     }
+
+                    gpioPins.Add($"Pin: {light.GpioPin}");
+                    usedGpios.Add(light.GpioPin);
 
                     var name = ExtractFriendlyName(light.UniqueId);
 
