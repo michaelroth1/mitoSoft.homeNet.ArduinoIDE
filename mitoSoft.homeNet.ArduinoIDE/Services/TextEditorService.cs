@@ -79,8 +79,6 @@ public class TextEditorService
         return false;
     }
 
-    private int GetLineNumber(string text, int index)
-    {
-        return text[..index].Count(c => c == '\n');
-    }
+    private int GetLineNumber(string text, int index) =>
+        text[..index].Count(c => c == '\n');
 }
