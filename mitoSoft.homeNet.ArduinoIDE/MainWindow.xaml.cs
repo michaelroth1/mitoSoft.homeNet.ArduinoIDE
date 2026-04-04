@@ -89,10 +89,8 @@ public partial class MainWindow : Window
         this.UpdateControllerList();
     }
 
-    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-    {
+    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e) =>
         _settingsService.SaveWindowSettings(Width, Height, ZoomSlider.Value);
-    }
 
     private void SetStatusText(string text)
     {
