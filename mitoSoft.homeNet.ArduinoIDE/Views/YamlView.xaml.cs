@@ -10,7 +10,7 @@ namespace mitoSoft.homeNet.ArduinoIDE.Views;
 public partial class YamlView : UserControl, IEditorView, ISaveable
 {
     private readonly TextEditorService _textEditorService = new();
-    private FileService _fileService = new();
+    private readonly FileService _fileService = new();
 
     public event EventHandler? TextChanged;
 
