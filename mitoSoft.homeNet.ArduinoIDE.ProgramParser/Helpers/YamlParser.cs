@@ -83,12 +83,14 @@ public class YamlParser(string yaml)
         var mqttData = deserializer.Deserialize<Dictionary<string, Mqtt.Config>>(_yamlText);
         var homeNetData = deserializer.Deserialize<Dictionary<string, HomeNet.Config>>(_yamlText);
 
-        var yaml = new YamlFile()
-        {
-            HomeNetConfig = homeNetData["homeNet"],
+        var yaml = new YamlFile();
 
-            MqttConfig = mqttData["mqtt"],
-        };
+        if (homeNetData.ContainsKey("homeNet"))
+            yaml.HomeNetConfig = homeNetData["homeNet"];
+
+        if (mqttData.ContainsKey("mqtt"))
+            yaml.MqttConfig = mqttData["mqtt"];
+        
 
         return yaml;
     }

@@ -35,7 +35,7 @@ public static class HomeNetConfigExtensions
 
             mergedCovers.Add(merged);
 
-            var mqttCover = mqttConfig.Covers.SingleOrDefault(h => h.UniqueId == homeNetCover.UniqueId);
+            var mqttCover = mqttConfig?.Covers?.SingleOrDefault(h => h.UniqueId == homeNetCover.UniqueId);
 
             if (mqttCover == null)
             {
@@ -79,7 +79,7 @@ public static class HomeNetConfigExtensions
 
             mergedLights.Add(merged);
 
-            var mqttLight = mqttConfig.Lights.SingleOrDefault(h => h.UniqueId == homeNetLight.UniqueId);
+            var mqttLight = mqttConfig?.Lights?.SingleOrDefault(h => h.UniqueId == homeNetLight.UniqueId);
 
             if (mqttLight == null)
             {

@@ -41,7 +41,8 @@ public class TextCrawler
                 break;
             }
             // Falls wir einen neuen Abschnitt auf gleicher Ebene erreichen, beenden
-            if (!string.IsNullOrWhiteSpace(_lines[i]) &&
+            if (!_lines[i].TrimStart().StartsWith("#") &&
+                !string.IsNullOrWhiteSpace(_lines[i]) &&
                 (_lines[i].Length - _lines[i].TrimStart().Length) <= (_lines[homeNetIndex].Length - _lines[homeNetIndex].TrimStart().Length))
             {
                 break;
@@ -62,8 +63,11 @@ public class TextCrawler
                 continue;
 
             int currentIndent = line.Length - line.TrimStart().Length;
+
             // Beenden, wenn die Einrückung zurückgeht
-            if (currentIndent <= controllerIndent && !line.TrimStart().StartsWith("-"))
+            if (!line.TrimStart().StartsWith("#") && 
+                currentIndent <= controllerIndent && 
+                !line.TrimStart().StartsWith("-"))
                 break;
 
             // Nur Zeilen, die mit "- name:" beginnen, sollen verarbeitet werden
