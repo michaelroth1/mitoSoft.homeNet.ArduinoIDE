@@ -138,7 +138,6 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public string StateOff { get; set; } = "off";
 
             [YamlMember(Alias = "switch_mode")]
-            [Required]
             public string SwitchMode { get; set; } = "button";
         }
     }
