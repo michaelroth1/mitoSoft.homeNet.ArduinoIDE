@@ -22,6 +22,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             string Description { get; set; }
 
             int ControllerId { get; set; }
+
+            string Type { get; set; }
         }
 
 
@@ -75,6 +77,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public string StateClosing { get; set; } = "_no_state";
 
             public string StateStopped { get; set; } = "_no_state";
+
+            public string Type { get; set; } = "Cover";
         }
 
         [DebuggerDisplay("{UniqueId}")]
@@ -107,6 +111,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public string PayloadOn { get; set; } = "_no_payload";
 
             public string PayloadOff { get; set; } = "_no_payload";
+
+            public string Type { get; set; } = "Light";
         }
     }
 }

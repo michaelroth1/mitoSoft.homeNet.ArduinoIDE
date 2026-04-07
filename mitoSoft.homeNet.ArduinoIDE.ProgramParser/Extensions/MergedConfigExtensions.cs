@@ -4,6 +4,15 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
 
 public static class MergedConfigExtensions
 {
+    public static void ReplaceDescription(this Merge.IItem item)
+    {
+        if (string.IsNullOrWhiteSpace(item.Description))
+        {
+            item.Description = $"{item.Type}: {item.Name}";
+        }
+    }
+
+
     public static IList<Merge.IItem> GetItems(this Merge.Config config)
     {
         var items = new List<Merge.IItem>();

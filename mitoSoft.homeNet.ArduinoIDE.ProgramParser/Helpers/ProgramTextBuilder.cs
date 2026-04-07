@@ -65,6 +65,7 @@ public class ProgramTextBuilder(string controllerName,
     {
         foreach (var cover in covers)
         {
+            cover.ReplaceDescription();
             this.TrySetCoverInfo(cover);
         }
     }
@@ -79,32 +80,44 @@ public class ProgramTextBuilder(string controllerName,
 
             if (!cover.CommandTopic.StartsWith("_no_"))
             {
+                coverDeclaration = coverDeclaration.Replace($"///hasnocommandtopic: ", "");
+                coverSetup = coverSetup.Replace($"///hasnocommandtopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnocommandtopic: ", "");
             }
             if (cover.GpioCloseButton > 0)
             {
-                coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
                 coverDeclaration = coverDeclaration.Replace($"///hasnodownbutton: ", "");
+                coverSetup = coverSetup.Replace($"///hasnodownbutton: ", "");
+                coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
             }
             if (cover.GpioOpenButton > 0)
             {
-                coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
                 coverDeclaration = coverDeclaration.Replace($"///hasnoupbutton: ", "");
+                coverSetup = coverSetup.Replace($"///hasnoupbutton: ", "");
+                coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
             }
             if (!cover.PayloadStop.StartsWith("_no_"))
             {
+                coverDeclaration = coverDeclaration.Replace($"///hasnostoppayload: ", "");
+                coverSetup = coverSetup.Replace($"///hasnostoppayload: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnostoppayload: ", "");
             }
             if (!cover.SetPositionTopic.StartsWith("_no_"))
             {
+                coverDeclaration = coverDeclaration.Replace($"///hasnosetTopic: ", "");
+                coverSetup = coverSetup.Replace($"///hasnosetTopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnosetTopic: ", "");
             }
             if (!cover.StateTopic.StartsWith("_no_"))
             {
+                coverDeclaration = coverDeclaration.Replace($"///hasnostatetopic: ", "");
+                coverSetup = coverSetup.Replace($"///hasnostatetopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnostatetopic: ", "");
             }
             if (!cover.PositionTopic.StartsWith("_no_"))
             {
+                coverDeclaration = coverDeclaration.Replace($"///hasnopositiontopic: ", "");
+                coverSetup = coverSetup.Replace($"///hasnopositiontopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnopositiontopic: ", "");
             }
 
@@ -114,11 +127,6 @@ public class ProgramTextBuilder(string controllerName,
                 coverDeclaration = coverDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 coverSetup = coverSetup.Replace($"##{prop.Key}##", prop.Value);
                 coverTemplate = coverTemplate.Replace($"##{prop.Key}##", prop.Value);
-            }
-
-            if (coverTemplate.Contains("##Description##"))
-            {
-                coverTemplate = coverTemplate.Replace($"##Description##", $"Cover {cover.Name}");
             }
 
             _program = _program.Replace("##coverDeclaration##", coverDeclaration);
@@ -135,6 +143,7 @@ public class ProgramTextBuilder(string controllerName,
     {
         foreach (var light in lights)
         {
+            light.ReplaceDescription();
             this.TrySetLightInfo(light);
         }
     }
@@ -149,23 +158,32 @@ public class ProgramTextBuilder(string controllerName,
 
             if (light.GpioButton > 0)
             {
-                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
                 lightDeclaration = lightDeclaration.Replace($"///hasnobutton: ", "");
+                lightSetup = lightSetup.Replace($"///hasnobutton: ", "");
+                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
             }
             if (light.SwitchMode.ToLower().Trim() == "button")
             {
+                lightDeclaration = lightDeclaration.Replace($"///hasnobuttonmode: ", "");
+                lightSetup = lightSetup.Replace($"///hasnobuttonmode: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnobuttonmode: ", "");
             }
             if (light.SwitchMode.ToLower().Trim() == "switch")
             {
+                lightDeclaration = lightDeclaration.Replace($"///hasnoswitchmode: ", "");
+                lightSetup = lightSetup.Replace($"///hasnoswitchmode: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnoswitchmode: ", "");
             }
             if (!light.CommandTopic.StartsWith("_no_"))
             {
+                lightDeclaration = lightDeclaration.Replace($"///hasnocommandtopic: ", "");
+                lightSetup = lightSetup.Replace($"///hasnocommandtopic: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
             }
             if (!light.StateTopic.StartsWith("_no_"))
             {
+                lightDeclaration = lightDeclaration.Replace($"///hasnostatetopic: ", "");
+                lightSetup = lightSetup.Replace($"///hasnostatetopic: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");
             }
 
@@ -175,11 +193,6 @@ public class ProgramTextBuilder(string controllerName,
                 lightDeclaration = lightDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
                 lightTemplate = lightTemplate.Replace($"##{prop.Key}##", prop.Value);
-            }
-
-            if (lightTemplate.Contains("##Description##"))
-            {
-                lightTemplate = lightTemplate.Replace($"##Description##", $"Light {light.Name}");
             }
 
             _program = _program.Replace("##lightDeclaration##", lightDeclaration);

@@ -1,4 +1,4 @@
-﻿//Cover ##Name##**************************************************
+﻿// ##Description## **************************************************
 ///hasnoupbutton: DebouncingInput gpio_##Name##_buttonUp(##GpioOpenButton##);
 ///hasnodownbutton: DebouncingInput gpio_##Name##_buttonDown(##GpioCloseButton##);
 ShutterController ##Name##(##RunningTime##, 0, -5.0, 105.0, 500);

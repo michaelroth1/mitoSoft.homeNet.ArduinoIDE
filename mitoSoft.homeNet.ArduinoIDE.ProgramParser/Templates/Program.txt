@@ -19,7 +19,10 @@
 ///hasnomqtt: MqttHelper mqttHelper(mqttClient, 15000, false);
 
 ##coverDeclaration##
+
 ##lightDeclaration##
+
+// Additional declarations *************************************
 ##additionalDeclaration##
 
 void setup() {
@@ -32,9 +35,11 @@ void setup() {
 
   // covers ***********************************************
 ##coverSetup##
+
   // lights ***********************************************
 ##lightSetup##
-  // additional setup *************************************
+
+  // Additional setup *************************************
 ##additionalSetup##
 }
 
