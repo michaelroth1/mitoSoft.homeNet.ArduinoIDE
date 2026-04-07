@@ -54,7 +54,6 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public string BrokerPassword { get; set; } = null!;
 
             [YamlMember(Alias = "gpio_output_mode")]
-            [Required]
             public string GpioOutputMode { get; set; } = null!;
 
             [YamlMember(Alias = "additional_declaration")]
