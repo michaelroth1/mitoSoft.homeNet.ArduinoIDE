@@ -24,6 +24,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             int ControllerId { get; set; }
 
             string Type { get; set; }
+
+            string GpioOutputMode { get; set; }
         }
 
 
@@ -47,6 +49,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public int GpioOpenButton { get; set; } = -1;
 
             public int GpioCloseButton { get; set; } = -1;
+
+            public string GpioOutputMode { get; set; } = "";
 
             public required int RunningTime { get; set; } = 15000;
 
@@ -97,6 +101,8 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public required int GpioPin { get; set; } = 1;
 
             public int GpioButton { get; set; } = -1;
+
+            public string GpioOutputMode { get; set; } = "";
 
             public string StateOn { get; set; } = "_no_state";
 

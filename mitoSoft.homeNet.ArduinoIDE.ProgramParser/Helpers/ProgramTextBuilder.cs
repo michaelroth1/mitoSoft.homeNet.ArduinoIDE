@@ -9,7 +9,7 @@ public class ProgramTextBuilder(string controllerName,
                                 string brokerIp,
                                 string brokerUserName,
                                 string brokerPassword,
-                                string gpioMode,
+                                string gpioOutputMode,
                                 string subscribedTopic,
                                 string additionalDeclaration,
                                 string additionalSetup,
@@ -21,7 +21,7 @@ public class ProgramTextBuilder(string controllerName,
     private readonly string _brokerIp = brokerIp ?? "0.0.0.0";
     private readonly string _brokerUserName = brokerUserName ?? "";
     private readonly string _brokerPassword = brokerPassword ?? "";
-    private readonly string _gpioMode = gpioMode;
+    private readonly string _gpioOutputMode = gpioOutputMode ?? "STANDARD";
     private readonly string _subscribedTopic = subscribedTopic ?? "_no_topic/to_subcribe/#";
     private readonly string _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
     private readonly string _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
@@ -207,7 +207,7 @@ public class ProgramTextBuilder(string controllerName,
 
     private void SetGpioMode()
     {
-        _program = _program.Replace("##GpioMode##", _gpioMode);
+        _program = _program.Replace("##GpioOutputMode##", _gpioOutputMode);
     }
 
     private void SetMqttInfo()

@@ -53,9 +53,9 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             [YamlMember(Alias = "broker_password")]
             public string BrokerPassword { get; set; } = null!;
 
-            [YamlMember(Alias = "gpio_mode")]
+            [YamlMember(Alias = "gpio_output_mode")]
             [Required]
-            public required string GpioMode { get; set; } = null!;
+            public string GpioOutputMode { get; set; } = null!;
 
             [YamlMember(Alias = "additional_declaration")]
             public string AdditionalDeclaration { get; set; } = null!;
@@ -100,6 +100,9 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             [YamlMember(Alias = "gpio_close_button")]
             public int GpioCloseButton { get; set; } = -1;
 
+            [YamlMember(Alias = "gpio_output_mode")]
+            public string GpioOutputMode { get; set; } = null!;
+
             [YamlMember(Alias = "running_time")]
             [Required]
             public int RunningTime { get; set; } = 15000;
@@ -125,6 +128,9 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
 
             [YamlMember(Alias = "gpio_button")]
             public int GpioButton { get; set; } = -1;
+
+            [YamlMember(Alias = "gpio_output_mode")]
+            public string GpioOutputMode { get; set; } = null!;
 
             [YamlMember(Alias = "state_on")]
             public string StateOn { get; set; } = "on";

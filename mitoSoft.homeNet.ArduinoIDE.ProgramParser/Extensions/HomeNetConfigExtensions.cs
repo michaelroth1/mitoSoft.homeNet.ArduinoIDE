@@ -31,6 +31,7 @@ public static class HomeNetConfigExtensions
                 GpioCloseButton = homeNetCover.GpioCloseButton,
                 GpioOpenButton = homeNetCover.GpioOpenButton,
                 ControllerId = homeNetCover.ControllerId,
+                GpioOutputMode = homeNetCover.GpioOutputMode,
             };
 
             mergedCovers.Add(merged);
@@ -75,6 +76,7 @@ public static class HomeNetConfigExtensions
                 StateOn = homeNetLight.StateOn,
                 StateOff = homeNetLight.StateOff,
                 SwitchMode = homeNetLight.SwitchMode,
+                GpioOutputMode = homeNetLight.GpioOutputMode,
             };
 
             mergedLights.Add(merged);

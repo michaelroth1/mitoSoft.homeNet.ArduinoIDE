@@ -152,7 +152,7 @@ public partial class MainWindow : Window
                 controller.BrokerIPAddress,
                 controller.BrokerUserName,
                 controller.BrokerPassword,
-                controller.GpioMode,
+                controller.GpioOutputMode,
                 controller.SubscribedTopic,
                 controller.AdditionalDeclaration,
                 controller.AdditionalSetup,
