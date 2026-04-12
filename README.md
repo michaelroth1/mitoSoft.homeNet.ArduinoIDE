@@ -4,7 +4,7 @@
 
 Eine WPF-Anwendung, die YAML-Konfigurationen von [Home Assistant](https://www.home-assistant.io/) ausliest und automatisch lauffähigen Arduino-Code für Arduino Mega generiert, um kabelgebundene Geräte wie Rollläden und Lichter über GPIO-Pins zu steuern.
 
-## 🎯 Überblick
+## Überblick
 
 Dieses Tool vereinfacht die Erstellung von Arduino-Programmen für die Hausautomatisierung, die mit Home Assistant über MQTT kommunizieren. Statt manuell Arduino-Code zu schreiben, definieren Sie Ihre Controller und kabelgebundenen Geräte (Rollläden, Lichter, etc.) in einer YAML-Datei und generieren den kompletten Arduino-Code mit einem Klick.
 
@@ -28,7 +28,7 @@ Home Assistant YAML → mitoSoft.homeNet.ArduinoIDE → Arduino Code → Arduino
 5. **GPIO-Steuerung**: Der Arduino Mega steuert kabelgebundene Rollläden, Lichter und Taster über GPIO-Pins
 6. **MQTT-Kommunikation**: Der Arduino-Controller kommuniziert über Ethernet/WiFi-Shield mit dem MQTT-Broker und Home Assistant
 
-## 🚀 Features
+## Features
 
 - **YAML-Editor** mit Syntax-Highlighting und Validierung
 - **Controller-Verwaltung** für mehrere Arduino Mega Controller
@@ -39,7 +39,7 @@ Home Assistant YAML → mitoSoft.homeNet.ArduinoIDE → Arduino Code → Arduino
 - **Fehler- und Warnungs-Analyse** vor der Code-Generierung
 - **Multi-Document Interface** zum gleichzeitigen Bearbeiten mehrerer Controller
 
-## 📸 Die Anwendung
+## Die Anwendung
 
 Die WPF-Anwendung bietet eine benutzerfreundliche Oberfläche zur Verwaltung und Generierung von Arduino-Code. Das Tool verfügt über einen integrierten YAML-Editor mit Syntax-Highlighting, eine übersichtliche Controller-Liste zur schnellen Navigation zwischen verschiedenen Controllern sowie ein Fehleranalyse-Panel, das GPIO-Konflikte und fehlende Konfigurationen vor der Code-Generierung erkennt. Das Multi-Document Interface ermöglicht es, gleichzeitig mehrere Controller zu bearbeiten und die generierten Arduino-Sketches direkt zu vergleichen.
 
@@ -53,7 +53,7 @@ Die Hauptansicht zeigt den YAML-Editor in der Mitte, die Controller-Liste auf de
 
 Nach dem Klick auf "Build" wird automatisch ein neuer Tab mit dem generierten Arduino-Code geöffnet. Der Code ist vollständig kompilierbar und kann direkt in die Arduino IDE kopiert oder als .ino-Datei gespeichert werden.
 
-## 📋 Voraussetzungen
+## Voraussetzungen
 
 ### Für generierte Arduino-Sketches
 - Arduino IDE oder PlatformIO
@@ -63,7 +63,7 @@ Nach dem Klick auf "Build" wird automatisch ein neuer Tab mit dem generierten Ar
 - Relais-Boards für Rollläden und Lichter
 - Physische Taster (optional)
 
-## 📝 Verwendung
+## Verwendung
 
 ### YAML-Struktur verstehen
 
@@ -219,7 +219,7 @@ light:
   switch_mode: "button"  #button (default) or switch
 ```
 
-## 🎮 Tastenkombinationen
+## Tastenkombinationen
 
 - **Strg+O** - YAML-Datei öffnen
 - **Strg+S** - Aktives Dokument speichern
@@ -227,7 +227,7 @@ light:
 - **Strg+K** - Zeilen kommentieren
 - **Strg+U** - Zeilen auskommentieren
 
-## 🔍 YAML-Schema
+## YAML-Schema
 
 ### Home Assistant MQTT-Abschnitt
 
@@ -407,7 +407,7 @@ homeNet:
     running_time: 52000
 ```
 
-## 🛠️ Technologien
+## Technologien
 
 - **.NET 10** - Framework
 - **WPF** - Benutzeroberfläche
@@ -417,20 +417,30 @@ homeNet:
 - **MQTT** - Kommunikationsprotokoll
 - **Ethernet/WiFi** - Netzwerk-Verbindung für Arduino Mega
 
-## 🤝 Beitragen
+## Beitragen
 
 Contributions sind willkommen! Bitte erstellen Sie einen Pull Request oder öffnen Sie ein Issue.
 
-## 📄 Lizenz
+## Lizenz
 
-Siehe [LICENSE](LICENSE) Datei für Details.
+Dieses Projekt steht unter der GNU General Public License v3.0 (GPL-3.0).
 
-## 🔗 Verwandte Projekte
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Weitere Details finden Sie in der [LICENSE](LICENSE) Datei.
+
+## Verwandte Projekte
 
 - [mitoSoft.homeNet.Arduino](https://github.com/michaelroth1/mitoSoft.homeNet.Arduino30) - Arduino-Bibliothek für
 - [Home Assistant](https://www.home-assistant.io/) - Open Source Home Automation Platform
 
-## 📧 Kontakt
+## Kontakt
 
 Michael Roth - [@michaelroth1](https://github.com/michaelroth1)
 
