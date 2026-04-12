@@ -207,7 +207,7 @@ homeNet:
 - **INVERTED**: Normal-Low = Aus, High = Ein (für Optokoppler/Relais)
 
 #### Switch-Modi für Buttons
-- **toggle**: Schalter mit An/Aus-Funktion
+- **switch**: Schalter mit An/Aus-Funktion
 - **button**: Taster (kurzer Impuls)
 
 ```yaml
@@ -216,9 +216,7 @@ light:
   controller_id: 1
   gpio_pin: 48
   gpio_button: 27
-  state_off: 0
-  state_on: 1
-  switch_mode: "button"  # Taster statt Schalter
+  switch_mode: "button"  #button (default) or switch
 ```
 
 ## 🎮 Tastenkombinationen
@@ -314,13 +312,11 @@ homeNet:
     controller_id: 1                # Referenz zur Controller unique_id
     gpio_pin: 15                    # GPIO-Pin für Relais/Ausgang
     gpio_button: 14                 # GPIO-Pin für physischen Taster
-    state_off: 0                    # Optional: MQTT-Wert für "Aus" (default: "off")
-    state_on: 1                     # Optional: MQTT-Wert für "Ein" (default: "on")
-    switch_mode: "toggle"           # Optional: "toggle" (default) oder "button"
+    switch_mode: "switch"           # Optional: "button" (default) oder "switch"
 ```
 
 **Switch Modes:**
-- `toggle`: Schalter bleibt in Position (An/Aus)
+- `switch`: Schalter bleibt in Position (An/Aus)
 - `button`: Taster (kurzer Impuls zum Umschalten)
 
 ### Cover (Rollläden/Jalousien)
