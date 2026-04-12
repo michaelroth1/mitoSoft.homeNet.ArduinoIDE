@@ -1,0 +1,33 @@
+﻿  //***************************************************************
+  // Publish ##Description## 
+  //
+  if (cover_##Name##.started()) {
+    if (1 == cover_##Name##.getDirection()) { //DOWN
+      gpio_##Name##_up.setOff();
+      gpio_##Name##_down.setOn();
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosing##", false); //state_closing:
+    } else if (2 == cover_##Name##.getDirection()) { //UP
+      gpio_##Name##_up.setOn();
+      gpio_##Name##_down.setOff();
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpening##", false); //state_opening:
+    }
+  }
+  
+  //if(cover_##Name##.running()) {
+      ///hasnopositiontopic: //mqttHelper.publish("##PositionTopic##", String(cover_##Name##.getPosition()), true);
+  //}
+  
+  if (cover_##Name##.stopped()) {
+    gpio_##Name##_up.setOff();
+    gpio_##Name##_down.setOff();
+    ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateStopped##", false);
+    ///hasnomqtt: ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(cover_##Name##.getPosition()), true);
+    if (0.0 >= cover_##Name##.getPosition()) { 
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
+    } else if (100.0 <= cover_##Name##.getPosition()) {
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosed##", false);
+    }
+  }
+  cover_##Name##.loop();
+
+##coverLoop##

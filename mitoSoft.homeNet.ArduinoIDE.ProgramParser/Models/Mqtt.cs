@@ -82,10 +82,10 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             public string StateTopic { get; set; } = "_no_topic/state";
 
             [YamlMember(Alias = "payload_on")]
-            public required string PayloadOn { get; set; } = "_no_payload";
+            public required string PayloadOn { get; set; } = "On";
 
             [YamlMember(Alias = "payload_off")]
-            public required string PayloadOff { get; set; } = "_no_payload";
+            public required string PayloadOff { get; set; } = "Off";
 
             [YamlMember(Alias = "optimistic")]
             public bool Optimistic { get; set; } = false;

@@ -77,48 +77,56 @@ public class ProgramTextBuilder(string controllerName,
             var coverDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt");
             var coverSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt");
             var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
+            var coverLoop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverLoop.txt");
 
             if (!cover.CommandTopic.StartsWith("_no_"))
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnocommandtopic: ", "");
                 coverSetup = coverSetup.Replace($"///hasnocommandtopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnocommandtopic: ", "");
+                coverLoop = coverLoop.Replace($"///hasnocommandtopic: ", "");
             }
             if (cover.GpioCloseButton > 0)
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnodownbutton: ", "");
                 coverSetup = coverSetup.Replace($"///hasnodownbutton: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
+                coverLoop = coverLoop.Replace($"///hasnodownbutton: ", "");
             }
             if (cover.GpioOpenButton > 0)
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnoupbutton: ", "");
                 coverSetup = coverSetup.Replace($"///hasnoupbutton: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
+                coverLoop = coverLoop.Replace($"///hasnoupbutton: ", "");
             }
             if (!cover.PayloadStop.StartsWith("_no_"))
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnostoppayload: ", "");
                 coverSetup = coverSetup.Replace($"///hasnostoppayload: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnostoppayload: ", "");
+                coverLoop = coverLoop.Replace($"///hasnostoppayload: ", "");
             }
             if (!cover.SetPositionTopic.StartsWith("_no_"))
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnosetTopic: ", "");
                 coverSetup = coverSetup.Replace($"///hasnosetTopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnosetTopic: ", "");
+                coverLoop = coverLoop.Replace($"///hasnosetTopic: ", "");
             }
             if (!cover.StateTopic.StartsWith("_no_"))
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnostatetopic: ", "");
                 coverSetup = coverSetup.Replace($"///hasnostatetopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnostatetopic: ", "");
+                coverLoop = coverLoop.Replace($"///hasnostatetopic: ", "");
             }
             if (!cover.PositionTopic.StartsWith("_no_"))
             {
                 coverDeclaration = coverDeclaration.Replace($"///hasnopositiontopic: ", "");
                 coverSetup = coverSetup.Replace($"///hasnopositiontopic: ", "");
                 coverTemplate = coverTemplate.Replace($"///hasnopositiontopic: ", "");
+                coverLoop = coverLoop.Replace($"///hasnopositiontopic: ", "");
             }
 
             var properties = ReflectionHelper.GetAllProperties(cover);
@@ -127,11 +135,13 @@ public class ProgramTextBuilder(string controllerName,
                 coverDeclaration = coverDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 coverSetup = coverSetup.Replace($"##{prop.Key}##", prop.Value);
                 coverTemplate = coverTemplate.Replace($"##{prop.Key}##", prop.Value);
+                coverLoop = coverLoop.Replace($"##{prop.Key}##", prop.Value);
             }
 
             _program = _program.Replace("##coverDeclaration##", coverDeclaration);
             _program = _program.Replace("##coverSetup##", coverSetup);
             _program = _program.Replace("##cover##", coverTemplate);
+            _program = _program.Replace("##coverLoop##", coverLoop);
         }
         catch (Exception ex)
         {
@@ -155,36 +165,42 @@ public class ProgramTextBuilder(string controllerName,
             var lightDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightDeclaration.txt");
             var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
             var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
+            var lightLoop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightLoop.txt");
 
             if (light.GpioButton > 0)
             {
                 lightDeclaration = lightDeclaration.Replace($"///hasnobutton: ", "");
                 lightSetup = lightSetup.Replace($"///hasnobutton: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
+                lightLoop = lightLoop.Replace($"///hasnobutton: ", "");
             }
             if (light.SwitchMode.ToLower().Trim() == "button")
             {
                 lightDeclaration = lightDeclaration.Replace($"///hasnobuttonmode: ", "");
                 lightSetup = lightSetup.Replace($"///hasnobuttonmode: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnobuttonmode: ", "");
+                lightLoop = lightLoop.Replace($"///hasnobuttonmode: ", "");
             }
             if (light.SwitchMode.ToLower().Trim() == "switch")
             {
                 lightDeclaration = lightDeclaration.Replace($"///hasnoswitchmode: ", "");
                 lightSetup = lightSetup.Replace($"///hasnoswitchmode: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnoswitchmode: ", "");
+                lightLoop = lightLoop.Replace($"///hasnoswitchmode: ", "");
             }
             if (!light.CommandTopic.StartsWith("_no_"))
             {
                 lightDeclaration = lightDeclaration.Replace($"///hasnocommandtopic: ", "");
                 lightSetup = lightSetup.Replace($"///hasnocommandtopic: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
+                lightLoop = lightLoop.Replace($"///hasnocommandtopic: ", "");
             }
             if (!light.StateTopic.StartsWith("_no_"))
             {
                 lightDeclaration = lightDeclaration.Replace($"///hasnostatetopic: ", "");
                 lightSetup = lightSetup.Replace($"///hasnostatetopic: ", "");
                 lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");
+                lightLoop = lightLoop.Replace($"///hasnostatetopic: ", "");
             }
 
             var properties = ReflectionHelper.GetAllProperties(light);
@@ -193,11 +209,13 @@ public class ProgramTextBuilder(string controllerName,
                 lightDeclaration = lightDeclaration.Replace($"##{prop.Key}##", prop.Value);
                 lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
                 lightTemplate = lightTemplate.Replace($"##{prop.Key}##", prop.Value);
+                lightLoop = lightLoop.Replace($"##{prop.Key}##", prop.Value);
             }
 
             _program = _program.Replace("##lightDeclaration##", lightDeclaration);
             _program = _program.Replace("##lightSetup##", lightSetup);
             _program = _program.Replace("##light##", lightTemplate);
+            _program = _program.Replace("##lightLoop##", lightLoop);
         }
         catch (Exception ex)
         {
@@ -227,12 +245,15 @@ public class ProgramTextBuilder(string controllerName,
         _program = _program.CleanKeyWord("##coverDeclaration##");
         _program = _program.CleanKeyWord("##coverSetup##");
         _program = _program.CleanKeyWord("##cover##");
+        _program = _program.CleanKeyWord("##coverLoop##");
         _program = _program.CleanKeyWord("##lightDeclaration##");
         _program = _program.CleanKeyWord("##lightSetup##");
         _program = _program.CleanKeyWord("##light##");
+        _program = _program.CleanKeyWord("##lightLoop##");
         _program = _program.CleanKeyWord("##additionalDeclaration##");
         _program = _program.CleanKeyWord("##additionalSetup##");
         _program = _program.CleanKeyWord("##additionalCode##");
+        _program = _program.RemoveDoubleEmptyRows();
     }
 
     public void Check()

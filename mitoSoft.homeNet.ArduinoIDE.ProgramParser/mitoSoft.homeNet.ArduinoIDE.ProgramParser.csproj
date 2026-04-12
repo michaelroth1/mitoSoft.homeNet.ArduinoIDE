@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\CoverLoop.txt" />
+    <None Remove="Templates\LightLoop.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\CoverLoop.txt" />
+    <EmbeddedResource Include="Templates\LightLoop.txt" />
     <EmbeddedResource Include="Templates\LightSetup.txt" />
   </ItemGroup>
 

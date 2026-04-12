@@ -1,2 +1,2 @@
-﻿  ///hasnomqtt: ##Name##.referenceRun();
+﻿  cover_##Name##.referenceRun();
 ##coverSetup##

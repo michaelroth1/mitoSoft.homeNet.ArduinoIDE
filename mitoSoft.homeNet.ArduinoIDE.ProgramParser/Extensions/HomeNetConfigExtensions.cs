@@ -73,8 +73,6 @@ public static class HomeNetConfigExtensions
                 GpioPin = homeNetLight.GpioPin,
                 Description = homeNetLight.Description,
                 ControllerId = homeNetLight.ControllerId,
-                StateOn = homeNetLight.StateOn,
-                StateOff = homeNetLight.StateOff,
                 SwitchMode = homeNetLight.SwitchMode,
                 GpioOutputMode = homeNetLight.GpioOutputMode,
             };

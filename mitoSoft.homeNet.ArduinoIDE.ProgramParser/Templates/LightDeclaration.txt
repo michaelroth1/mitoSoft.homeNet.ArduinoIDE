@@ -1,5 +1,5 @@
-﻿// ##Description## **************************************************
+﻿// ##Description## ************************************************
 ///hasnobutton: ///hasnobuttonmode: DebouncingInput gpio_##Name##_button(##GpioButton##);
 ///hasnobutton: ///hasnoswitchmode: DebouncingInput gpio_##Name##_switch(##GpioButton##);
-DigitalOutput gpio_##Name##(##GpioPin##, ##GpioOutputMode##); //INVERTED or STANDARD
+LightController light_##Name##(##GpioPin##, ##GpioOutputMode##); //INVERTED or STANDARD
 ##lightDeclaration##

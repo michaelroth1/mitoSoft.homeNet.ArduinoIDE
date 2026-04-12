@@ -1,0 +1,14 @@
+﻿  //***************************************************************
+  // Publish ##Description##
+  //
+  if (light_##Name##.isToggled()) {
+    int state = light_##Name##.getState();
+    if (state == 1) { //on
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##PayloadOn##", true);
+    } else { //off
+      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##PayloadOff##", true);
+    }    
+  }
+  light_##Name##.loop();
+
+##lightLoop##

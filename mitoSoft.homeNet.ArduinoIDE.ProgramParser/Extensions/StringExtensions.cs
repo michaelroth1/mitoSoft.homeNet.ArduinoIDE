@@ -96,7 +96,6 @@ internal static class StringExtensions
         return full;
     }
 
-
     public static string RemoveDoubleEmptyRows(this string value)
     {
         string[] lines = value.Split(["\r\n", "\n"], StringSplitOptions.None);

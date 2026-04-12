@@ -104,10 +104,6 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
 
             public string GpioOutputMode { get; set; } = "";
 
-            public string StateOn { get; set; } = "_no_state";
-
-            public string StateOff { get; set; } = "_no_state";
-
             public string SwitchMode { get; set; } = "button";
 
             public string CommandTopic { get; set; } = "_no_topic/command";

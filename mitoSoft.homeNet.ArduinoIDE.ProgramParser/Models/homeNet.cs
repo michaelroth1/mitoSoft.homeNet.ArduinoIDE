@@ -131,12 +131,6 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             [YamlMember(Alias = "gpio_output_mode")]
             public string GpioOutputMode { get; set; } = null!;
 
-            [YamlMember(Alias = "state_on")]
-            public string StateOn { get; set; } = "on";
-
-            [YamlMember(Alias = "state_off")]
-            public string StateOff { get; set; } = "off";
-
             [YamlMember(Alias = "switch_mode")]
             public string SwitchMode { get; set; } = "button";
         }

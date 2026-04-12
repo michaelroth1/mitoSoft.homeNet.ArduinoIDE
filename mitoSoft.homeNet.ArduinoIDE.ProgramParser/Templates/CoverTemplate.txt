@@ -1,54 +1,24 @@
-﻿  //***********************************************************************************************************
-  // ##Description##
+﻿  //***************************************************************
+  // Set ##Description##
   //
   if (false 
       ///hasnodownbutton: || gpio_##Name##_buttonDown.risingEdge()
       ///hasnomqtt: ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "##PayloadClose##")
      ) {
-    ##Name##.runDown();
+    cover_##Name##.runDown();
   } else if (false 
              ///hasnoupbutton: || gpio_##Name##_buttonUp.risingEdge()
              ///hasnomqtt: ///hasnocommandtopic: || (topic == "##CommandTopic##" && message == "##PayloadOpen##")
             ) {
-    ##Name##.runUp();
+    cover_##Name##.runUp();
   } else if (false
              ///hasnomqtt: ///hasnostoppayload: || (topic == "##CommandTopic##" && message == "##PayloadStop##")
             ) {
-    ##Name##.runStop();
+    cover_##Name##.runStop();
   } else if (false
              ///hasnomqtt: ///hasnosetTopic: || topic == "##SetPositionTopic##"
             ) {
-    ##Name##.setShutterPosition(message.toDouble());
+    cover_##Name##.setShutterPosition(message.toDouble());
   }
-  
-  if (##Name##.started()) {
-    if (1 == ##Name##.getDirection()) { //DOWN
-      gpio_##Name##_up.setOff();
-      gpio_##Name##_down.setOn();
-      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosing##", false); //state_closing:
-    } else if (2 == ##Name##.getDirection()) { //UP
-      gpio_##Name##_up.setOn();
-      gpio_##Name##_down.setOff();
-      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpening##", false); //state_opening:
-    }
-  }
-  
-  if(##Name##.running()) {
-      ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
-  }
-  
-  if (##Name##.stopped()) {
-    gpio_##Name##_up.setOff();
-    gpio_##Name##_down.setOff();
-    ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateStopped##", false);
-    ///hasnomqtt: ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(##Name##.getPosition()), true);
-    if (0.0 >= ##Name##.getPosition()) { 
-      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
-    } else if (100.0 <= ##Name##.getPosition()) {
-      ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateClosed##", false);
-    }
-  }
-  
-  ##Name##.loop();
-
+    
 ##cover##

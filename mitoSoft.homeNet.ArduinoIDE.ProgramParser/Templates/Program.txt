@@ -15,6 +15,8 @@
 
 ///hasnomqtt: EthernetClient ethClient;
 ///hasnomqtt: EthernetHelper ethHelper(mac, ip, false);
+// example mosquitto_pub: mosquitto_pub.exe -h 192.168.2.125 -p 1883 -u user -P passwd    -t ShutterController/cover/eg_kuche_hof/command/mode -m down
+// example mosquitto_sub: mosquitto_sub.exe -h 192.168.2.125 -p 1883 -u user -P passwd -v -t ShutterController/cover/+/state/mode
 ///hasnomqtt: MqttClient mqttClient(ethClient);
 ///hasnomqtt: MqttHelper mqttHelper(mqttClient, 15000, false);
 
@@ -22,24 +24,25 @@
 
 ##lightDeclaration##
 
-// Additional declarations *************************************
+// Additional declarations ****************************************
 ##additionalDeclaration##
 
 void setup() {
   //Serial.begin(9600);
+  //Serial.println("");
   //Serial.println("start ##controllerName##");
 
   ///hasnomqtt: ethHelper.fixIpSetup();
 
   ///hasnomqtt: mqttHelper.init(broker, "##controllerName##", "##brokerUserName##", "##brokerPassword##");
 
-  // covers ***********************************************
+  // covers *******************************************************
 ##coverSetup##
 
-  // lights ***********************************************
+  // lights *******************************************************
 ##lightSetup##
 
-  // Additional setup *************************************
+  // Additional setup *********************************************
 ##additionalSetup##
 }
 
@@ -51,18 +54,18 @@ void loop() {
   ///hasnomqtt:   topic = mqttHelper.getLastTopic();
   ///hasnomqtt:   message = mqttHelper.getLastMessage();
   ///hasnomqtt: }
-  
+
 ##cover##
 ##light##
-  // Additional code ***********************************************
+  // Additional code **********************************************
 ##additionalCode##
 
-  // Subscribe******************************************************
+##coverLoop##
+##lightLoop##
+  // Subscribe*****************************************************
   ///hasnomqtt: if (mqttHelper.onConnected()){
   ///hasnomqtt:   mqttHelper.subscribe("##subscribedTopic##");
   ///hasnomqtt: }
-
-  //****************************************************************
   ///hasnomqtt: ethHelper.loop();
   ///hasnomqtt: mqttHelper.loop();
   delay(10);
