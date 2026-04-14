@@ -27,7 +27,7 @@ public class ProgramTextBuilder(string controllerName,
     private readonly string _additionalSetup = additionalSetup ?? "///hasnoadditionalsetup";
     private readonly string _additionalDeclaration = additionalDeclaration ?? "///hasnoadditionaldeclaration";
     private readonly string _additionalCode = additionalCode ?? "///hasnoadditionalcode";
-    private string _program = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.Program.txt");
+    private string _program = FileHelper.ReadResourceFile("Program.txt");
 
     public string Build(Merge.Config config)
     {
@@ -77,10 +77,10 @@ public class ProgramTextBuilder(string controllerName,
         {
             var templates = new TemplateSet()
             {
-                Declaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt"),
-                Setup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt"),
-                MainTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt"),
-                Loop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverLoop.txt"),
+                Declaration = FileHelper.ReadResourceFile("CoverDeclaration.txt"),
+                Setup = FileHelper.ReadResourceFile("CoverSetup.txt"),
+                MainTemplate = FileHelper.ReadResourceFile("CoverTemplate.txt"),
+                Loop = FileHelper.ReadResourceFile("CoverLoop.txt"),
             };
 
             if (!cover.CommandTopic.StartsWith("_no_"))
@@ -136,10 +136,10 @@ public class ProgramTextBuilder(string controllerName,
         {
             var templates = new TemplateSet()
             {
-                Declaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightDeclaration.txt"),
-                Setup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt"),
-                MainTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt"),
-                Loop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightLoop.txt"),
+                Declaration = FileHelper.ReadResourceFile("LightDeclaration.txt"),
+                Setup = FileHelper.ReadResourceFile("LightSetup.txt"),
+                MainTemplate = FileHelper.ReadResourceFile("LightTemplate.txt"),
+                Loop = FileHelper.ReadResourceFile("LightLoop.txt"),
             };
 
             if (light.GpioButton > 0)
