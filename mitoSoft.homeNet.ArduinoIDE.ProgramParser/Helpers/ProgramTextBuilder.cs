@@ -104,11 +104,10 @@ public class ProgramTextBuilder(string controllerName,
             if (!cover.PositionTopic.StartsWith("_no_"))
                 templates.EnableFeature("///hasnopositiontopic: ");
 
-            var properties = ReflectionHelper.GetAllProperties(cover);
-            foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
-            {
-                templates.ReplaceInAll($"##{prop.Key}##", prop.Value);
-            }
+            ReflectionHelper.GetAllProperties(cover)
+                .Where(p => !string.IsNullOrWhiteSpace(p.Value))
+                .ToList()
+                .ForEach(prop => templates.ReplaceInAll($"##{prop.Key}##", prop.Value));
 
             _program = _program.Replace("##coverDeclaration##", templates.Declaration);
             _program = _program.Replace("##coverSetup##", templates.Setup);
@@ -157,11 +156,10 @@ public class ProgramTextBuilder(string controllerName,
             if (!light.StateTopic.StartsWith("_no_"))
                 templates.EnableFeature("///hasnostatetopic: ");
 
-            var properties = ReflectionHelper.GetAllProperties(light);
-            foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
-            {
-                templates.ReplaceInAll($"##{prop.Key}##", prop.Value);
-            }
+            ReflectionHelper.GetAllProperties(light)
+                .Where(p => !string.IsNullOrWhiteSpace(p.Value))
+                .ToList()
+                .ForEach(prop => templates.ReplaceInAll($"##{prop.Key}##", prop.Value));
 
             _program = _program.Replace("##lightDeclaration##", templates.Declaration);
             _program = _program.Replace("##lightSetup##", templates.Setup);
