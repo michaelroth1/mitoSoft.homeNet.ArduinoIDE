@@ -1,4 +1,5 @@
 ﻿using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Extensions;
+using mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models;
 using Merge = mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models.Merge;
 
 namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Helpers;
@@ -74,74 +75,45 @@ public class ProgramTextBuilder(string controllerName,
     {
         try
         {
-            var coverDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt");
-            var coverSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt");
-            var coverTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt");
-            var coverLoop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverLoop.txt");
+            var templates = new TemplateSet()
+            {
+                Declaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverDeclaration.txt"),
+                Setup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverSetup.txt"),
+                MainTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverTemplate.txt"),
+                Loop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.CoverLoop.txt"),
+            };
 
             if (!cover.CommandTopic.StartsWith("_no_"))
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnocommandtopic: ", "");
-                coverSetup = coverSetup.Replace($"///hasnocommandtopic: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnocommandtopic: ", "");
-                coverLoop = coverLoop.Replace($"///hasnocommandtopic: ", "");
-            }
+                templates.EnableFeature("///hasnocommandtopic: ");
+
             if (cover.GpioCloseButton > 0)
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnodownbutton: ", "");
-                coverSetup = coverSetup.Replace($"///hasnodownbutton: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnodownbutton: ", "");
-                coverLoop = coverLoop.Replace($"///hasnodownbutton: ", "");
-            }
+                templates.EnableFeature("///hasnodownbutton: ");
+
             if (cover.GpioOpenButton > 0)
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnoupbutton: ", "");
-                coverSetup = coverSetup.Replace($"///hasnoupbutton: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnoupbutton: ", "");
-                coverLoop = coverLoop.Replace($"///hasnoupbutton: ", "");
-            }
+                templates.EnableFeature("///hasnoupbutton: ");
+
             if (!cover.PayloadStop.StartsWith("_no_"))
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnostoppayload: ", "");
-                coverSetup = coverSetup.Replace($"///hasnostoppayload: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnostoppayload: ", "");
-                coverLoop = coverLoop.Replace($"///hasnostoppayload: ", "");
-            }
+                templates.EnableFeature("///hasnostoppayload: ");
+
             if (!cover.SetPositionTopic.StartsWith("_no_"))
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnosetTopic: ", "");
-                coverSetup = coverSetup.Replace($"///hasnosetTopic: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnosetTopic: ", "");
-                coverLoop = coverLoop.Replace($"///hasnosetTopic: ", "");
-            }
+                templates.EnableFeature("///hasnosetTopic: ");
+
             if (!cover.StateTopic.StartsWith("_no_"))
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnostatetopic: ", "");
-                coverSetup = coverSetup.Replace($"///hasnostatetopic: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnostatetopic: ", "");
-                coverLoop = coverLoop.Replace($"///hasnostatetopic: ", "");
-            }
+                templates.EnableFeature("///hasnostatetopic: ");
+
             if (!cover.PositionTopic.StartsWith("_no_"))
-            {
-                coverDeclaration = coverDeclaration.Replace($"///hasnopositiontopic: ", "");
-                coverSetup = coverSetup.Replace($"///hasnopositiontopic: ", "");
-                coverTemplate = coverTemplate.Replace($"///hasnopositiontopic: ", "");
-                coverLoop = coverLoop.Replace($"///hasnopositiontopic: ", "");
-            }
+                templates.EnableFeature("///hasnopositiontopic: ");
 
             var properties = ReflectionHelper.GetAllProperties(cover);
             foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
-                coverDeclaration = coverDeclaration.Replace($"##{prop.Key}##", prop.Value);
-                coverSetup = coverSetup.Replace($"##{prop.Key}##", prop.Value);
-                coverTemplate = coverTemplate.Replace($"##{prop.Key}##", prop.Value);
-                coverLoop = coverLoop.Replace($"##{prop.Key}##", prop.Value);
+                templates.ReplaceInAll($"##{prop.Key}##", prop.Value);
             }
 
-            _program = _program.Replace("##coverDeclaration##", coverDeclaration);
-            _program = _program.Replace("##coverSetup##", coverSetup);
-            _program = _program.Replace("##cover##", coverTemplate);
-            _program = _program.Replace("##coverLoop##", coverLoop);
+            _program = _program.Replace("##coverDeclaration##", templates.Declaration);
+            _program = _program.Replace("##coverSetup##", templates.Setup);
+            _program = _program.Replace("##cover##", templates.MainTemplate);
+            _program = _program.Replace("##coverLoop##", templates.Loop);
         }
         catch (Exception ex)
         {
@@ -162,60 +134,39 @@ public class ProgramTextBuilder(string controllerName,
     {
         try
         {
-            var lightDeclaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightDeclaration.txt");
-            var lightSetup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt");
-            var lightTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt");
-            var lightLoop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightLoop.txt");
+            var templates = new TemplateSet()
+            {
+                Declaration = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightDeclaration.txt"),
+                Setup = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightSetup.txt"),
+                MainTemplate = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightTemplate.txt"),
+                Loop = FileHelper.ReadResourceFile("mitoSoft.homeNet.ArduinoIDE.ProgramParser.Templates.LightLoop.txt"),
+            };
 
             if (light.GpioButton > 0)
-            {
-                lightDeclaration = lightDeclaration.Replace($"///hasnobutton: ", "");
-                lightSetup = lightSetup.Replace($"///hasnobutton: ", "");
-                lightTemplate = lightTemplate.Replace($"///hasnobutton: ", "");
-                lightLoop = lightLoop.Replace($"///hasnobutton: ", "");
-            }
+                templates.EnableFeature("///hasnobutton: ");
+
             if (light.SwitchMode.ToLower().Trim() == "button")
-            {
-                lightDeclaration = lightDeclaration.Replace($"///hasnobuttonmode: ", "");
-                lightSetup = lightSetup.Replace($"///hasnobuttonmode: ", "");
-                lightTemplate = lightTemplate.Replace($"///hasnobuttonmode: ", "");
-                lightLoop = lightLoop.Replace($"///hasnobuttonmode: ", "");
-            }
+                templates.EnableFeature("///hasnobuttonmode: ");
+
             if (light.SwitchMode.ToLower().Trim() == "switch")
-            {
-                lightDeclaration = lightDeclaration.Replace($"///hasnoswitchmode: ", "");
-                lightSetup = lightSetup.Replace($"///hasnoswitchmode: ", "");
-                lightTemplate = lightTemplate.Replace($"///hasnoswitchmode: ", "");
-                lightLoop = lightLoop.Replace($"///hasnoswitchmode: ", "");
-            }
+                templates.EnableFeature("///hasnoswitchmode: ");
+
             if (!light.CommandTopic.StartsWith("_no_"))
-            {
-                lightDeclaration = lightDeclaration.Replace($"///hasnocommandtopic: ", "");
-                lightSetup = lightSetup.Replace($"///hasnocommandtopic: ", "");
-                lightTemplate = lightTemplate.Replace($"///hasnocommandtopic: ", "");
-                lightLoop = lightLoop.Replace($"///hasnocommandtopic: ", "");
-            }
+                templates.EnableFeature("///hasnocommandtopic: ");
+
             if (!light.StateTopic.StartsWith("_no_"))
-            {
-                lightDeclaration = lightDeclaration.Replace($"///hasnostatetopic: ", "");
-                lightSetup = lightSetup.Replace($"///hasnostatetopic: ", "");
-                lightTemplate = lightTemplate.Replace($"///hasnostatetopic: ", "");
-                lightLoop = lightLoop.Replace($"///hasnostatetopic: ", "");
-            }
+                templates.EnableFeature("///hasnostatetopic: ");
 
             var properties = ReflectionHelper.GetAllProperties(light);
             foreach (var prop in properties.Where(p => !string.IsNullOrWhiteSpace(p.Value)))
             {
-                lightDeclaration = lightDeclaration.Replace($"##{prop.Key}##", prop.Value);
-                lightSetup = lightSetup.Replace($"##{prop.Key}##", prop.Value);
-                lightTemplate = lightTemplate.Replace($"##{prop.Key}##", prop.Value);
-                lightLoop = lightLoop.Replace($"##{prop.Key}##", prop.Value);
+                templates.ReplaceInAll($"##{prop.Key}##", prop.Value);
             }
 
-            _program = _program.Replace("##lightDeclaration##", lightDeclaration);
-            _program = _program.Replace("##lightSetup##", lightSetup);
-            _program = _program.Replace("##light##", lightTemplate);
-            _program = _program.Replace("##lightLoop##", lightLoop);
+            _program = _program.Replace("##lightDeclaration##", templates.Declaration);
+            _program = _program.Replace("##lightSetup##", templates.Setup);
+            _program = _program.Replace("##light##", templates.MainTemplate);
+            _program = _program.Replace("##lightLoop##", templates.Loop);
         }
         catch (Exception ex)
         {
