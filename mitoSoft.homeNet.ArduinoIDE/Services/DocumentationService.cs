@@ -22,6 +22,7 @@ public static class DocumentationService
                     ControllerId = controller.UniqueId,
                     IPAddress = controller.IPAddress ?? "N/A",
                     MacAddress = controller.MacAddress ?? "N/A",
+                    AdditionalDeclarations = controller.AdditionalDeclaration ?? string.Empty,
                     Items = []
                 };
 

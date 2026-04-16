@@ -93,6 +93,18 @@ public partial class DocumentionView : UserControl
             };
             controllerStack.Children.Add(controllerInfo);
 
+            if (!string.IsNullOrWhiteSpace(overview.AdditionalDeclarations))
+            {
+                var additionalDeclarations = new TextBlock
+                {
+                    Text = $"Additional Declarations:{Environment.NewLine}{overview.AdditionalDeclarations}",
+                    FontSize = 11,
+                    Foreground = Brushes.DarkGreen,
+                    Margin = new Thickness(0, 3, 0, 0)
+                };
+                controllerStack.Children.Add(additionalDeclarations);
+            }
+
             controllerBorder.Child = controllerStack;
             ContentPanel.Children.Add(controllerBorder);
 
@@ -220,6 +232,17 @@ public partial class DocumentionView : UserControl
                         Margin = new Thickness(0, 0, 0, 10)
                     };
                     doc.Blocks.Add(controllerInfo);
+
+                    if (!string.IsNullOrWhiteSpace(overview.AdditionalDeclarations))
+                    {
+                        var additionalDeclarations = new Paragraph(new Run($"Additional Declarations: {overview.AdditionalDeclarations}"))
+                        {
+                            FontSize = 10,
+                            Foreground = Brushes.DarkGreen,
+                            Margin = new Thickness(0, 0, 0, 10)
+                        };
+                        doc.Blocks.Add(additionalDeclarations);
+                    }
 
                     var table = new Table
                     {

@@ -18,4 +18,5 @@ public class ControllerGpioOverview
     public List<GpioOverviewItem> Items { get; set; } = [];
 
     public int TotalGpioCount { get; set; }
+    public string AdditionalDeclarations { get; set; } = string.Empty;
 }
