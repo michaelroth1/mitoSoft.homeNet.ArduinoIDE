@@ -555,6 +555,24 @@ namespace mitoSoft.homeNet.ArduinoIDE.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The YAML file has unsaved changes. Do you want to save them before closing?.
+        /// </summary>
+        public static string Msg_UnsavedChanges {
+            get {
+                return ResourceManager.GetString("Msg_UnsavedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string Msg_UnsavedChangesTitle {
+            get {
+                return ResourceManager.GetString("Msg_UnsavedChangesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         public static string Status_Ready {

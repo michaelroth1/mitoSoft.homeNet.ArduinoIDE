@@ -16,6 +16,7 @@ namespace mitoSoft.homeNet.ArduinoIDE;
 public partial class MainWindow : Window
 {
     private string _currentFileName = string.Empty;
+    private bool _isYamlModified = false;
 
     private readonly DispatcherTimer _statusClearTimer = new();
 
@@ -76,11 +77,16 @@ public partial class MainWindow : Window
         {
             _currentFileName = lastFile;
             YamlView.Text = _fileService.ReadFile(_currentFileName);
+            _isYamlModified = false;
             SetStatusText(string.Format(Res.Msg_Opened, _currentFileName));
         }
 
         // Subscribe to TextChanged event
-        YamlView.TextChanged += (s, args) => this.UpdateControllerList();
+        YamlView.TextChanged += (s, args) =>
+        {
+            _isYamlModified = true;
+            this.UpdateControllerList();
+        };
 
         // Apply zoom after UI is fully initialized
         this.ApplyZoom();
@@ -90,8 +96,29 @@ public partial class MainWindow : Window
         this.UpdateControllerList();
     }
 
-    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e) =>
+    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (_isYamlModified)
+        {
+            var result = MessageBox.Show(
+                Res.Msg_UnsavedChanges,
+                Res.Msg_UnsavedChangesTitle,
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                this.Save();
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         _settingsService.SaveWindowSettings(Width, Height, ZoomSlider.Value);
+    }
 
     private void SetStatusText(string text)
     {
@@ -229,6 +256,7 @@ public partial class MainWindow : Window
         {
             _currentFileName = filePath;
             YamlView.Text = _fileService.ReadFile(_currentFileName);
+            _isYamlModified = false;
             _settingsService.SaveLastOpenedYamlFile(_currentFileName);
             SetStatusText(string.Format(Res.Msg_Opened, _currentFileName));
         }
@@ -278,6 +306,7 @@ public partial class MainWindow : Window
             file.Extension.Equals(".yml", StringComparison.OrdinalIgnoreCase))
         {
             _currentFileName = file.FullName;
+            _isYamlModified = false;
         }
 
         this.SetStatusText(string.Format(Res.Msg_Saved, file.FullName));

@@ -221,6 +221,12 @@
 
 Bitte stellen Sie sicher, dass Ihr YAML-File gültige homeNet-Controller mit Cover- oder Light-Konfigurationen enthält.</value>
   </data>
+  <data name="Msg_UnsavedChanges" xml:space="preserve">
+    <value>Wollen Sie die YAML Datei vor dem schließen speichern?</value>
+  </data>
+  <data name="Msg_UnsavedChangesTitle" xml:space="preserve">
+    <value>Änderungen speichern</value>
+  </data>
   <data name="Filter_Yaml" xml:space="preserve">
     <value>YAML-Dateien (*.yaml)|*.yaml|Alle Dateien (*.*)|*.*</value>
   </data>
