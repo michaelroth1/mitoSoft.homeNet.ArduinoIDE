@@ -22,6 +22,7 @@
     gpio_##Name##_down.setOff();
     ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateStopped##", false);
     ///hasnomqtt: ///hasnopositiontopic: mqttHelper.publish("##PositionTopic##", String(cover_##Name##.getPosition()), true);
+    ///hasnomqtt: ///hasnotiltstatustopic: mqttHelper.publish("##TiltStatusTopic##", String(cover_##Name##.getFinPosition()), true);
     if (0.0 >= cover_##Name##.getPosition()) { 
       ///hasnomqtt: ///hasnostatetopic: mqttHelper.publish("##StateTopic##", "##StateOpen##", false);
     } else if (100.0 <= cover_##Name##.getPosition()) {

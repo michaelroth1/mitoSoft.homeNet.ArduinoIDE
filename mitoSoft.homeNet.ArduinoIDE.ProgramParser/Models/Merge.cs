@@ -54,13 +54,19 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
 
             public required int RunningTime { get; set; } = 15000;
 
+            public int TiltRunningTime { get; set; } = 0;
+
             public string CommandTopic { get; set; } = "_no_topic/command";
+
+            public string TiltCommandTopic { get; set; } = "_no_topic/command/tilt";
 
             public string StateTopic { get; set; } = "_no_topic/state";
 
             public string SetPositionTopic { get; set; } = "_no_topic/command/set";
 
             public string PositionTopic { get; set; } = "_no_topic/state/pos";
+
+            public string TiltStatusTopic { get; set; } = "_no_topic/state/tilt";
 
             public string PayloadOpen { get; set; } = "_no_payload";
 

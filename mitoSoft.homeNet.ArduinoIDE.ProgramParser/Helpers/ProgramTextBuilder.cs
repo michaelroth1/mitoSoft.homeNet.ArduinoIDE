@@ -104,6 +104,12 @@ public class ProgramTextBuilder(string controllerName,
             if (!cover.PositionTopic.StartsWith("_no_"))
                 templates.EnableFeature("///hasnopositiontopic: ");
 
+            if (!cover.TiltCommandTopic.StartsWith("_no_"))
+                templates.EnableFeature("///hasnotiltcommandtopic: ");
+
+            if (!cover.TiltStatusTopic.StartsWith("_no_"))
+                templates.EnableFeature("///hasnotiltstatustopic: ");
+
             ReflectionHelper.GetAllProperties(cover)
                 .Where(p => !string.IsNullOrWhiteSpace(p.Value))
                 .ToList()

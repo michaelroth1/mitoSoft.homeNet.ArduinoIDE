@@ -32,6 +32,7 @@ public static class HomeNetConfigExtensions
                 GpioOpenButton = homeNetCover.GpioOpenButton,
                 ControllerId = homeNetCover.ControllerId,
                 GpioOutputMode = homeNetCover.GpioOutputMode,
+                TiltRunningTime = homeNetCover.TiltRunningTime,                 
             };
 
             mergedCovers.Add(merged);
@@ -48,6 +49,8 @@ public static class HomeNetConfigExtensions
             merged.HasPartner = true;
             merged.CommandTopic = mqttCover.CommandTopic;
             merged.StateTopic = mqttCover.StateTopic;
+            merged.TiltCommandTopic = mqttCover.TiltCommandTopic;
+            merged.TiltStatusTopic = mqttCover.TiltStatusTopic;
             merged.SetPositionTopic = mqttCover.SetPositionTopic;
             merged.PositionTopic = mqttCover.PositionTopic;
             merged.PayloadOpen = mqttCover.PayloadOpen;

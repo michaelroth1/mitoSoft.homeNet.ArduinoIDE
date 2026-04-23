@@ -105,6 +105,9 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             [YamlMember(Alias = "running_time")]
             [Required]
             public int RunningTime { get; set; } = 15000;
+
+            [YamlMember(Alias = "tilt_time")]
+            public int TiltRunningTime { get; set; } = 0;
         }
 
         [DebuggerDisplay("{UniqueId}")]

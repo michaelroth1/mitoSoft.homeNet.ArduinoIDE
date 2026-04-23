@@ -32,6 +32,12 @@ namespace mitoSoft.homeNet.ArduinoIDE.ProgramParser.Models
             [YamlMember(Alias = "position_topic")]
             public string PositionTopic { get; set; } = "_no_topic/state/pos";
 
+            [YamlMember(Alias = "tilt_command_topic")]
+            public string TiltCommandTopic { get; set; } = "_no_topic/command/tilt";
+
+            [YamlMember(Alias = "tilt_status_topic")]
+            public string TiltStatusTopic { get; set; } = "_no_topic/state/tilt";
+
             [YamlMember(Alias = "payload_open")]
             public required string PayloadOpen { get; set; } = "_no_payload"!;
 

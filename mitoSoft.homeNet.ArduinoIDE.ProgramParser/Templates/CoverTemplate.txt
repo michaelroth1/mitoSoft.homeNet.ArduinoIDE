@@ -15,10 +15,14 @@
              ///hasnomqtt: ///hasnostoppayload: || (topic == "##CommandTopic##" && message == "##PayloadStop##")
             ) {
     cover_##Name##.runStop();
+  } else if (false 
+             ///hasnomqtt: ///hasnotiltcommandtopic: || (topic == "##TiltCommandTopic##")
+            ) {
+    cover_##Name##.setFinPosition(message.toDouble()); 
   } else if (false
              ///hasnomqtt: ///hasnosetTopic: || topic == "##SetPositionTopic##"
             ) {
-    cover_##Name##.setShutterPosition(message.toDouble());
+    cover_##Name##.setPosition(message.toDouble(), cover_##Name##.getFinPosition());
   }
     
 ##cover##
