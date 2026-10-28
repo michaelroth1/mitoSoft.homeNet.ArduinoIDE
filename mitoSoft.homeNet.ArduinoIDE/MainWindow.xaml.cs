@@ -108,7 +108,7 @@ public partial class MainWindow : Window
 
             if (result == MessageBoxResult.Yes)
             {
-                this.Save();
+                this.SaveYaml();
             }
             else if (result == MessageBoxResult.Cancel)
             {
@@ -288,6 +288,12 @@ public partial class MainWindow : Window
         }
     }
 
+    private void SaveYaml()
+    {
+        var file = YamlView.Save(_currentFileName);
+        this.SetSaveText(file);
+    }
+
     private void SetSaveText(string? fileName)
     {
         if (fileName == null)
@@ -308,6 +314,8 @@ public partial class MainWindow : Window
             _currentFileName = file.FullName;
             _isYamlModified = false;
         }
+
+        _settingsService.SaveLastOpenedYamlFile(_currentFileName);
 
         this.SetStatusText(string.Format(Res.Msg_Saved, file.FullName));
     }
