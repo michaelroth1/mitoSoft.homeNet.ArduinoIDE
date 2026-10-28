@@ -104,7 +104,7 @@ public partial class YamlView : UserControl, IEditorView, ISaveable
     {
         var filePath = _fileService.ShowSaveDialog(
             filter: Res.Filter_Yaml,
-            defaultFileName: "config.yaml",
+            defaultFileName: "configuration.yaml",
             currentFilePath: fileName);
 
         if (filePath != null)
